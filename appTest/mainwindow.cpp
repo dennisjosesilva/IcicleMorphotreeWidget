@@ -32,14 +32,17 @@ MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
   widget_ = new QWidget{this};
   widget_->setLayout(layout_);
 
-
-
   if (domain.numberOfPoints() < 500) {
+    // mtreeVis_ = new imt::IcicleMorphotreeWidget{this, 
+    //   std::make_unique<imt::FixedHeightTreeLayout>(20.f, 20.f, 50.0f)};
+
     mtreeVis_ = new imt::IcicleMorphotreeWidget{this, 
-      std::make_unique<imt::FixedHeightTreeLayout>(20.f, 20.f, 50.0f)};
+      std::make_unique<imt::GrayscaleBasedHeightTreeLayout>(20.f, 20.f, 30.0f)};
   }
   else {
-    mtreeVis_ = new imt::IcicleMorphotreeWidget{this};
+    // mtreeVis_ = new imt::IcicleMorphotreeWidget{this};
+    mtreeVis_ = new imt::IcicleMorphotreeWidget{this, 
+      std::make_unique<imt::GrayscaleBasedHeightTreeLayout>(20.f, 20.f, 2.0f)};
   }
 
   QPushButton *btnPan = new QPushButton{tr("Switch Pan"), this};

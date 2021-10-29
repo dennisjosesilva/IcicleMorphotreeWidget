@@ -47,4 +47,22 @@ namespace IcicleMorphotreeWidget
   private:
     float height_;   
   };
+
+  class GrayscaleBasedHeightTreeLayout : public TreeLayout
+  {
+  public:
+    using uint8 = morphotree::uint8;
+    using MTree = morphotree::MorphologicalTree<uint8>;
+    using NodePtr = typename MTree::NodePtr;
+
+    GrayscaleBasedHeightTreeLayout(float marginTop = 20.f,
+      float marginBottom = 20.f,
+      float unitHeight = 5.0f);
+
+    void parseTree(const MTree &tree);
+
+    std::vector<float> computeNormalisedArea(const MTree &tree);
+  private:
+    float unitHeight_;
+  };
 }

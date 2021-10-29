@@ -75,4 +75,66 @@ namespace IcicleMorphotreeWidget
 
     return normalisedArea;
   }
+
+  // ========= GRAYSCALE BASED HEIGHT TREE LAYOUT ============================
+  GrayscaleBasedHeightTreeLayout::GrayscaleBasedHeightTreeLayout(float marginTop,
+    float marginBottom, float unitHeight)
+    :TreeLayout{marginTop, marginBottom},
+     unitHeight_{unitHeight}
+  {}
+
+  void GrayscaleBasedHeightTreeLayout::parseTree(const MTree &tree)
+  {
+    std::vector<float> narea = computeNormalisedArea(tree);
+    std::vector<float> left(tree.numberOfNodes(), 0);
+    std::vector<qreal> bottom(tree.numberOfNodes(), 0);
+
+    tree.traverseByLevel([&bottom, &narea, &left, this](NodePtr node){
+      if (node->parent() == nullptr) {
+        int levelsToZero = static_cast<int>(node->level() + 1);
+        GNode *gnode = new GNode{treeVis_, node};
+        treeVis_->scene()->addItem(gnode);
+        gnode->setPos(0, 0);
+        gnode->setWidth(treeVis_->width());
+        gnode->setHeight(unitHeight_ * levelsToZero);
+        left[node->id()] = gnode->pos().x();
+        bottom[node->id()] = unitHeight_ * levelsToZero;
+      }
+      else {
+        int levelsToZero = 
+          static_cast<int>(node->level() - node->parent()->level() + 1);
+        GNode *gnode = new GNode{treeVis_, node};
+        treeVis_->scene()->addItem(gnode);
+        qreal leftP = left[node->parent()->id()];
+        qreal bottomP = bottom[node->parent()->id()];
+        gnode->setPos(leftP, bottomP);
+        gnode->setWidth(treeVis_->width() * narea[node->id()]);
+        gnode->setHeight(unitHeight_ * levelsToZero);
+
+        left[node->id()] = leftP;
+        left[node->parent()->id()] = leftP + gnode->width();
+        bottom[node->id()] = bottomP + gnode->height();
+      }
+    });
+  }
+
+  std::vector<float> GrayscaleBasedHeightTreeLayout::computeNormalisedArea(
+    const MTree &tree)
+  {
+    using AreaComputer = morphotree::AreaComputer<uint8>;
+    using uint32 = morphotree::uint32;
+
+    std::vector<uint32> area = 
+      std::make_unique<AreaComputer>()->computeAttribute(tree);
+    
+    float largestArea = static_cast<float>(area[tree.root()->id()]);
+
+    std::vector<float> normalisedArea(tree.numberOfNodes(), 0);
+
+    for (uint32 nid = 0; nid < tree.numberOfNodes(); ++nid) {
+      normalisedArea[nid] = static_cast<float>(area[nid]) / largestArea;
+    }
+
+    return normalisedArea;
+  }
 }
