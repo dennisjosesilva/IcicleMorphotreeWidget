@@ -2,6 +2,8 @@
 
 #include <morphotree/adjacency/adjacency8c.hpp>
 
+#include <QKeyEvent>
+
 namespace IcicleMorphotreeWidget 
 {
   IcicleMorphotreeWidget::IcicleMorphotreeWidget(QWidget *parent,
@@ -49,5 +51,43 @@ namespace IcicleMorphotreeWidget
     scene()->clear();
     treeLayout_->parseTree(tree_);
     scene()->update();
+  }
+
+  void IcicleMorphotreeWidget::scaleView(qreal scaleFactor)
+  {
+    qreal factor = transform().scale(scaleFactor, scaleFactor)
+      .mapRect(QRectF{0, 0, 1, 1}).width();
+    
+    if (factor < 0.07f || factor > 100.0f)
+      return;
+
+    scale(scaleFactor, scaleFactor);
+  }
+
+  void IcicleMorphotreeWidget::visZoomIn()
+  {
+    scaleView(qreal(1.2));
+  }
+
+  void IcicleMorphotreeWidget::visZoomOut()
+  {
+    scaleView(1.0 / qreal(1.2));
+  }
+
+  void IcicleMorphotreeWidget::keyPressEvent(QKeyEvent *e)
+  {
+    switch (e->key())
+    {
+    case Qt::Key_Plus:
+      visZoomIn();
+      break;
+    
+    case Qt::Key_Minus:
+      visZoomOut();
+      break;
+
+    default:
+      break;
+    }
   }
 }

@@ -27,6 +27,14 @@ namespace IcicleMorphotreeWidget
 
     void loadImage(Box domain, const std::vector<uint8> &f);
 
+
+    void scaleView(qreal scaleFactor);
+    void visZoomIn();
+    void visZoomOut();
+
+  protected:
+    void keyPressEvent(QKeyEvent *e) override;
+
   private:
     TreeLayoutPtr treeLayout_;
     Box domain_;
