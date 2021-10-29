@@ -49,18 +49,21 @@ namespace IcicleMorphotreeWidget
   void GNode::mousePressEvent(QGraphicsSceneMouseEvent *e)
   {
     GNodeEventHandler::Singleton()->emitMousePress(this, e);
-    e->accept();
+    // e->accept();
+    QGraphicsItem::mousePressEvent(e);
   }
 
   void GNode::mouseReleaseEvent(QGraphicsSceneMouseEvent *e)
   {
     GNodeEventHandler::Singleton()->emitMouseRelease(this, e);
-    e->accept();
+    // e->accept();
+    QGraphicsItem::mouseReleaseEvent(e);
   }
 
   void GNode::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *e)
   {
     GNodeEventHandler::Singleton()->emitMouseDoubleClick(this, e);
-    e->accept();
+    // e->accept();
+    QGraphicsItem::mouseDoubleClickEvent(e);
   }
 }
