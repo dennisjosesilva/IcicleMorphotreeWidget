@@ -7,6 +7,7 @@
 #include <morphotree/tree/mtree.hpp>
 
 #include "IcicleMorphotreeWidget/TreeLayout/TreeLayout.hpp"
+#include "IcicleMorphotreeWidget/Graphics/GrayScaleBar.hpp"
 
 namespace IcicleMorphotreeWidget
 {
@@ -27,10 +28,12 @@ namespace IcicleMorphotreeWidget
 
     void loadImage(Box domain, const std::vector<uint8> &f);
 
-
     void scaleView(qreal scaleFactor);
     void visZoomIn();
     void visZoomOut();
+
+    void addGrayScaleBar(int numberOfLevels=256, qreal unitWidth=20, 
+      qreal unitHeight = 5.0f);
 
   protected:
     void keyPressEvent(QKeyEvent *e) override;
@@ -39,5 +42,6 @@ namespace IcicleMorphotreeWidget
     TreeLayoutPtr treeLayout_;
     Box domain_;
     MTree tree_;
+    GrayScaleBar *grayScaleBar_;
   };
 }

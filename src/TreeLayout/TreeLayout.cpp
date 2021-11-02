@@ -102,7 +102,7 @@ namespace IcicleMorphotreeWidget
       }
       else {
         int levelsToZero = 
-          static_cast<int>(node->level() - node->parent()->level() + 1);
+          static_cast<int>(node->level() - node->parent()->level());
         GNode *gnode = new GNode{treeVis_, node};
         treeVis_->scene()->addItem(gnode);
         qreal leftP = left[node->parent()->id()];

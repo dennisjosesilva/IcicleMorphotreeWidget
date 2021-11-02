@@ -74,6 +74,15 @@ namespace IcicleMorphotreeWidget
     scaleView(1.0 / qreal(1.2));
   }
 
+  void IcicleMorphotreeWidget::addGrayScaleBar(int numberOfLevels, 
+    qreal unitWidth, qreal unitHeight)
+  {
+    grayScaleBar_ = new GrayScaleBar{unitWidth, unitHeight, numberOfLevels};
+    grayScaleBar_->setPos(-20, 0);
+    scene()->addItem(grayScaleBar_);
+    scene()->update();
+  }
+
   void IcicleMorphotreeWidget::keyPressEvent(QKeyEvent *e)
   {
     switch (e->key())

@@ -22,6 +22,8 @@
 
 #include <QPushButton>
 
+#include <algorithm>
+
 MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
   :QMainWindow{nullptr}
 {
@@ -32,17 +34,22 @@ MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
   widget_ = new QWidget{this};
   widget_->setLayout(layout_);
 
+  qreal unitHeight = 2.0f;
+  qreal unitWidth = 20.f;
+
   if (domain.numberOfPoints() < 500) {
     // mtreeVis_ = new imt::IcicleMorphotreeWidget{this, 
     //   std::make_unique<imt::FixedHeightTreeLayout>(20.f, 20.f, 50.0f)};
 
     mtreeVis_ = new imt::IcicleMorphotreeWidget{this, 
       std::make_unique<imt::GrayscaleBasedHeightTreeLayout>(20.f, 20.f, 30.0f)};
+      unitHeight = 30.f;
   }
   else {
     // mtreeVis_ = new imt::IcicleMorphotreeWidget{this};
     mtreeVis_ = new imt::IcicleMorphotreeWidget{this, 
       std::make_unique<imt::GrayscaleBasedHeightTreeLayout>(20.f, 20.f, 2.0f)};
+      unitWidth= 5.f;
   }
 
   QPushButton *btnPan = new QPushButton{tr("Switch Pan"), this};
@@ -55,6 +62,11 @@ MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
   layout_->addWidget(btnPan);
 
   mtreeVis_->loadImage(domain, f);
+
+  mt::uint8 maxLevel = *std::max_element(f.begin(), f.end());
+  mtreeVis_->addGrayScaleBar(static_cast<unsigned int>(maxLevel)+1, unitWidth,
+    unitHeight);
+
   // mtreeVis_->setDragMode(QGraphicsView::DragMode::ScrollHandDrag);
   layout_->addWidget(mtreeVis_);
 
