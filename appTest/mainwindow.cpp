@@ -25,7 +25,7 @@
 #include <algorithm>
 
 MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
-  :QMainWindow{nullptr}
+  :QMainWindow{nullptr}, colorBar_{nullptr}
 {
   setWindowTitle("Main Window");
   resize(400, 700);
@@ -77,7 +77,11 @@ MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
   connect(btnRemoveGrayScaleBar, &QPushButton::clicked, [unitWidth, unitHeight, maxLevel, this](){
     mtreeVis_->removeGrayScaleBar();
   });
+
+  QPushButton *btnShowAttribute = new QPushButton{tr("Toggle attribute visualisation"), this};
+  connect(btnShowAttribute, &QPushButton::clicked, this, &MainWindow::visualiseAttributesAct_onTrigger);
   
+  hlayout->addWidget(btnShowAttribute);
   hlayout->addWidget(btnPan);
   hlayout->addWidget(btnAddGrayScaleBar);
   hlayout->addWidget(btnRemoveGrayScaleBar);
@@ -104,5 +108,53 @@ void MainWindow::nodeMousePress(imt::GNode *node, QGraphicsSceneMouseEvent *e)
     node->update();
 
     qDebug() << mnode->id();
+  }
+}
+
+void MainWindow::visualiseAttributesAct_onTrigger()
+{
+  namespace mt = morphotree;
+  using AreaComp = mt::AreaComputer<mt::uint8>;
+  using VolumeComp = mt::MaxTreeVolumeComputer<mt::uint8>;
+  using PerimeterComp = mt::MaxTreeVolumeComputer<mt::uint8>;
+  using MTree = mt::MorphologicalTree<mt::uint8>;
+  using NodePtr = typename MTree::NodePtr;
+  using VColorBar = imt::VColorBar;
+  using HColorBar = imt::HColorBar;
+
+  using MinMaxVol = std::pair<std::vector<float>::iterator, std::vector<float>::iterator>;
+
+
+  if (mtreeVis_->hasAttributes()) {
+    mtreeVis_->clearAttributes();
+    layout_->removeWidget(colorBar_);
+    colorBar_->deleteLater();
+    colorBar_ = nullptr;
+  }
+  else {
+    const MTree &tree = mtreeVis_->mtree();
+    std::vector<float> vol = 
+      std::make_unique<VolumeComp>()->computeAttribute(tree);
+
+    std::unique_ptr<std::vector<float>> nvol = 
+      std::make_unique<std::vector<float>>(vol.size());
+
+    MinMaxVol minMaxVol = std::minmax_element(vol.begin(), vol.end());
+
+    float volMax = *minMaxVol.second;
+    float volMin = *minMaxVol.first;
+    for (mt::uint32 i = 0; i < vol.size(); ++i) {
+      (*nvol)[i] = (vol[i] - volMin) / (volMax - volMin);      
+    }
+
+    mtreeVis_->loadAttributes(std::move(nvol));
+
+    HColorBar *colorBar = qobject_cast<HColorBar*>(mtreeVis_->createHColorBar(this));
+
+    colorBar->setMaxValue(volMax);
+    colorBar->setMinValue(volMin);
+    colorBar->setShowNumbers(true);
+    layout_->addWidget(colorBar);
+    colorBar_ = colorBar;
   }
 }

@@ -8,7 +8,7 @@
       "name": "(gdb) Launch",
       "type": "cppdbg",
       "request": "launch",
-      "program": "/mnt/HDD-Ubuntu/documents/phd/groningen/research/experiments/IcecleMorphoTreeWidget/debug/bin/appTest",
+      "program": "/mnt/HDD-Ubuntu/documents/phd/groningen/research/experiments/IcicleMorphoTreeWidget/debug/bin/appTest",
       "args": [],
       "stopAtEntry": false,
       "cwd": "${fileDirname}",

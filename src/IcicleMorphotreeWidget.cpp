@@ -1,4 +1,5 @@
 #include "IcicleMorphotreeWidget/IcicleMorphotreeWidget.hpp"
+#include "IcicleMorphotreeWidget/Graphics/GNode.hpp"
 
 #include <morphotree/adjacency/adjacency8c.hpp>
 
@@ -11,7 +12,8 @@ namespace IcicleMorphotreeWidget
     :QGraphicsView{parent},
      tree_{morphotree::MorphoTreeType::MaxTree},
      treeLayout_{std::move(treeLayout)},
-     grayScaleBar_{nullptr}     
+     grayScaleBar_{nullptr},
+     colorMap_{std::make_unique<RainbowColorMap>()}     
   {
     QGraphicsScene *scene = new QGraphicsScene{this};
     scene->setItemIndexMethod(QGraphicsScene::NoIndex);
@@ -40,6 +42,30 @@ namespace IcicleMorphotreeWidget
     updateTreeRendering();
   }
 
+  void IcicleMorphotreeWidget::loadAttributes(NormAttributesPtr attr)
+  {
+    attr_ = std::move(attr);
+    paintNodesBasedOnNormAttribute();
+    viewport()->update();
+  }
+
+  void IcicleMorphotreeWidget::clearAttributes()
+  {
+    attr_ = nullptr;
+    resetNodesColor();
+    viewport()->update();
+  }
+
+  void IcicleMorphotreeWidget::addGNodeToScene(GNode *node)
+  {
+    if (attr_ && !attr_->empty()) {
+      float attrVal = attr_->at(node->mnode()->id());
+      node->setBackgroundColor(colorMap_->color(attrVal));
+    }
+
+    scene()->addItem(node);    
+  }
+
   void IcicleMorphotreeWidget::drawBackground(QPainter *painter, 
     const QRectF &rect)
   {
@@ -50,9 +76,31 @@ namespace IcicleMorphotreeWidget
   void IcicleMorphotreeWidget::updateTreeRendering()
   {
     scene()->clear();
+
+    gnodes_.clear();
+    gnodes_.resize(tree_.numberOfNodes());
+
     treeLayout_->parseTree(tree_);
     scene()->update();
   }
+
+  void IcicleMorphotreeWidget::paintNodesBasedOnNormAttribute()
+  {
+    if (!gnodes_.empty() && !attr_->empty()) {
+      for (GNode *gnode : gnodes_) {
+        float attrVal = attr_->at(gnode->mnode()->id());
+        gnode->setBackgroundColor(colorMap_->color(attrVal));
+      }
+    }
+  }
+
+  void IcicleMorphotreeWidget::resetNodesColor()
+  {
+    for (GNode *gnode : gnodes_) {
+      gnode->setBackgroundColor(Qt::lightGray);
+    }
+  }
+
 
   void IcicleMorphotreeWidget::scaleView(qreal scaleFactor)
   {
@@ -117,5 +165,23 @@ namespace IcicleMorphotreeWidget
     default:
       break;
     }
+  }
+
+  GNode *IcicleMorphotreeWidget::gnode(const I32Point &p)
+  {
+    using NodePtr = typename MTree::NodePtr;
+
+    NodePtr mnode = tree_.smallComponent(domain_.pointToIndex(p));
+    return gnodes_[mnode->id()];
+  }
+
+  GNode *IcicleMorphotreeWidget::gnode(const QPoint &p)
+  {
+    return gnode(I32Point{p.x(), p.y()});
+  }
+
+  GNode *IcicleMorphotreeWidget::gnode(int x, int y)
+  {
+    return gnode(I32Point{x, y});
   }
 }
