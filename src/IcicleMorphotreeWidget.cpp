@@ -81,6 +81,8 @@ namespace IcicleMorphotreeWidget
     if (grayScaleBar_ == nullptr)  {
       grayScaleBar_ = new GrayScaleBar{unitWidth, unitHeight, numberOfLevels};
       grayScaleBar_->setPos(-unitWidth, 0);
+      const QRectF &sceneRect = scene()->sceneRect();      
+      scene()->setSceneRect(-unitWidth, 0, sceneRect.width()+unitWidth, sceneRect.height());
       scene()->addItem(grayScaleBar_);
       scene()->update();
       update();
