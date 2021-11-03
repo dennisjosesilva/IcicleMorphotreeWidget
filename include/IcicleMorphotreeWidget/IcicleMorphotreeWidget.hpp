@@ -32,8 +32,9 @@ namespace IcicleMorphotreeWidget
     void visZoomIn();
     void visZoomOut();
 
-    void addGrayScaleBar(int numberOfLevels=256, qreal unitWidth=20, 
+    void addGrayScaleBar(unsigned int numberOfLevels=256, qreal unitWidth=20, 
       qreal unitHeight = 5.0f);
+    void removeGrayScaleBar();
 
   protected:
     void keyPressEvent(QKeyEvent *e) override;

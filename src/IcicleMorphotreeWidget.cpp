@@ -10,7 +10,8 @@ namespace IcicleMorphotreeWidget
     TreeLayoutPtr treeLayout)
     :QGraphicsView{parent},
      tree_{morphotree::MorphoTreeType::MaxTree},
-     treeLayout_{std::move(treeLayout)}     
+     treeLayout_{std::move(treeLayout)},
+     grayScaleBar_{nullptr}     
   {
     QGraphicsScene *scene = new QGraphicsScene{this};
     scene->setItemIndexMethod(QGraphicsScene::NoIndex);
@@ -74,13 +75,29 @@ namespace IcicleMorphotreeWidget
     scaleView(1.0 / qreal(1.2));
   }
 
-  void IcicleMorphotreeWidget::addGrayScaleBar(int numberOfLevels, 
+  void IcicleMorphotreeWidget::addGrayScaleBar(unsigned int numberOfLevels, 
     qreal unitWidth, qreal unitHeight)
   {
-    grayScaleBar_ = new GrayScaleBar{unitWidth, unitHeight, numberOfLevels};
-    grayScaleBar_->setPos(-20, 0);
-    scene()->addItem(grayScaleBar_);
-    scene()->update();
+    if (grayScaleBar_ == nullptr)  {
+      grayScaleBar_ = new GrayScaleBar{unitWidth, unitHeight, numberOfLevels};
+      grayScaleBar_->setPos(-unitWidth, 0);
+      scene()->addItem(grayScaleBar_);
+      scene()->update();
+      update();
+    }
+  }
+
+  void IcicleMorphotreeWidget::removeGrayScaleBar()
+  {
+    if (grayScaleBar_ != nullptr) {
+      scene()->removeItem(grayScaleBar_);
+      qreal unitWidth = grayScaleBar_->unitWidth();
+      grayScaleBar_ = nullptr;
+      const QRectF &sceneRect = scene()->sceneRect();      
+      scene()->setSceneRect(0, 0, sceneRect.width()-unitWidth, sceneRect.height());
+      scene()->update();
+      update();
+    }
   }
 
   void IcicleMorphotreeWidget::keyPressEvent(QKeyEvent *e)

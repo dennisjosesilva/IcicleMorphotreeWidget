@@ -18,6 +18,10 @@ namespace IcicleMorphotreeWidget
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
       QWidget *widget);
 
+    qreal unitWidth() const { return unitWidth_; }
+    qreal unitHeight() const { return unitHeight_; }
+    unsigned int numberOfLevels() const { return numberOfLevels_; }
+
   private:
     qreal unitWidth_;
     qreal unitHeight_;

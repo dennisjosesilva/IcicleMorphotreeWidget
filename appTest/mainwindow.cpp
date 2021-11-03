@@ -34,6 +34,8 @@ MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
   widget_ = new QWidget{this};
   widget_->setLayout(layout_);
 
+  QHBoxLayout *hlayout = new QHBoxLayout;
+
   qreal unitHeight = 2.0f;
   qreal unitWidth = 20.f;
 
@@ -52,6 +54,12 @@ MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
       unitWidth= 5.f;
   }
 
+  mtreeVis_->loadImage(domain, f);
+
+  mt::uint8 maxLevel = *std::max_element(f.begin(), f.end());
+  // mtreeVis_->addGrayScaleBar(static_cast<unsigned int>(maxLevel)+1, unitWidth,
+  //   unitHeight);
+
   QPushButton *btnPan = new QPushButton{tr("Switch Pan"), this};
   connect(btnPan, &QPushButton::clicked, [this]{ 
     if (mtreeVis_->dragMode() == QGraphicsView::NoDrag) 
@@ -59,13 +67,21 @@ MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
     else
       mtreeVis_->setDragMode(QGraphicsView::NoDrag);
   });
-  layout_->addWidget(btnPan);
 
-  mtreeVis_->loadImage(domain, f);
+  QPushButton *btnAddGrayScaleBar = new QPushButton{tr("Add GrayScale Bar"), this};
+  connect(btnAddGrayScaleBar, &QPushButton::clicked, [unitWidth, unitHeight, maxLevel, this](){
+    mtreeVis_->addGrayScaleBar(maxLevel+1, unitWidth, unitHeight);
+  });
 
-  mt::uint8 maxLevel = *std::max_element(f.begin(), f.end());
-  mtreeVis_->addGrayScaleBar(static_cast<unsigned int>(maxLevel)+1, unitWidth,
-    unitHeight);
+  QPushButton *btnRemoveGrayScaleBar = new QPushButton{tr("Remove GrayScale Bar"), this};
+  connect(btnRemoveGrayScaleBar, &QPushButton::clicked, [unitWidth, unitHeight, maxLevel, this](){
+    mtreeVis_->removeGrayScaleBar();
+  });
+  
+  hlayout->addWidget(btnPan);
+  hlayout->addWidget(btnAddGrayScaleBar);
+  hlayout->addWidget(btnRemoveGrayScaleBar);
+  layout_->addItem(hlayout);
 
   // mtreeVis_->setDragMode(QGraphicsView::DragMode::ScrollHandDrag);
   layout_->addWidget(mtreeVis_);
