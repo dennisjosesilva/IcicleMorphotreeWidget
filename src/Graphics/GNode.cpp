@@ -35,7 +35,11 @@ namespace IcicleMorphotreeWidget
     QWidget *)
   {
     if (isSelected_) {
-      painter->setPen(QPen(Qt::black, 0.7));            
+      if (height_ < 5.0f)
+        painter->setPen(QPen(Qt::black, 1));            
+      else
+        painter->setPen(QPen(Qt::black, 3));            
+
       painter->setBrush(backgroundColor_);
       painter->drawRect(boundingRect());
     }
