@@ -35,7 +35,7 @@ namespace IcicleMorphotreeWidget
     QWidget *)
   {
     if (isSelected_) {
-      painter->setPen(QPen(Qt::black, 3));
+      painter->setPen(QPen(Qt::black, 0.7));            
       painter->setBrush(backgroundColor_);
       painter->drawRect(boundingRect());
     }

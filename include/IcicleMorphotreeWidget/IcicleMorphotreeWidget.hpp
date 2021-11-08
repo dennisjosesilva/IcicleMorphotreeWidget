@@ -11,6 +11,8 @@
 
 #include "IcicleMorphotreeWidget/Graphics/ColorBar.hpp"
 
+#include "IcicleMorphotreeWidget/Filtering/TreeFiltering.hpp"
+
 namespace IcicleMorphotreeWidget
 {
   class GNode;
@@ -24,7 +26,7 @@ namespace IcicleMorphotreeWidget
     using MTree = morphotree::MorphologicalTree<uint8>;
     using TreeLayoutPtr = std::unique_ptr<TreeLayout>;
     using UI32Point = morphotree::UI32Point;
-    using I32Point = morphotree::I32Point;
+    using I32Point = morphotree::I32Point;    
 
     using ColorMapPtr = std::unique_ptr<ColorMap>;
     using NormAttributesPtr = std::unique_ptr<std::vector<float>>;
@@ -35,6 +37,9 @@ namespace IcicleMorphotreeWidget
     void drawBackground(QPainter *painter, const QRectF &rect) override;
 
     void updateTreeRendering();
+
+    MTree filter(std::shared_ptr<TreeFiltering> treeFiltering);
+    void ifilter(std::shared_ptr<TreeFiltering> treeFiltering);    
 
     void loadImage(Box domain, const std::vector<uint8> &f);
 
@@ -61,6 +66,9 @@ namespace IcicleMorphotreeWidget
     GNode *gnode(const I32Point &p);
     GNode *gnode(const QPoint &p);
     GNode *gnode(int x, int y);
+
+    inline std::vector<uint8> recImage() const { return tree_.reconstructImage(); }
+    inline Box domain() const { return domain_; }
 
     void addGrayScaleBar(unsigned int numberOfLevels=256, qreal unitWidth=20, 
       qreal unitHeight = 5.0f);

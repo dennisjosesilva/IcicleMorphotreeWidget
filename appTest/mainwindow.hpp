@@ -22,7 +22,7 @@ public:
   MainWindow(mt::Box domain, const std::vector<mt::uint8> &f);
   void nodeMousePress(imt::GNode *node, QGraphicsSceneMouseEvent *e);
 
-  void visualiseAttributesAct_onTrigger();  
+  void visualiseAttributesAct_onTrigger();    
 
 private:
   imt::IcicleMorphotreeWidget *mtreeVis_;

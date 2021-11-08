@@ -3,6 +3,8 @@
 #include "IcicleMorphotreeWidget/Graphics/GNodeEventHandler.hpp"
 #include "IcicleMorphotreeWidget/TreeLayout/TreeLayout.hpp"
 
+#include "IcicleMorphotreeWidget/Filtering/AreaTreeFiltering.hpp"
+
 #include <morphotree/attributes/areaComputer.hpp>
 #include <morphotree/attributes/volumeComputer.hpp>
 #include <morphotree/attributes/perimeterComputer.hpp>
@@ -27,6 +29,8 @@
 MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
   :QMainWindow{nullptr}, colorBar_{nullptr}
 {
+  using AreaTreeFiltering = IcicleMorphotreeWidget::AreaTreeFiltering;
+
   setWindowTitle("Main Window");
   resize(400, 700);
 
@@ -55,8 +59,7 @@ MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
   }
 
   mtreeVis_->loadImage(domain, f);
-
-  mt::uint8 maxLevel = *std::max_element(f.begin(), f.end());
+  
   // mtreeVis_->addGrayScaleBar(static_cast<unsigned int>(maxLevel)+1, unitWidth,
   //   unitHeight);
 
@@ -69,20 +72,34 @@ MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
   });
 
   QPushButton *btnAddGrayScaleBar = new QPushButton{tr("Add GrayScale Bar"), this};
-  connect(btnAddGrayScaleBar, &QPushButton::clicked, [unitWidth, unitHeight, maxLevel, this](){
+  connect(btnAddGrayScaleBar, &QPushButton::clicked, [unitWidth, unitHeight, this](){
+    std::vector<mt::uint8> frec = mtreeVis_->recImage();    
+    mt::uint8 maxLevel = *std::max_element(frec.begin(), frec.end());
     mtreeVis_->addGrayScaleBar(maxLevel+1, unitWidth, unitHeight);
   });
 
   QPushButton *btnRemoveGrayScaleBar = new QPushButton{tr("Remove GrayScale Bar"), this};
-  connect(btnRemoveGrayScaleBar, &QPushButton::clicked, [unitWidth, unitHeight, maxLevel, this](){
+  connect(btnRemoveGrayScaleBar, &QPushButton::clicked, [unitWidth, unitHeight, this](){
     mtreeVis_->removeGrayScaleBar();
   });
 
   QPushButton *btnShowAttribute = new QPushButton{tr("Toggle attribute visualisation"), this};
   connect(btnShowAttribute, &QPushButton::clicked, this, &MainWindow::visualiseAttributesAct_onTrigger);
   
+  QPushButton *btnAreaFilter = new QPushButton{tr("Area filter"), this};
+  connect(btnAreaFilter, &QPushButton::clicked, [this](){
+    if (mtreeVis_->hasAttributes()) {
+      layout_->removeWidget(colorBar_);
+      colorBar_->deleteLater();
+      colorBar_ = nullptr;
+    }
+
+    mtreeVis_->ifilter(std::make_shared<AreaTreeFiltering>(500));        
+  });
+
   hlayout->addWidget(btnShowAttribute);
   hlayout->addWidget(btnPan);
+  hlayout->addWidget(btnAreaFilter);
   hlayout->addWidget(btnAddGrayScaleBar);
   hlayout->addWidget(btnRemoveGrayScaleBar);
   layout_->addItem(hlayout);

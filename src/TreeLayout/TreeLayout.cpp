@@ -27,8 +27,9 @@ namespace IcicleMorphotreeWidget
     std::vector<qreal> left(tree.numberOfNodes(), 0);
     std::vector<qreal> bottom(tree.numberOfNodes(), 0);
     QVector<GNode *> &gnodes = treeVis_->gnodes();
+    float maxBottom = 0;
 
-    tree.traverseByLevel([&bottom, &narea, &left, &gnodes, this](NodePtr node) {
+    tree.traverseByLevel([&bottom, &narea, &left, &gnodes, &maxBottom, this](NodePtr node) {
       if (node->parent() == nullptr) {
         // Root node rendering
         GNode *gnode = new GNode{treeVis_, node};
@@ -36,10 +37,11 @@ namespace IcicleMorphotreeWidget
         treeVis_->addGNodeToScene(gnode);
         gnodes[node->id()] = gnode;
         gnode->setPos(0, 0);
-        gnode->setWidth(treeVis_->width());
+        gnode->setWidth(treeVis_->sceneRect().width());
         gnode->setHeight(height_);
         left[node->id()] = gnode->pos().x();
         bottom[node->id()] = height_;
+        maxBottom = height_;
       } 
       else {
         // TODO: Implement other nodes rendering.
@@ -50,15 +52,22 @@ namespace IcicleMorphotreeWidget
         qreal leftP = left[node->parent()->id()];
         qreal bottomP = bottom[node->parent()->id()];
         gnode->setPos(leftP, bottomP);
-        gnode->setWidth(treeVis_->width() * narea[node->id()]);
+        gnode->setWidth(treeVis_->sceneRect().width() * narea[node->id()]);
         gnode->setHeight(height_);
         
         left[node->id()] = leftP;
         left[node->parent()->id()] = leftP + gnode->width();
         bottom[node->id()] = bottomP + height_;
+        if (bottom[node->id()] > maxBottom) 
+          maxBottom = bottom[node->id()];
       }
     });
 
+    QRectF sRect = treeVis_->sceneRect();
+    sRect.setHeight(maxBottom);
+    treeVis_->scene()->setSceneRect(sRect);    
+    treeVis_->scene()->update();
+    treeVis_->update();
   }
 
   std::vector<float> FixedHeightTreeLayout::computeNormalisedArea(
@@ -94,8 +103,9 @@ namespace IcicleMorphotreeWidget
     std::vector<float> left(tree.numberOfNodes(), 0);
     std::vector<qreal> bottom(tree.numberOfNodes(), 0);
     QVector<GNode *> &gnodes = treeVis_->gnodes();
+    float maxBottom = 0;
 
-    tree.traverseByLevel([&bottom, &narea, &left, &gnodes, this](NodePtr node){
+    tree.traverseByLevel([&bottom, &narea, &left, &gnodes, &maxBottom, this](NodePtr node){
       if (node->parent() == nullptr) {
         int levelsToZero = static_cast<int>(node->level() + 1);
         GNode *gnode = new GNode{treeVis_, node};
@@ -103,10 +113,11 @@ namespace IcicleMorphotreeWidget
         gnodes[node->id()] = gnode;
         // treeVis_->scene()->addItem(gnode);
         gnode->setPos(0, 0);
-        gnode->setWidth(treeVis_->width());
+        gnode->setWidth(treeVis_->sceneRect().width());
         gnode->setHeight(unitHeight_ * levelsToZero);
         left[node->id()] = gnode->pos().x();
         bottom[node->id()] = unitHeight_ * levelsToZero;
+        maxBottom = bottom[node->id()];
       }
       else {
         int levelsToZero = 
@@ -118,14 +129,21 @@ namespace IcicleMorphotreeWidget
         qreal leftP = left[node->parent()->id()];
         qreal bottomP = bottom[node->parent()->id()];
         gnode->setPos(leftP, bottomP);
-        gnode->setWidth(treeVis_->width() * narea[node->id()]);
+        gnode->setWidth(treeVis_->sceneRect().width() * narea[node->id()]);
         gnode->setHeight(unitHeight_ * levelsToZero);
 
         left[node->id()] = leftP;
         left[node->parent()->id()] = leftP + gnode->width();
         bottom[node->id()] = bottomP + gnode->height();
+        if (maxBottom < bottom[node->id()])
+          maxBottom = bottom[node->id()];
       }
     });
+    QRectF sRect = treeVis_->sceneRect();
+    sRect.setHeight(maxBottom);
+    treeVis_->scene()->setSceneRect(sRect);
+    treeVis_->scene()->update();
+    treeVis_->update();
   }
 
   std::vector<float> GrayscaleBasedHeightTreeLayout::computeNormalisedArea(

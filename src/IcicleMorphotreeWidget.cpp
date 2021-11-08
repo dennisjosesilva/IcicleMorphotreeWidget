@@ -16,6 +16,7 @@ namespace IcicleMorphotreeWidget
      colorMap_{std::make_unique<RainbowColorMap>()}     
   {
     QGraphicsScene *scene = new QGraphicsScene{this};
+    scene->setSceneRect(QRectF{0, 0, 400, 400});
     scene->setItemIndexMethod(QGraphicsScene::NoIndex);
     setScene(scene);
     setCacheMode(CacheBackground);
@@ -77,11 +78,39 @@ namespace IcicleMorphotreeWidget
   {
     scene()->clear();
 
+    scene()->setSceneRect(scene()->sceneRect());
+
     gnodes_.clear();
     gnodes_.resize(tree_.numberOfNodes());
 
     treeLayout_->parseTree(tree_);
     scene()->update();
+  }
+
+  IcicleMorphotreeWidget::MTree 
+    IcicleMorphotreeWidget::filter(std::shared_ptr<TreeFiltering>
+    treeFiltering)
+  {
+    MTree copiedTree = tree_.copy();
+    
+    clearAttributes();
+    removeGrayScaleBar();
+
+    treeFiltering->ifilter(tree_);
+    updateTreeRendering();
+    update();
+    return copiedTree;
+  }
+
+  void IcicleMorphotreeWidget::ifilter(
+    std::shared_ptr<TreeFiltering> treeFiltering)
+  {    
+    clearAttributes();
+    removeGrayScaleBar();
+    
+    treeFiltering->ifilter(tree_);
+    updateTreeRendering();
+    update();
   }
 
   void IcicleMorphotreeWidget::paintNodesBasedOnNormAttribute()
