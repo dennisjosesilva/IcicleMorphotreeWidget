@@ -5,6 +5,8 @@
 
 #include <QKeyEvent>
 
+#include <QDebug>
+
 namespace IcicleMorphotreeWidget 
 {
   IcicleMorphotreeWidget::IcicleMorphotreeWidget(QWidget *parent,
@@ -191,6 +193,26 @@ namespace IcicleMorphotreeWidget
       visZoomOut();
       break;
 
+    case Qt::Key_Alt:
+      isDownSpace_ = true; 
+      setDragMode(QGraphicsView::ScrollHandDrag);
+      break;
+
+    default:
+      break;
+    }
+  }
+
+  void IcicleMorphotreeWidget::keyReleaseEvent(QKeyEvent *e)
+  {
+    switch (e->key())
+    {
+    case Qt::Key_Alt:
+      isDownSpace_ = false;
+      setDragMode(QGraphicsView::NoDrag);
+      qDebug() << "Release";
+      break;
+    
     default:
       break;
     }

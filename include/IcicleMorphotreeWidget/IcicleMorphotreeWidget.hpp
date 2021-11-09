@@ -74,12 +74,15 @@ namespace IcicleMorphotreeWidget
       qreal unitHeight = 5.0f);
     void removeGrayScaleBar();
 
+    bool isDownSpace() const { return isDownSpace_; }
+
   protected:    
     void paintNodesBasedOnNormAttribute();
     void resetNodesColor();
 
   protected:
     void keyPressEvent(QKeyEvent *e) override;
+    void keyReleaseEvent(QKeyEvent *e) override;
 
   private:
     TreeLayoutPtr treeLayout_;
@@ -91,5 +94,7 @@ namespace IcicleMorphotreeWidget
 
     NormAttributesPtr attr_;
     ColorMapPtr colorMap_;
+
+    bool isDownSpace_;
   };
 }
