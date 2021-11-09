@@ -5,8 +5,6 @@
 
 #include <QKeyEvent>
 
-#include <QDebug>
-
 namespace IcicleMorphotreeWidget 
 {
   IcicleMorphotreeWidget::IcicleMorphotreeWidget(QWidget *parent,
@@ -209,8 +207,7 @@ namespace IcicleMorphotreeWidget
     {
     case Qt::Key_Alt:
       isDownSpace_ = false;
-      setDragMode(QGraphicsView::NoDrag);
-      qDebug() << "Release";
+      setDragMode(QGraphicsView::NoDrag);      
       break;
     
     default:
