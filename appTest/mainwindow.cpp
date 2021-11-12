@@ -121,9 +121,12 @@ void MainWindow::nodeMousePress(imt::GNode *node, QGraphicsSceneMouseEvent *e)
   if (mtreeVis_->dragMode() == QGraphicsView::NoDrag) {
     NodePtr mnode = node->mnode();
 
+    node->setOpacity(0.2f);
+
     node->setSelected(!node->isSelected());
     node->update();
 
+    
     qDebug() << mnode->id();
   }
 }
