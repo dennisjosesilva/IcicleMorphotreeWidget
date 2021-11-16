@@ -22,7 +22,7 @@ set(APP_TEST_SOURCE appTest/main.cpp appTest/mainwindow.cpp)
 
 # MOC SOURCE
 qt5_wrap_cpp(PROJECT_SOURCE
-   include/IcicleMorphotreeWidget/Graphics/GNodeEventHandler.hpp
+   include/IcicleMorphotreeWidget/Graphics/Node/GNodeEventHandler.hpp
    include/IcicleMorphotreeWidget/Graphics/ColorBar.hpp)
 
 qt5_wrap_cpp(APP_TEST_SOURCE

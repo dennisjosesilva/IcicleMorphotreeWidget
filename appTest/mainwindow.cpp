@@ -1,6 +1,6 @@
 #include "mainwindow.hpp"
 
-#include "IcicleMorphotreeWidget/Graphics/GNodeEventHandler.hpp"
+#include "IcicleMorphotreeWidget/Graphics/Node/GNodeEventHandler.hpp"
 #include "IcicleMorphotreeWidget/TreeLayout/TreeLayout.hpp"
 
 #include "IcicleMorphotreeWidget/Filtering/AreaTreeFiltering.hpp"
@@ -27,7 +27,7 @@
 #include <algorithm>
 
 MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
-  :QMainWindow{nullptr}, colorBar_{nullptr}
+  :QMainWindow{nullptr}, colorBar_{nullptr}, isGradientNodeStyle_{true}
 {
   using AreaTreeFiltering = IcicleMorphotreeWidget::AreaTreeFiltering;
 
@@ -48,13 +48,15 @@ MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
     //   std::make_unique<imt::FixedHeightTreeLayout>(20.f, 20.f, 50.0f)};
 
     mtreeVis_ = new imt::IcicleMorphotreeWidget{this, 
-      std::make_unique<imt::GrayscaleBasedHeightTreeLayout>(20.f, 20.f, 30.0f)};
+      std::make_unique<imt::GrayscaleBasedHeightTreeLayout>(
+        std::make_unique<imt::GradientGNodeFactory>(), 20.f, 20.f, 30.0f)};
       unitHeight = 30.f;
   }
   else {
     // mtreeVis_ = new imt::IcicleMorphotreeWidget{this};
     mtreeVis_ = new imt::IcicleMorphotreeWidget{this, 
-      std::make_unique<imt::GrayscaleBasedHeightTreeLayout>(20.f, 20.f, 2.0f)};
+      std::make_unique<imt::GrayscaleBasedHeightTreeLayout>(
+        std::make_unique<imt::GradientGNodeFactory>(), 20.f, 20.f, 2.0f)};
       unitWidth= 5.f;
   }
 
@@ -97,11 +99,24 @@ MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
     mtreeVis_->ifilter(std::make_shared<AreaTreeFiltering>(500));        
   });
 
+  QPushButton *btnChangeNodeStyle = new QPushButton{tr("Change Node Style"), this};
+  connect(btnChangeNodeStyle, &QPushButton::clicked, [this]{
+    if (isGradientNodeStyle_){
+      mtreeVis_->setGNodeFactory(std::make_unique<imt::FixedColorGNodeFactory>());
+      isGradientNodeStyle_ = false;
+    }
+    else {
+      mtreeVis_->setGNodeFactory(std::make_unique<imt::GradientGNodeFactory>());
+      isGradientNodeStyle_ = true;
+    }
+  });
+
   hlayout->addWidget(btnShowAttribute);
   hlayout->addWidget(btnPan);
   hlayout->addWidget(btnAreaFilter);
   hlayout->addWidget(btnAddGrayScaleBar);
   hlayout->addWidget(btnRemoveGrayScaleBar);
+  hlayout->addWidget(btnChangeNodeStyle);
   layout_->addItem(hlayout);
 
   // mtreeVis_->setDragMode(QGraphicsView::DragMode::ScrollHandDrag);
@@ -121,7 +136,7 @@ void MainWindow::nodeMousePress(imt::GNode *node, QGraphicsSceneMouseEvent *e)
   if (mtreeVis_->dragMode() == QGraphicsView::NoDrag) {
     NodePtr mnode = node->mnode();
 
-    node->setOpacity(0.2f);
+    // node->setOpacity(0.2f);
 
     node->setSelected(!node->isSelected());
     node->update();

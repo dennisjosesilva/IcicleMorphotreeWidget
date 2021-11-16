@@ -1,5 +1,5 @@
 #include "IcicleMorphotreeWidget/IcicleMorphotreeWidget.hpp"
-#include "IcicleMorphotreeWidget/Graphics/GNode.hpp"
+#include "IcicleMorphotreeWidget/Graphics/Node/GNode.hpp"
 
 #include <morphotree/adjacency/adjacency8c.hpp>
 
@@ -232,4 +232,12 @@ namespace IcicleMorphotreeWidget
   {
     return gnode(I32Point{x, y});
   }
+
+  void IcicleMorphotreeWidget::setGNodeFactory(GNodeFactoryPtr f) 
+  {
+    f->setTreeVisualiser(this);
+    treeLayout_->setGNodeFactory(std::move(f)); 
+    updateTreeRendering();
+  }
+  
 }

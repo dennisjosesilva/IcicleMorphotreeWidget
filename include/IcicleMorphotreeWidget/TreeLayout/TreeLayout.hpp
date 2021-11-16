@@ -3,11 +3,13 @@
 #include <morphotree/tree/mtree.hpp>
 #include <morphotree/core/alias.hpp>
 
+#include "IcicleMorphotreeWidget/Graphics/Node/GNodeFactory.hpp"
+
 #include <vector>
 
 namespace IcicleMorphotreeWidget
 {
-  class IcicleMorphotreeWidget;  
+  class IcicleMorphotreeWidget;    
 
   class TreeLayout
   {
@@ -15,16 +17,22 @@ namespace IcicleMorphotreeWidget
     using uint8 = morphotree::uint8;
     using MTree = morphotree::MorphologicalTree<uint8>;
     using NodePtr = typename MTree::NodePtr;
+    using GNodeFactoryPtr = std::unique_ptr<GNodeFactory>;
 
-    TreeLayout(float marginTop = 20.f,
+    TreeLayout(
+      GNodeFactoryPtr nodeFactory=std::make_unique<GradientGNodeFactory>(),
+      float marginTop = 20.f,
       float marginBottom = 20.f);
 
     virtual void parseTree(const MTree &tree) = 0;
 
-    inline void setTreeVis(IcicleMorphotreeWidget *t) { treeVis_ = t; }
+    inline void setTreeVis(IcicleMorphotreeWidget *t) { gnodeFactory_->setTreeVisualiser(t); treeVis_ = t; }
+
+    inline void setGNodeFactory(GNodeFactoryPtr f) { gnodeFactory_ = std::move(f); }
 
   protected:
     IcicleMorphotreeWidget *treeVis_;
+    GNodeFactoryPtr gnodeFactory_;
     float marginBottom_;
     float marginTop_;
   };
@@ -36,7 +44,9 @@ namespace IcicleMorphotreeWidget
     using MTree = morphotree::MorphologicalTree<uint8>;
     using NodePtr = typename MTree::NodePtr;
 
-    FixedHeightTreeLayout(float marginTop = 20.f,
+    FixedHeightTreeLayout(
+      GNodeFactoryPtr nodeFactory=std::make_unique<GradientGNodeFactory>(),
+      float marginTop = 20.f,
       float marginBotton = 20.f,
       float height = 5.0f);
 
@@ -55,7 +65,9 @@ namespace IcicleMorphotreeWidget
     using MTree = morphotree::MorphologicalTree<uint8>;
     using NodePtr = typename MTree::NodePtr;
 
-    GrayscaleBasedHeightTreeLayout(float marginTop = 20.f,
+    GrayscaleBasedHeightTreeLayout(
+      GNodeFactoryPtr nodeFactory=std::make_unique<GradientGNodeFactory>(),
+      float marginTop = 20.f,
       float marginBottom = 20.f,
       float unitHeight = 5.0f);
 

@@ -28,9 +28,7 @@ namespace IcicleMorphotreeWidget
 
     QRectF boundingRect() const override;
     QPainterPath shape() const override;
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
-      QWidget *widget) override;
-    
+
     inline bool isSelected() const { return isSelected_; }
     inline bool& isSelected() { return isSelected_; }
     inline void setSelected(bool isSelected) { isSelected_ = isSelected; }
@@ -52,7 +50,7 @@ namespace IcicleMorphotreeWidget
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *e) override;
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *e) override;
 
-  private:
+  protected:
     IcicleMorphotreeWidget *treeVis_;
     MTreeNodePtr mnode_;
     QColor backgroundColor_;
@@ -61,5 +59,30 @@ namespace IcicleMorphotreeWidget
     qreal height_;
 
     bool isSelected_;    
+  };
+
+  class FixedColorGNode : public GNode
+  {
+  public:
+    FixedColorGNode(IcicleMorphotreeWidget *treeVis, MTreeNodePtr mnode = nullptr);
+
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *options, 
+      QWidget *widget) override;
+  };
+
+  class GradientGNode : public GNode
+  {
+  public:
+    GradientGNode(IcicleMorphotreeWidget *treeVis, MTreeNodePtr mnode = nullptr,
+      float gradientProportion = 0.4f);
+    
+    inline float gradientProportion() const { return gradientProportion_; }
+    inline float& gradientProportion() { return gradientProportion_; }
+    inline void gradientProportion(float val) { gradientProportion_ = val; }
+
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *options,
+      QWidget *widget) override;
+  private:
+    float gradientProportion_;
   };
 }

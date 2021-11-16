@@ -2,7 +2,7 @@
 #include <morphotree/core/alias.hpp>
 
 #include "IcicleMorphotreeWidget/TreeLayout/TreeLayout.hpp"
-#include "IcicleMorphotreeWidget/Graphics/GNode.hpp"
+#include "IcicleMorphotreeWidget/Graphics/Node/GNode.hpp"
 #include "IcicleMorphotreeWidget/IcicleMorphotreeWidget.hpp"
 
 #include <QMainWindow>
@@ -28,6 +28,8 @@ private:
   imt::IcicleMorphotreeWidget *mtreeVis_;
 
   imt::ColorBar *colorBar_;
+
+  bool isGradientNodeStyle_;
 
   QWidget *widget_;
   QLayout *layout_;

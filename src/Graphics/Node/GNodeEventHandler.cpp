@@ -1,5 +1,5 @@
-#include "IcicleMorphotreeWidget/Graphics/GNodeEventHandler.hpp"
-#include "IcicleMorphotreeWidget/Graphics/GNode.hpp"
+#include "IcicleMorphotreeWidget/Graphics/Node/GNodeEventHandler.hpp"
+#include "IcicleMorphotreeWidget/Graphics/Node/GNode.hpp"
 
 namespace IcicleMorphotreeWidget
 {

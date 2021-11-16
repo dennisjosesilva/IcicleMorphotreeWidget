@@ -6,11 +6,10 @@
 #include <morphotree/core/box.hpp>
 #include <morphotree/tree/mtree.hpp>
 
+#include "IcicleMorphotreeWidget/Graphics/Node/GNodeFactory.hpp"
 #include "IcicleMorphotreeWidget/TreeLayout/TreeLayout.hpp"
 #include "IcicleMorphotreeWidget/Graphics/GrayScaleBar.hpp"
-
 #include "IcicleMorphotreeWidget/Graphics/ColorBar.hpp"
-
 #include "IcicleMorphotreeWidget/Filtering/TreeFiltering.hpp"
 
 namespace IcicleMorphotreeWidget
@@ -27,6 +26,7 @@ namespace IcicleMorphotreeWidget
     using TreeLayoutPtr = std::unique_ptr<TreeLayout>;
     using UI32Point = morphotree::UI32Point;
     using I32Point = morphotree::I32Point;    
+    using GNodeFactoryPtr = typename TreeLayout::GNodeFactoryPtr;
 
     using ColorMapPtr = std::unique_ptr<ColorMap>;
     using NormAttributesPtr = std::unique_ptr<std::vector<float>>;
@@ -66,6 +66,8 @@ namespace IcicleMorphotreeWidget
     GNode *gnode(const I32Point &p);
     GNode *gnode(const QPoint &p);
     GNode *gnode(int x, int y);
+
+    void setGNodeFactory(GNodeFactoryPtr f);
 
     inline std::vector<uint8> recImage() const { return tree_.reconstructImage(); }
     inline Box domain() const { return domain_; }
