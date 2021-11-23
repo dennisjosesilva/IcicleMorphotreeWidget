@@ -54,6 +54,10 @@ namespace IcicleMorphotreeWidget
 
     std::vector<float> computeNormalisedArea(const MTree &tree);
 
+    inline float& height() { return height_; }
+    inline float height() const { return height_; }
+    inline void setHeight(float height) { height_ = height; }
+
   private:
     float height_;   
   };
@@ -70,6 +74,10 @@ namespace IcicleMorphotreeWidget
       float marginTop = 20.f,
       float marginBottom = 20.f,
       float unitHeight = 5.0f);
+    
+    inline float& uniHeight() { return unitHeight_; }
+    inline float  uniHeight() const { return unitHeight_; }
+    inline void setUniHeight(float uniHeight) { unitHeight_ = uniHeight; }
 
     void parseTree(const MTree &tree);
 

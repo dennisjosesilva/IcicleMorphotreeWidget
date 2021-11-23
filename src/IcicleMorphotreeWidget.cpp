@@ -76,6 +76,13 @@ namespace IcicleMorphotreeWidget
 
   void IcicleMorphotreeWidget::updateTreeRendering()
   {
+    if (grayScaleBar_ != nullptr) {
+      // backup grayscaleBar before it is deleted by scene()->clear()
+      grayScaleBar_ =  new GrayScaleBar{grayScaleBar_->unitWidth(), 
+        grayScaleBar_->unitHeight(), grayScaleBar_ ->numberOfLevels()};      
+    }
+    
+    // It deletes all items including grayscaleBar_
     scene()->clear();
 
     scene()->setSceneRect(scene()->sceneRect());
@@ -85,6 +92,11 @@ namespace IcicleMorphotreeWidget
 
     treeLayout_->parseTree(tree_);
     scene()->update();
+
+    if (grayScaleBar_ != nullptr) {
+      scene()->addItem(grayScaleBar_);
+      renderGrayScaleBar();
+    }
   }
 
   IcicleMorphotreeWidget::MTree 
@@ -158,11 +170,8 @@ namespace IcicleMorphotreeWidget
     if (grayScaleBar_ == nullptr)  {
       grayScaleBar_ = new GrayScaleBar{unitWidth, unitHeight, numberOfLevels};
       grayScaleBar_->setPos(-unitWidth, 0);
-      const QRectF &sceneRect = scene()->sceneRect();      
-      scene()->setSceneRect(-unitWidth, 0, sceneRect.width()+unitWidth, sceneRect.height());
       scene()->addItem(grayScaleBar_);
-      scene()->update();
-      update();
+      renderGrayScaleBar();
     }
   }
 
@@ -177,6 +186,21 @@ namespace IcicleMorphotreeWidget
       scene()->update();
       update();
     }
+  }
+
+  void IcicleMorphotreeWidget::renderGrayScaleBar()
+  {    
+    // const QRectF &sceneRect = scene()->sceneRect();      
+    // scene()->setSceneRect(-grayScaleBar_->unitWidth(), 0, 
+    //   sceneRect.width()+grayScaleBar_->unitWidth(), sceneRect.height());        
+    scene()->update();
+    update();
+  }
+
+  void IcicleMorphotreeWidget::setTreeLayout(TreeLayoutPtr treeLayout)
+  {
+    treeLayout_ = treeLayout;
+    updateTreeRendering();    
   }
 
   void IcicleMorphotreeWidget::keyPressEvent(QKeyEvent *e)

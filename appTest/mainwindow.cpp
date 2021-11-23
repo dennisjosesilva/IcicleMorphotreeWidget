@@ -23,7 +23,7 @@
 #include <QKeyEvent>
 
 #include <QPushButton>
-
+#include <memory>
 #include <algorithm>
 
 MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
@@ -77,7 +77,11 @@ MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
   connect(btnAddGrayScaleBar, &QPushButton::clicked, [unitWidth, unitHeight, this](){
     std::vector<mt::uint8> frec = mtreeVis_->recImage();    
     mt::uint8 maxLevel = *std::max_element(frec.begin(), frec.end());
-    mtreeVis_->addGrayScaleBar(maxLevel+1, unitWidth, unitHeight);
+
+    std::shared_ptr<imt::GrayscaleBasedHeightTreeLayout> treeLayout = 
+      std::dynamic_pointer_cast<imt::GrayscaleBasedHeightTreeLayout>(mtreeVis_->treeLayout());
+
+    mtreeVis_->addGrayScaleBar(maxLevel+1, unitWidth, treeLayout->uniHeight());
   });
 
   QPushButton *btnRemoveGrayScaleBar = new QPushButton{tr("Remove GrayScale Bar"), this};
@@ -118,6 +122,7 @@ MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
   hlayout->addWidget(btnRemoveGrayScaleBar);
   hlayout->addWidget(btnChangeNodeStyle);
   layout_->addItem(hlayout);
+  layout_->addItem(createUniHeightControls(unitHeight));
 
   // mtreeVis_->setDragMode(QGraphicsView::DragMode::ScrollHandDrag);
   layout_->addWidget(mtreeVis_);
@@ -144,6 +149,29 @@ void MainWindow::nodeMousePress(imt::GNode *node, QGraphicsSceneMouseEvent *e)
     
     qDebug() << mnode->id();
   }
+}
+
+QLayout* MainWindow::createUniHeightControls(float initialUniHeight)
+{
+  QHBoxLayout *layout = new QHBoxLayout;
+  uniHeightLabel_ = new QLabel{tr("unit node height: "), this};
+  layout->addWidget(uniHeightLabel_);
+
+  uniHeightSlider_ = new QSlider{this};
+  uniHeightSlider_->setOrientation(Qt::Horizontal);
+  uniHeightSlider_->setRange(1, 50);
+  uniHeightSlider_->setValue(static_cast<int>(initialUniHeight));
+  connect(uniHeightSlider_, &QSlider::sliderMoved, this, 
+    &MainWindow::uniHeightSlider_onSliderMoved);
+  layout->addWidget(uniHeightSlider_);
+
+  uniHeightLineEdit_ = new QLineEdit{this};
+  uniHeightLineEdit_->setText(QString::number(initialUniHeight));
+  connect(uniHeightLineEdit_, &QLineEdit::editingFinished, this, 
+    &MainWindow::uniHeightLineEdit_onEditingFinishing);
+  layout->addWidget(uniHeightLineEdit_);
+
+  return layout;
 }
 
 void MainWindow::visualiseAttributesAct_onTrigger()
@@ -192,4 +220,42 @@ void MainWindow::visualiseAttributesAct_onTrigger()
     layout_->addWidget(colorBar);
     colorBar_ = colorBar;
   }
+}
+
+void MainWindow::uniHeightSlider_onSliderMoved(int value)
+{
+  uniHeightLineEdit_->setText(QString::number(value));
+  applyTreeLayoutChange();
+}
+
+void MainWindow::uniHeightLineEdit_onEditingFinishing()
+{
+  float uniHeightVal = uniHeightLineEdit_->text().toFloat();
+  if (uniHeightSlider_->minimum() <= uniHeightVal && uniHeightVal <= uniHeightSlider_->maximum()) {
+    uniHeightSlider_->setValue(uniHeightVal);
+    applyTreeLayoutChange();
+  }
+  else {
+    uniHeightLineEdit_->setText(QString::number(uniHeightSlider_->value()));
+  }
+}
+
+void MainWindow::applyTreeLayoutChange()
+{
+  using TreeLayout = imt::TreeLayout;
+  using TreeLayoutPtr = std::shared_ptr<TreeLayout>;
+  using GrayScaleBasedHeightTreeLayout = imt::GrayscaleBasedHeightTreeLayout;
+  using GrayScaleBasedHeightTreeLayoutPtr = std::shared_ptr<GrayScaleBasedHeightTreeLayout>;
+
+  
+  GrayScaleBasedHeightTreeLayoutPtr treeLayout  = 
+    std::dynamic_pointer_cast<GrayScaleBasedHeightTreeLayout>(mtreeVis_->treeLayout());
+  
+  float uniHeight = uniHeightLineEdit_->text().toFloat();
+  treeLayout->setUniHeight(uniHeight);
+  
+  if (mtreeVis_->grayscaleBar() != nullptr)
+    mtreeVis_->grayscaleBar()->setUnitHeight(uniHeight);
+
+  mtreeVis_->updateTreeRendering();
 }

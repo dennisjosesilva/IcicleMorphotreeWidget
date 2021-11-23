@@ -7,6 +7,10 @@
 
 #include <QMainWindow>
 
+#include <QLabel>
+#include <QSlider>
+#include <QLineEdit>
+
 #include <QLayout>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -22,10 +26,23 @@ public:
   MainWindow(mt::Box domain, const std::vector<mt::uint8> &f);
   void nodeMousePress(imt::GNode *node, QGraphicsSceneMouseEvent *e);
 
+  QLayout* createUniHeightControls(float initialUniHeight);
+
   void visualiseAttributesAct_onTrigger();    
+  
+  void uniHeightSlider_onSliderMoved(int value);
+  void uniHeightLineEdit_onEditingFinishing();
+
+
+private:
+  void applyTreeLayoutChange();
 
 private:
   imt::IcicleMorphotreeWidget *mtreeVis_;
+
+  QLabel *uniHeightLabel_;
+  QSlider *uniHeightSlider_;
+  QLineEdit *uniHeightLineEdit_;
 
   imt::ColorBar *colorBar_;
 

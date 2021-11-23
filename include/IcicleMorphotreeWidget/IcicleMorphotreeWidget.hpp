@@ -23,7 +23,7 @@ namespace IcicleMorphotreeWidget
     using uint8 = morphotree::uint8;
     using uint32 = morphotree::uint32;
     using MTree = morphotree::MorphologicalTree<uint8>;
-    using TreeLayoutPtr = std::unique_ptr<TreeLayout>;
+    using TreeLayoutPtr = std::shared_ptr<TreeLayout>;
     using UI32Point = morphotree::UI32Point;
     using I32Point = morphotree::I32Point;    
     using GNodeFactoryPtr = typename TreeLayout::GNodeFactoryPtr;
@@ -32,7 +32,7 @@ namespace IcicleMorphotreeWidget
     using NormAttributesPtr = std::unique_ptr<std::vector<float>>;
 
     IcicleMorphotreeWidget(QWidget *parent = nullptr, 
-      TreeLayoutPtr treeLayout=std::make_unique<FixedHeightTreeLayout>());
+      TreeLayoutPtr treeLayout=std::make_shared<FixedHeightTreeLayout>());
 
     void drawBackground(QPainter *painter, const QRectF &rect) override;
 
@@ -73,12 +73,17 @@ namespace IcicleMorphotreeWidget
     inline Box domain() const { return domain_; }
 
     void addGrayScaleBar(unsigned int numberOfLevels=256, qreal unitWidth=20, 
-      qreal unitHeight = 5.0f);
+      qreal unitHeight = 5.0f);    
     void removeGrayScaleBar();
+    GrayScaleBar* grayscaleBar() { return grayScaleBar_; }
 
     bool isDownSpace() const { return isDownSpace_; }
 
+    TreeLayoutPtr treeLayout() { return treeLayout_; }
+    void setTreeLayout(TreeLayoutPtr treeLayout);
+
   protected:    
+    void renderGrayScaleBar();
     void paintNodesBasedOnNormAttribute();
     void resetNodesColor();
 
