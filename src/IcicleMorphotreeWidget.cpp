@@ -257,6 +257,23 @@ namespace IcicleMorphotreeWidget
     return gnode(I32Point{x, y});
   }
 
+  GNode* IcicleMorphotreeWidget::gnode(const I32Point &p, const QVector<bool> &mask)
+  {
+    using NodePtr = typename MTree::NodePtr;
+    NodePtr node = tree_.smallComponent(domain_.pointToIndex(p), mask.toStdVector());
+    return gnodes_[node->id()];
+  }
+
+  GNode *IcicleMorphotreeWidget::gnode(const QPoint &p, const QVector<bool> &mask)
+  {
+    return gnode(I32Point{p.x(), p.y()}, mask);
+  }
+
+  GNode *IcicleMorphotreeWidget::gnode(int x, int y, const QVector<bool> &mask)
+  {
+    return gnode(I32Point{x, y}, mask);
+  }
+
   void IcicleMorphotreeWidget::setGNodeFactory(GNodeFactoryPtr f) 
   {
     f->setTreeVisualiser(this);

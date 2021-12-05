@@ -67,6 +67,10 @@ namespace IcicleMorphotreeWidget
     GNode *gnode(const QPoint &p);
     GNode *gnode(int x, int y);
 
+    GNode *gnode(const I32Point &p, const QVector<bool> &mask);
+    GNode *gnode(const QPoint &p, const QVector<bool> &mask);
+    GNode *gnode(int x, int y, const QVector<bool> &mask);
+
     void setGNodeFactory(GNodeFactoryPtr f);
 
     inline std::vector<uint8> recImage() const { return tree_.reconstructImage(); }
