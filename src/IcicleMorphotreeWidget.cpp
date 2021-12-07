@@ -169,7 +169,7 @@ namespace IcicleMorphotreeWidget
   {
     if (grayScaleBar_ == nullptr)  {
       grayScaleBar_ = new GrayScaleBar{unitWidth, unitHeight, numberOfLevels};
-      grayScaleBar_->setPos(-unitWidth, 0);
+      grayScaleBar_->setPos(-unitWidth-5, 0);
       scene()->addItem(grayScaleBar_);
       renderGrayScaleBar();
     }
