@@ -1,0 +1,34 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+  <file>images/Remove_Skel_icon.png</file>
+  <file>images/Skel_icon.png</file>
+  <file>images/morphotree_icon.png</file>
+  <file>images/binrec_icon.png</file>
+  <file>images/binrec_unselect_icon.png</file>
+  <file>images/binrec_plus_icon.png</file>
+  <file>images/greyrec_icon.png</file>
+  <file>images/greyrec_unselect_icon.png</file>
+  <file>images/greyrec_plus_icon.png</file>  
+  <file>images/inspect_node_minus.png</file>
+  <file>images/inspect_node_plus.png</file>
+  <file>images/node_selection_pixel_icon.png</file>
+  <file>images/image_zoom_in_icon.png</file>
+  <file>images/image_zoom_out_icon.png</file>
+  <file>images/highlight_node_icon.png</file>
+  <file>images/Spline_CPs_icon.png</file>  
+  <file>images/Remove_SplineCPs_icon.png</file>  
+  <file>images/AddCP_icon.png</file>
+  <file>images/DeleteCP_icon.png</file>
+  <file>images/DeleteMultiCP_icon.png</file>
+  <file>images/saliency_icon.png</file>
+  <file>images/color_icon.png</file>  
+  <file>images/width_icon.png</file>
+  <file>images/clear_screen_icon.png</file>
+  <file>images/clear_image_icon.png</file>
+  <file>images/ellipse_icon.png</file>
+  <file>images/iciclemorphotree_icon.png</file>
+  <file>images/icicle_node_selection_pixel_icon.png</file>
+  <file>images/icicle_node_inclusion_icon.png</file>
+  <file>images/icicle_node_removal_icon.png</file>
+</qresource>
+</RCC>
