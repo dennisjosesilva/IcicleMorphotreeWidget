@@ -78,8 +78,12 @@ namespace IcicleMorphotreeWidget
   {
     if (grayScaleBar_ != nullptr) {
       // backup grayscaleBar before it is deleted by scene()->clear()
+      
+      QPointF pos = grayScaleBar_->pos();
+
       grayScaleBar_ =  new GrayScaleBar{grayScaleBar_->unitWidth(), 
         grayScaleBar_->unitHeight(), grayScaleBar_ ->numberOfLevels()};      
+      grayScaleBar_->setPos(pos);
     }
     
     // It deletes all items including grayscaleBar_
