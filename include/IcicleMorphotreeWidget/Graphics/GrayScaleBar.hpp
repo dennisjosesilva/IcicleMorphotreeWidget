@@ -30,9 +30,14 @@ namespace IcicleMorphotreeWidget
     unsigned int& numberOfLevels() { return numberOfLevels_; }
     void setNumberOfLevels(unsigned int val) { numberOfLevels_ = val; }
 
+    bool showBorders() const { return showBorders_; }
+    bool &showBorders() { return showBorders_; }
+    void setShowBorders(bool val) { showBorders_ = val; }
+
   private:
     qreal unitWidth_;
     qreal unitHeight_;
     unsigned int numberOfLevels_;
+    bool showBorders_;
   };
 }

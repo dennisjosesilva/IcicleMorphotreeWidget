@@ -8,7 +8,8 @@ namespace IcicleMorphotreeWidget
   GrayScaleBar::GrayScaleBar(qreal unitWidth, qreal unitHeight, 
     unsigned int numberOfLevels)
     :unitWidth_{unitWidth}, unitHeight_{unitHeight}, 
-     numberOfLevels_{numberOfLevels}
+     numberOfLevels_{numberOfLevels},
+     showBorders_{true}
   {
     setZValue(-1);
   }
@@ -32,7 +33,14 @@ namespace IcicleMorphotreeWidget
     for (unsigned int l=0; l < L; ++l) {
       qreal relLevel = static_cast<qreal>(l) / static_cast<qreal>(L);
       int level = 255 * relLevel;     
-      painter->setPen(QPen{Qt::black, 0});
+      
+      if (showBorders_){
+        painter->setPen(QPen{Qt::black, 0});
+      }
+      else {
+        painter->setPen(Qt::NoPen);
+      }
+
       painter->setBrush(QColor::fromRgb(level, level, level));            
       painter->drawRect(0, static_cast<qreal>(l)*unitHeight_, unitWidth_, unitHeight_);    
     }

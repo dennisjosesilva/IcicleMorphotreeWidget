@@ -82,6 +82,11 @@ MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
       std::dynamic_pointer_cast<imt::GrayscaleBasedHeightTreeLayout>(mtreeVis_->treeLayout());
 
     mtreeVis_->addGrayScaleBar(maxLevel+1, unitWidth, treeLayout->uniHeight());
+
+    if (isGradientNodeStyle_)
+      mtreeVis_->grayscaleBar()->setShowBorders(false);
+    else 
+      mtreeVis_->grayscaleBar()->setShowBorders(true);
   });
 
   QPushButton *btnRemoveGrayScaleBar = new QPushButton{tr("Remove GrayScale Bar"), this};
@@ -108,10 +113,16 @@ MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
     if (isGradientNodeStyle_){
       mtreeVis_->setGNodeFactory(std::make_unique<imt::FixedColorGNodeFactory>());
       isGradientNodeStyle_ = false;
+
+      if (mtreeVis_->grayscaleBar() != nullptr)
+        mtreeVis_->grayscaleBar()->setShowBorders(true);              
     }
     else {
       mtreeVis_->setGNodeFactory(std::make_unique<imt::GradientGNodeFactory>());
       isGradientNodeStyle_ = true;
+      
+      if (mtreeVis_->grayscaleBar() != nullptr)
+        mtreeVis_->grayscaleBar()->setShowBorders(false);              
     }
   });
 
