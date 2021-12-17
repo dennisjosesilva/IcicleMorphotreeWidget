@@ -11,6 +11,12 @@ namespace IcicleMorphotreeWidget
 {
   class IcicleMorphotreeWidget;    
 
+  enum TreeLayoutType {
+    FixedHeight,
+    GrayScaleBasedHeight,
+    AutoSize
+  };
+
   class TreeLayout
   {
   public:
@@ -25,6 +31,8 @@ namespace IcicleMorphotreeWidget
       float marginBottom = 20.f);
 
     virtual void parseTree(const MTree &tree) = 0;
+
+    virtual TreeLayoutType type() const = 0;
 
     inline void setTreeVis(IcicleMorphotreeWidget *t) { gnodeFactory_->setTreeVisualiser(t); treeVis_ = t; }
 
@@ -58,6 +66,8 @@ namespace IcicleMorphotreeWidget
     inline float height() const { return height_; }
     inline void setHeight(float height) { height_ = height; }
 
+    inline TreeLayoutType type() const override { return FixedHeight; }
+
   private:
     float height_;   
   };
@@ -80,6 +90,8 @@ namespace IcicleMorphotreeWidget
     inline void setUniHeight(float uniHeight) { unitHeight_ = uniHeight; }
 
     void parseTree(const MTree &tree);
+
+    inline TreeLayoutType type() const override { return TreeLayoutType::GrayScaleBasedHeight; }
 
     std::vector<float> computeNormalisedArea(const MTree &tree);
   private:

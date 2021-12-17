@@ -31,6 +31,8 @@ namespace IcicleMorphotreeWidget
 
     qreal computeUnitHeightFromTheTree(const MTree &tree) const;
 
+    inline TreeLayoutType type() const override { return TreeLayoutType::AutoSize; }
+
   private:
     qreal unitHeight_;
   };

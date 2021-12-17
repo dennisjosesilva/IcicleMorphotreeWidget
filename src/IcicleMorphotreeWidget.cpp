@@ -1,6 +1,8 @@
 #include "IcicleMorphotreeWidget/IcicleMorphotreeWidget.hpp"
 #include "IcicleMorphotreeWidget/Graphics/Node/GNode.hpp"
 
+#include "IcicleMorphotreeWidget/TreeLayout/AutoSizeTreeLayout.hpp"
+
 #include <morphotree/adjacency/adjacency8c.hpp>
 
 #include <QDebug>
@@ -82,10 +84,12 @@ namespace IcicleMorphotreeWidget
       // backup grayscaleBar before it is deleted by scene()->clear()
       
       QPointF pos = grayScaleBar_->pos();
+      bool showBorders = grayScaleBar_->showBorders();
 
       grayScaleBar_ =  new GrayScaleBar{grayScaleBar_->unitWidth(), 
         grayScaleBar_->unitHeight(), grayScaleBar_ ->numberOfLevels()};      
       grayScaleBar_->setPos(pos);
+      grayScaleBar_->setShowBorders(showBorders);
     }
     
     // It deletes all items including grayscaleBar_
@@ -244,17 +248,24 @@ namespace IcicleMorphotreeWidget
   }
 
   void IcicleMorphotreeWidget::resizeEvent(QResizeEvent *e) 
-  {
+  {    
     const QSize& s = e->size();
-    if (grayScaleBar_ != nullptr){
+    if (grayScaleBar_ != nullptr) {
+      using AutoSizeTLPtr = std::shared_ptr<AutoSizeTreeLayout>;
+
       scene()->setSceneRect(-grayScaleBar_->unitWidth()-20, 0, s.width(), s.height());
+      updateTreeRendering();
+      if (treeLayout_->type() == TreeLayoutType::AutoSize) {
+        AutoSizeTLPtr t = std::dynamic_pointer_cast<AutoSizeTreeLayout>(treeLayout_);
+        grayScaleBar_->setUnitHeight(t->unitHeight());
+        renderGrayScaleBar();
+      }
     }
     else {
       scene()->setSceneRect(0, 0, s.width(), s.height());
+      updateTreeRendering();
     }
-    updateTreeRendering();
-
-    qDebug() << "resized";
+        
     QWidget::resizeEvent(e);
   }
 

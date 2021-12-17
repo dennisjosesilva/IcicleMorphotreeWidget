@@ -87,10 +87,10 @@ MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
     std::vector<mt::uint8> frec = mtreeVis_->recImage();    
     mt::uint8 maxLevel = *std::max_element(frec.begin(), frec.end());
 
-    std::shared_ptr<imt::GrayscaleBasedHeightTreeLayout> treeLayout = 
-      std::dynamic_pointer_cast<imt::GrayscaleBasedHeightTreeLayout>(mtreeVis_->treeLayout());
+    std::shared_ptr<imt::AutoSizeTreeLayout> treeLayout = 
+      std::dynamic_pointer_cast<imt::AutoSizeTreeLayout>(mtreeVis_->treeLayout());
 
-    mtreeVis_->addGrayScaleBar(maxLevel+1, unitWidth, treeLayout->uniHeight());
+    mtreeVis_->addGrayScaleBar(maxLevel+1, unitWidth, treeLayout->unitHeight());
 
     if (isGradientNodeStyle_)
       mtreeVis_->grayscaleBar()->setShowBorders(false);
