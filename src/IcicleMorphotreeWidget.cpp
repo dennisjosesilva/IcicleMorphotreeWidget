@@ -3,6 +3,8 @@
 
 #include <morphotree/adjacency/adjacency8c.hpp>
 
+#include <QDebug>
+
 #include <QKeyEvent>
 
 namespace IcicleMorphotreeWidget 
@@ -87,9 +89,7 @@ namespace IcicleMorphotreeWidget
     }
     
     // It deletes all items including grayscaleBar_
-    scene()->clear();
-
-    scene()->setSceneRect(scene()->sceneRect());
+    scene()->clear();    
 
     gnodes_.clear();
     gnodes_.resize(tree_.numberOfNodes());
@@ -241,6 +241,21 @@ namespace IcicleMorphotreeWidget
     default:
       break;
     }
+  }
+
+  void IcicleMorphotreeWidget::resizeEvent(QResizeEvent *e) 
+  {
+    const QSize& s = e->size();
+    if (grayScaleBar_ != nullptr){
+      scene()->setSceneRect(-grayScaleBar_->unitWidth()-20, 0, s.width(), s.height());
+    }
+    else {
+      scene()->setSceneRect(0, 0, s.width(), s.height());
+    }
+    updateTreeRendering();
+
+    qDebug() << "resized";
+    QWidget::resizeEvent(e);
   }
 
   GNode *IcicleMorphotreeWidget::gnode(const I32Point &p)

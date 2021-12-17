@@ -2,6 +2,7 @@
 
 #include "IcicleMorphotreeWidget/Graphics/Node/GNodeEventHandler.hpp"
 #include "IcicleMorphotreeWidget/TreeLayout/TreeLayout.hpp"
+#include "IcicleMorphotreeWidget/TreeLayout/AutoSizeTreeLayout.hpp"
 
 #include "IcicleMorphotreeWidget/Filtering/AreaTreeFiltering.hpp"
 
@@ -47,16 +48,24 @@ MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
     // mtreeVis_ = new imt::IcicleMorphotreeWidget{this, 
     //   std::make_unique<imt::FixedHeightTreeLayout>(20.f, 20.f, 50.0f)};
 
-    mtreeVis_ = new imt::IcicleMorphotreeWidget{this, 
-      std::make_unique<imt::GrayscaleBasedHeightTreeLayout>(
-        std::make_unique<imt::GradientGNodeFactory>(), 20.f, 20.f, 30.0f)};
-      unitHeight = 30.f;
+    // mtreeVis_ = new imt::IcicleMorphotreeWidget{this, 
+    //   std::make_unique<imt::GrayscaleBasedHeightTreeLayout>(
+    //     std::make_unique<imt::GradientGNodeFactory>(), 20.f, 20.f, 30.0f)};
+    //   unitHeight = 30.f;
+
+    mtreeVis_ = new imt::IcicleMorphotreeWidget{this,
+      std::make_unique<imt::AutoSizeTreeLayout>(
+        std::make_unique<imt::GradientGNodeFactory>(), 20.f, 20.f)};
+    unitHeight = 30.f;
   }
   else {
     // mtreeVis_ = new imt::IcicleMorphotreeWidget{this};
+    // mtreeVis_ = new imt::IcicleMorphotreeWidget{this, 
+    //   std::make_unique<imt::GrayscaleBasedHeightTreeLayout>(
+    //     std::make_unique<imt::GradientGNodeFactory>(), 20.f, 20.f, 2.0f)};
     mtreeVis_ = new imt::IcicleMorphotreeWidget{this, 
-      std::make_unique<imt::GrayscaleBasedHeightTreeLayout>(
-        std::make_unique<imt::GradientGNodeFactory>(), 20.f, 20.f, 2.0f)};
+      std::make_unique<imt::AutoSizeTreeLayout>(
+        std::make_unique<imt::GradientGNodeFactory>(), 20.f, 20.f)};
       unitWidth= 5.f;
   }
 

@@ -9,7 +9,7 @@
       "type": "cppdbg",
       "request": "launch",
       "program": "/mnt/HDD-Ubuntu/documents/phd/groningen/research/experiments/IcicleMorphoTreeWidget/debug/bin/appTest",
-      "args": [],
+      "args": ["/mnt/HDD-Ubuntu/documents/phd/groningen/research/experiments/images/Zuckerberg.pgm"],
       "stopAtEntry": false,
       "cwd": "${fileDirname}",
       "environment": [],

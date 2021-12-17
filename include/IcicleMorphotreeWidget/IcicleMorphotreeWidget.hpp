@@ -95,6 +95,8 @@ namespace IcicleMorphotreeWidget
     void keyPressEvent(QKeyEvent *e) override;
     void keyReleaseEvent(QKeyEvent *e) override;
 
+    void resizeEvent(QResizeEvent *e) override;
+
   private:
     TreeLayoutPtr treeLayout_;
     Box domain_;
