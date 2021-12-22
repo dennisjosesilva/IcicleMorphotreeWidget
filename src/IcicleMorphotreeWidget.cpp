@@ -99,6 +99,7 @@ namespace IcicleMorphotreeWidget
     gnodes_.resize(tree_.numberOfNodes());
 
     treeLayout_->parseTree(tree_);
+    emit treeAboutToBeRedrawn();
     scene()->update();
 
     if (grayScaleBar_ != nullptr) {

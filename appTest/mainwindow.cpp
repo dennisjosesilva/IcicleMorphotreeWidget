@@ -70,7 +70,9 @@ MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
   }
 
   mtreeVis_->loadImage(domain, f);
-  
+  connect(mtreeVis_, &imt::IcicleMorphotreeWidget::treeAboutToBeRedrawn, [](){
+    qDebug() << "about to be drawn";
+  });
   // mtreeVis_->addGrayScaleBar(static_cast<unsigned int>(maxLevel)+1, unitWidth,
   //   unitHeight);
 

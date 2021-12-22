@@ -19,6 +19,7 @@ file(GLOB_RECURSE PROJECT_SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
 
 # MOC SOURCE
 qt5_wrap_cpp(PROJECT_SOURCE
+   ../include/IcicleMorphotreeWidget/IcicleMorphotreeWidget.hpp
    ../include/IcicleMorphotreeWidget/Graphics/Node/GNodeEventHandler.hpp
    ../include/IcicleMorphotreeWidget/Graphics/ColorBar.hpp)
 

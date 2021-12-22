@@ -18,6 +18,7 @@ namespace IcicleMorphotreeWidget
 
   class IcicleMorphotreeWidget : public QGraphicsView
   {
+    Q_OBJECT
   public:
     using Box = morphotree::Box;
     using uint8 = morphotree::uint8;
@@ -85,6 +86,9 @@ namespace IcicleMorphotreeWidget
 
     TreeLayoutPtr treeLayout() { return treeLayout_; }
     void setTreeLayout(TreeLayoutPtr treeLayout);
+
+  signals:
+    void treeAboutToBeRedrawn();
 
   protected:    
     void renderGrayScaleBar();
