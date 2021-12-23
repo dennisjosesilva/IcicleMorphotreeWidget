@@ -8,9 +8,10 @@
 namespace IcicleMorphotreeWidget
 { 
   AutoSizeTreeLayout::AutoSizeTreeLayout(GNodeFactoryPtr nodeFactory,
-    float marginTop, float marginBottom)
+    float marginTop, float marginBottom, qreal marginLeft)
     : TreeLayout{std::move(nodeFactory), marginTop, marginBottom},
-      unitHeight_{-1.0f}
+      unitHeight_{-1.0f},
+      marginLeft_{marginLeft}
   {}
 
   void AutoSizeTreeLayout::parseTree(const MTree &tree)
@@ -22,14 +23,16 @@ namespace IcicleMorphotreeWidget
     float maxBottom = 0;
     unitHeight_ = computeUnitHeightFromTheTree(tree);
 
-    tree.traverseByLevel([&bottom, &narea, &left, &gnodes, &maxBottom, this](NodePtr node){
+    float renderWidth = treeVis_->sceneRect().width() - marginLeft_;
+
+    tree.traverseByLevel([&bottom, &narea, &left, &gnodes, &maxBottom, &renderWidth, this](NodePtr node) {
       if (node->parent() == nullptr) { // root node
         int levelsToZero = static_cast<int>(node->level()) + 1;
         GNode *gnode = gnodeFactory_->create(node);
         treeVis_->addGNodeToScene(gnode);
         gnodes[node->id()] = gnode;
-        gnode->setPos(0, 0);
-        gnode->setWidth(treeVis_->sceneRect().width());
+        gnode->setPos(marginLeft_, 0);
+        gnode->setWidth(renderWidth);
         gnode->setHeight(unitHeight_ * levelsToZero);
         left[node->id()] = gnode->pos().x();
         bottom[node->id()] = gnode->height(); 
@@ -44,7 +47,7 @@ namespace IcicleMorphotreeWidget
         qreal leftP = left[node->parent()->id()];
         qreal bottomP = bottom[node->parent()->id()];
         gnode->setPos(leftP, bottomP);
-        gnode->setWidth(treeVis_->sceneRect().width() * narea[node->id()]);
+        gnode->setWidth(renderWidth * narea[node->id()]);
         gnode->setHeight(unitHeight_ * levelsToZero);
 
         left[node->id()] = leftP;

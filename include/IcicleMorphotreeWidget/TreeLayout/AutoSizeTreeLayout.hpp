@@ -20,14 +20,19 @@ namespace IcicleMorphotreeWidget
     using NodePtr = typename MTree::NodePtr;
 
     AutoSizeTreeLayout(
-      GNodeFactoryPtr nodeFactory=std::make_unique<GradientGNodeFactory>(),
+      GNodeFactoryPtr nodeFactory=std::make_unique<GradientGNodeFactory>(),      
       float marginTop = 20.f,
-      float marginBottom = 20.f);
+      float marginBottom = 20.f,
+      qreal marginLeft = 0.0f);
     
     void parseTree(const MTree &tree);
     std::vector<float> computeNormalisedArea(const MTree &tree);
 
     inline float unitHeight() const { return unitHeight_; }
+    
+    inline qreal marginLeft() const { return marginLeft_; }
+    inline qreal &marginLeft() { return marginLeft_; }
+    inline void setMarginLeft(qreal val) { marginLeft_ = val; }
 
     qreal computeUnitHeightFromTheTree(const MTree &tree) const;
 
@@ -35,6 +40,7 @@ namespace IcicleMorphotreeWidget
 
   private:
     qreal unitHeight_;
+    qreal marginLeft_;
   };
 
 }
