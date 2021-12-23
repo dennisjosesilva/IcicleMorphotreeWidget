@@ -60,6 +60,7 @@ namespace IcicleMorphotreeWidget
     void scaleView(qreal scaleFactor);
     void visZoomIn();
     void visZoomOut();
+    inline void fitToWidget() { scaleView(1.0f / scaleFactor_); }
 
     const QVector<GNode *> &gnodes() const { return gnodes_; }
     QVector<GNode *>& gnodes() { return gnodes_; }
@@ -102,6 +103,7 @@ namespace IcicleMorphotreeWidget
     void resizeEvent(QResizeEvent *e) override;
 
   private:
+    qreal scaleFactor_;
     TreeLayoutPtr treeLayout_;
     Box domain_;
     MTree tree_;

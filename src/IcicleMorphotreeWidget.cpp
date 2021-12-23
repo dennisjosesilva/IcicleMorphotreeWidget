@@ -14,6 +14,7 @@ namespace IcicleMorphotreeWidget
   IcicleMorphotreeWidget::IcicleMorphotreeWidget(QWidget *parent,
     TreeLayoutPtr treeLayout)
     :QGraphicsView{parent},
+     scaleFactor_{1.0},
      tree_{morphotree::MorphoTreeType::MaxTree},
      treeLayout_{std::move(treeLayout)},
      grayScaleBar_{nullptr},
@@ -75,7 +76,16 @@ namespace IcicleMorphotreeWidget
     const QRectF &rect)
   {
     painter->setBrush(Qt::white);
-    painter->drawRect(sceneRect());
+    
+    if (grayScaleBar_ != nullptr) {
+      const QRectF &s = sceneRect();
+      qreal marginLeft = grayScaleBar_->unitWidth()+15;
+      QRectF renderRect{ marginLeft, 0, s.width()-marginLeft, s.height() };
+      painter->drawRect(sceneRect());
+    }
+    else {
+      painter->drawRect(sceneRect());
+    }    
   }
 
   void IcicleMorphotreeWidget::updateTreeRendering()
@@ -159,7 +169,7 @@ namespace IcicleMorphotreeWidget
     
     if (factor < 0.07f || factor > 100.0f)
       return;
-
+    scaleFactor_ *= scaleFactor;
     scale(scaleFactor, scaleFactor);
   }
 
@@ -176,11 +186,16 @@ namespace IcicleMorphotreeWidget
   void IcicleMorphotreeWidget::addGrayScaleBar(unsigned int numberOfLevels, 
     qreal unitWidth, qreal unitHeight)
   {
-    if (grayScaleBar_ == nullptr)  {
-      QRectF s = sceneRect();
-      setSceneRect(s.x()-unitWidth-20, s.y(), width()-unitWidth-5, s.height());
+    if (grayScaleBar_ == nullptr)  {      
       grayScaleBar_ = new GrayScaleBar{unitWidth, unitHeight, numberOfLevels};
-      grayScaleBar_->setPos(-unitWidth-5, 0);      
+      grayScaleBar_->setPos(0, 0);      
+
+      if (treeLayout_->type() == AutoSize) {
+        std::shared_ptr<AutoSizeTreeLayout> treeLayout =
+          std::dynamic_pointer_cast<AutoSizeTreeLayout>(treeLayout_);
+        treeLayout->setMarginLeft(unitWidth+15);
+      }
+
       updateTreeRendering();
     }
   }
@@ -191,8 +206,14 @@ namespace IcicleMorphotreeWidget
       scene()->removeItem(grayScaleBar_);
       qreal unitWidth = grayScaleBar_->unitWidth();
       grayScaleBar_ = nullptr;
-      const QRectF &sceneRect = scene()->sceneRect();      
-      scene()->setSceneRect(0, 0, sceneRect.width()-unitWidth, sceneRect.height());
+            
+      if (treeLayout_->type() == AutoSize) {
+        std::shared_ptr<AutoSizeTreeLayout> treeLayout =
+          std::dynamic_pointer_cast<AutoSizeTreeLayout>(treeLayout_);
+        
+        treeLayout->setMarginLeft(0);
+      }
+      updateTreeRendering();
       scene()->update();
       update();
     }
@@ -223,6 +244,10 @@ namespace IcicleMorphotreeWidget
     
     case Qt::Key_Minus:
       visZoomOut();
+      break;
+
+    case Qt::Key_0:
+      fitToWidget();
       break;
 
     case Qt::Key_Alt:
@@ -259,11 +284,11 @@ namespace IcicleMorphotreeWidget
       setSceneRect(0, 0, s.width(), s.height());
       QGraphicsView::resizeEvent(e);
       updateTreeRendering();
-      // if (treeLayout_->type() == TreeLayoutType::AutoSize) {
-      //   AutoSizeTLPtr t = std::dynamic_pointer_cast<AutoSizeTreeLayout>(treeLayout_);
-      //   grayScaleBar_->setUnitHeight(t->unitHeight());
-      //   renderGrayScaleBar();
-      // }
+      if (treeLayout_->type() == TreeLayoutType::AutoSize) {
+        AutoSizeTLPtr t = std::dynamic_pointer_cast<AutoSizeTreeLayout>(treeLayout_);
+        grayScaleBar_->setUnitHeight(t->unitHeight());
+        renderGrayScaleBar();
+      }
     }
     else {
       // scene()->setSceneRect(0, 0, s.width(), s.height());
