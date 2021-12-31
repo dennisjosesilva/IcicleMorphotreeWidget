@@ -92,7 +92,7 @@ MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
     std::shared_ptr<imt::AutoSizeTreeLayout> treeLayout = 
       std::dynamic_pointer_cast<imt::AutoSizeTreeLayout>(mtreeVis_->treeLayout());
 
-    mtreeVis_->addGrayScaleBar(maxLevel+1, unitWidth, treeLayout->unitHeight());
+    mtreeVis_->addGrayScaleBar(maxLevel+1, unitWidth);
 
     if (isGradientNodeStyle_)
       mtreeVis_->grayscaleBar()->setShowBorders(false);

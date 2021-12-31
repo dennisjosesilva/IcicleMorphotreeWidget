@@ -17,6 +17,11 @@ namespace IcicleMorphotreeWidget
     AutoSize
   };
 
+  enum TreeLayoutOrientation {
+    Horizontal,
+    Vertical
+  };
+
   class TreeLayout
   {
   public:
@@ -30,7 +35,7 @@ namespace IcicleMorphotreeWidget
       float marginTop = 20.f,
       float marginBottom = 20.f);
 
-    virtual void parseTree(const MTree &tree) = 0;
+    void parseTree(const MTree &tree);
 
     virtual TreeLayoutType type() const = 0;
 
@@ -38,11 +43,23 @@ namespace IcicleMorphotreeWidget
 
     inline void setGNodeFactory(GNodeFactoryPtr f) { gnodeFactory_ = std::move(f); }
 
+    inline TreeLayoutOrientation orientation() const { return orientation_; }
+    inline TreeLayoutOrientation &orientation() { return orientation_; }
+    inline void setOrientation(TreeLayoutOrientation orientation) { orientation; }
+
+    virtual ~TreeLayout();
+
+  protected:
+    virtual void parseHorizontal(const MTree &tree) = 0;
+    virtual void parseVertical(const MTree &tree) = 0;
+
   protected:
     IcicleMorphotreeWidget *treeVis_;
     GNodeFactoryPtr gnodeFactory_;
     float marginBottom_;
     float marginTop_;
+
+    TreeLayoutOrientation orientation_;
   };
 
   class FixedHeightTreeLayout : public TreeLayout
@@ -57,9 +74,7 @@ namespace IcicleMorphotreeWidget
       float marginTop = 20.f,
       float marginBotton = 20.f,
       float height = 5.0f);
-
-    void parseTree(const MTree &tree);
-
+    
     std::vector<float> computeNormalisedArea(const MTree &tree);
 
     inline float& height() { return height_; }
@@ -67,6 +82,10 @@ namespace IcicleMorphotreeWidget
     inline void setHeight(float height) { height_ = height; }
 
     inline TreeLayoutType type() const override { return FixedHeight; }
+
+  protected:
+    void parseVertical(const MTree &tree) override;
+    void parseHorizontal(const MTree &tree) override;
 
   private:
     float height_;   
@@ -89,11 +108,14 @@ namespace IcicleMorphotreeWidget
     inline float  uniHeight() const { return unitHeight_; }
     inline void setUniHeight(float uniHeight) { unitHeight_ = uniHeight; }
 
-    void parseTree(const MTree &tree);
-
     inline TreeLayoutType type() const override { return TreeLayoutType::GrayScaleBasedHeight; }
 
     std::vector<float> computeNormalisedArea(const MTree &tree);
+
+  protected:
+    void parseHorizontal(const MTree &tree) override;
+    void parseVertical(const MTree &tree) override;
+
   private:
     float unitHeight_;
   };

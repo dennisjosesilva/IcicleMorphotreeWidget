@@ -97,7 +97,8 @@ namespace IcicleMorphotreeWidget
       bool showBorders = grayScaleBar_->showBorders();
 
       grayScaleBar_ =  new GrayScaleBar{grayScaleBar_->unitWidth(), 
-        grayScaleBar_->unitHeight(), grayScaleBar_ ->numberOfLevels()};      
+        grayScaleBar_->unitHeight(), grayScaleBar_ ->numberOfLevels(),
+        grayScaleBar_->orientation()};
       grayScaleBar_->setPos(pos);
       grayScaleBar_->setShowBorders(showBorders);
     }
@@ -184,18 +185,82 @@ namespace IcicleMorphotreeWidget
   }
 
   void IcicleMorphotreeWidget::addGrayScaleBar(unsigned int numberOfLevels, 
-    qreal unitWidth, qreal unitHeight)
+    qreal breadth)
   {
-    if (grayScaleBar_ == nullptr)  {      
-      grayScaleBar_ = new GrayScaleBar{unitWidth, unitHeight, numberOfLevels};
-      grayScaleBar_->setPos(0, 0);      
+    using FixedHeightTreeLayoutPtr = std::shared_ptr<FixedHeightTreeLayout>;
+    using GrayscaleBasedHeightTreeLayoutPtr = std::shared_ptr<GrayscaleBasedHeightTreeLayout>;
+    using AutoSizeTreeLayoutPtr = std::shared_ptr<AutoSizeTreeLayout>;
 
-      if (treeLayout_->type() == AutoSize) {
-        std::shared_ptr<AutoSizeTreeLayout> treeLayout =
-          std::dynamic_pointer_cast<AutoSizeTreeLayout>(treeLayout_);
-        treeLayout->setMarginLeft(unitWidth+15);
+    if (grayScaleBar_ == nullptr)  {    
+      float unitWidth = 0.0f;
+      float unitHeight = 0.0f;
+
+      if (treeLayout_->orientation() == TreeLayoutOrientation::Horizontal) {        
+        switch (treeLayout_->type()) {
+          case TreeLayoutType::GrayScaleBasedHeight:
+          {
+            GrayscaleBasedHeightTreeLayoutPtr l = 
+              std::dynamic_pointer_cast<GrayscaleBasedHeightTreeLayout>(treeLayout_);
+            unitHeight = breadth;
+            unitWidth = l->uniHeight();
+            break;
+          }
+        
+          case TreeLayoutType::FixedHeight:
+          {
+            FixedHeightTreeLayoutPtr l = 
+              std::dynamic_pointer_cast<FixedHeightTreeLayout>(treeLayout_);
+            unitHeight = breadth;
+            unitWidth = l->height();
+            break;
+          }
+        
+          case TreeLayoutType::AutoSize:
+          {
+            AutoSizeTreeLayoutPtr l =
+              std::dynamic_pointer_cast<AutoSizeTreeLayout>(treeLayout_);
+            unitHeight = breadth;
+            unitWidth = l->unitWidth();
+            l->setMarginLeft(unitHeight + 15);
+            break;
+          }
+        }
+      }
+      else { // when orientation == Vertical
+        switch (treeLayout_->type())
+        {
+          case TreeLayoutType::GrayScaleBasedHeight:
+          {
+            GrayscaleBasedHeightTreeLayoutPtr l = 
+              std::dynamic_pointer_cast<GrayscaleBasedHeightTreeLayout>(treeLayout_);
+            unitHeight = l->uniHeight();
+            unitWidth = breadth;
+            break;
+          }
+          case TreeLayoutType::FixedHeight:
+          {
+            FixedHeightTreeLayoutPtr l = 
+              std::dynamic_pointer_cast<FixedHeightTreeLayout>(treeLayout_);
+            unitHeight = l->height();
+            unitWidth = breadth;
+            break;
+          }
+          case TreeLayoutType::AutoSize:
+          {
+            AutoSizeTreeLayoutPtr l = 
+              std::dynamic_pointer_cast<AutoSizeTreeLayout>(treeLayout_);
+            unitHeight = l->unitHeight();
+            unitWidth = breadth;
+            l->setMarginLeft(unitWidth + 15);
+            break;
+          }        
+        }
       }
 
+      grayScaleBar_ = new GrayScaleBar{unitWidth, unitHeight, numberOfLevels,
+        treeLayout_->orientation()};
+      grayScaleBar_->setPos(0, 0);      
+      
       updateTreeRendering();
     }
   }

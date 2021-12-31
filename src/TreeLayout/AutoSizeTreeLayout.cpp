@@ -14,7 +14,7 @@ namespace IcicleMorphotreeWidget
       marginLeft_{marginLeft}
   {}
 
-  void AutoSizeTreeLayout::parseTree(const MTree &tree)
+  void AutoSizeTreeLayout::parseVertical(const MTree &tree)
   {
     std::vector<float> narea = computeNormalisedArea(tree);
     std::vector<float> left(tree.numberOfNodes(), 0);
@@ -65,6 +65,60 @@ namespace IcicleMorphotreeWidget
     treeVis_->update();
   }
 
+  void AutoSizeTreeLayout::parseHorizontal(const MTree &tree)
+  {
+    std::vector<float> narea = computeNormalisedArea(tree);
+    std::vector<float> top(tree.numberOfNodes(), 0);
+    std::vector<float> right(tree.numberOfNodes(), 0);
+    QVector<GNode *> &gnodes = treeVis_->gnodes();
+    float maxRight = 0.0f;
+    unitWidth_ = computeUnitWidthFromTheTree(tree);
+
+    float renderHeight = treeVis_->sceneRect().height() - marginTop_;
+
+    tree.traverseByLevel([&right, &narea, &top, &gnodes, &maxRight, &renderHeight, this](NodePtr node){
+      if (node->parent() == nullptr) { 
+        // root node
+        // ---------
+        int levelsToZero = static_cast<int>(node->level()) + 1;
+        GNode *gnode = gnodeFactory_->create(node);
+        treeVis_->addGNodeToScene(gnode);
+        gnodes[node->id()] = gnode;
+        gnode->setPos(0, marginTop_);
+        gnode->setWidth(unitWidth_ * levelsToZero);
+        gnode->setHeight(renderHeight);
+        right[node->id()] = gnode->width();
+        top[node->id()] = marginTop_;
+        maxRight = right[node->id()];
+      }
+      else {
+        // other nodes of the tree
+        // -----------------------
+        int levelsToZero = static_cast<int>(node->level()) - 
+          static_cast<int>(node->parent()->level());
+        GNode *gnode = gnodeFactory_->create(node);
+        treeVis_->addGNodeToScene(gnode);
+        gnodes[node->id()] = gnode;
+        qreal topP = top[node->parent()->id()];
+        qreal rightP = right[node->parent()->id()];
+        gnode->setPos(rightP, topP);
+        gnode->setWidth(unitWidth_ * levelsToZero);
+        gnode->setHeight(renderHeight * narea[node->id()]);
+
+        top[node->id()] = topP;
+        top[node->parent()->id()] = topP + gnode->height();
+        right[node->id()] = rightP + gnode->width();
+        if (maxRight < right[gnode->width()])
+          maxRight = right[node->id()];
+      }
+    });
+
+    QRectF sRect = treeVis_->sceneRect();
+    sRect.setWidth(maxRight);
+    treeVis_->scene()->setSceneRect(sRect);
+    treeVis_->update();
+  }
+
   std::vector<float> AutoSizeTreeLayout::computeNormalisedArea(const MTree &tree)
   {
     using AreaComputer = morphotree::AreaComputer<uint8>;
@@ -95,5 +149,19 @@ namespace IcicleMorphotreeWidget
 
     return (height / (static_cast<qreal>(maxLevel)+1.0));
   }
+
+  qreal AutoSizeTreeLayout::computeUnitWidthFromTheTree(const MTree &tree) const
+  {
+    uint8 maxLevel = 0;
+    tree.tranverse([&maxLevel](NodePtr node){
+      if (maxLevel < node->level())
+        maxLevel = node->level();
+    });
+
+    qreal width = treeVis_->sceneRect().width();
+    return (width / (static_cast<qreal>(maxLevel)+1.0));
+  }
+
+  
 }
 

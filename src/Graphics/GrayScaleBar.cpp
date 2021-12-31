@@ -6,10 +6,11 @@
 namespace IcicleMorphotreeWidget
 {
   GrayScaleBar::GrayScaleBar(qreal unitWidth, qreal unitHeight, 
-    unsigned int numberOfLevels)
+    unsigned int numberOfLevels, TreeLayoutOrientation orientation)
     :unitWidth_{unitWidth}, unitHeight_{unitHeight}, 
      numberOfLevels_{numberOfLevels},
-     showBorders_{true}
+     showBorders_{true},
+     orientation_{orientation}
   {
     setZValue(-1);
   }
@@ -28,6 +29,20 @@ namespace IcicleMorphotreeWidget
 
   void GrayScaleBar::paint(QPainter *painter, 
     const QStyleOptionGraphicsItem *options, QWidget *)
+  {  
+    switch (orientation_)
+    {
+    case TreeLayoutOrientation::Vertical:
+      paintVertical(painter);
+      break;
+    
+    case TreeLayoutOrientation::Horizontal:
+      paintHorizontal(painter);
+      break;
+    }
+  }
+
+  void GrayScaleBar::paintVertical(QPainter *painter)
   {
     unsigned int L = numberOfLevels_;
     for (unsigned int l=0; l < L; ++l) {
@@ -43,6 +58,25 @@ namespace IcicleMorphotreeWidget
 
       painter->setBrush(QColor::fromRgb(level, level, level));            
       painter->drawRect(0, static_cast<qreal>(l)*unitHeight_, unitWidth_, unitHeight_);    
+    }
+  }
+
+  void GrayScaleBar::paintHorizontal(QPainter *painter)
+  {
+    unsigned int L = numberOfLevels_;
+    for (unsigned int l = 0; l < L; ++l) {
+      qreal relLevel = static_cast<qreal>(l) / static_cast<qreal>(L);
+      int level = 255 * relLevel;
+
+      if (showBorders_) {
+        painter->setPen(QPen{Qt::black});
+      }
+      else {
+        painter->setPen(Qt::NoPen);
+      }
+
+      painter->setBrush(QColor::fromRgb(level, level, level));
+      painter->drawRect(static_cast<qreal>(l) * unitWidth_, 0, unitWidth_, unitHeight_);
     }
   }
 }

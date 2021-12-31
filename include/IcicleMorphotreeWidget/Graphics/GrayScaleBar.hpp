@@ -1,5 +1,6 @@
 #pragma once 
 
+#include "IcicleMorphotreeWidget/TreeLayout/TreeLayout.hpp"
 #include <QGraphicsItem>
 
 namespace IcicleMorphotreeWidget
@@ -8,7 +9,8 @@ namespace IcicleMorphotreeWidget
   {
   public:
     GrayScaleBar(qreal unitWidth = 20.f, qreal unitHeight = 20.f,
-      unsigned int numberOfLevels=256);
+      unsigned int numberOfLevels=256, 
+      TreeLayoutOrientation orientation = TreeLayoutOrientation::Vertical);
 
     enum { Type = UserType + 2 };
     int type() const override { return Type; }
@@ -34,10 +36,19 @@ namespace IcicleMorphotreeWidget
     bool &showBorders() { return showBorders_; }
     void setShowBorders(bool val) { showBorders_ = val; }
 
+    TreeLayoutOrientation &orientation() { return orientation_; }
+    TreeLayoutOrientation orientation() const { return orientation_; }
+    void setOrientation(TreeLayoutOrientation val) { orientation_ = val; } 
+
+  private:
+    void paintVertical(QPainter *painter);
+    void paintHorizontal(QPainter *painter);
+
   private:
     qreal unitWidth_;
     qreal unitHeight_;
     unsigned int numberOfLevels_;
+    TreeLayoutOrientation orientation_;
     bool showBorders_;
   };
 }

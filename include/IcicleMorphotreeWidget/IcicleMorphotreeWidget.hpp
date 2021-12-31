@@ -78,8 +78,7 @@ namespace IcicleMorphotreeWidget
     inline std::vector<uint8> recImage() const { return tree_.reconstructImage(); }
     inline Box domain() const { return domain_; }
 
-    void addGrayScaleBar(unsigned int numberOfLevels=256, qreal unitWidth=20, 
-      qreal unitHeight = 5.0f);    
+    void addGrayScaleBar(unsigned int numberOfLevels=256, qreal breadth=5.0f);    
     void removeGrayScaleBar();
     GrayScaleBar* grayscaleBar() { return grayScaleBar_; }
 
