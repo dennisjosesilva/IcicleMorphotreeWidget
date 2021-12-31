@@ -55,7 +55,7 @@ MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
 
     mtreeVis_ = new imt::IcicleMorphotreeWidget{this,
       std::make_unique<imt::AutoSizeTreeLayout>(
-        std::make_unique<imt::GradientGNodeFactory>(), 20.f, 20.f)};
+        std::make_unique<imt::GradientGNodeFactory>(), 0.0f, 0.0f)};
     unitHeight = 30.f;
   }
   else {
@@ -65,7 +65,7 @@ MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
     //     std::make_unique<imt::GradientGNodeFactory>(), 20.f, 20.f, 2.0f)};
     mtreeVis_ = new imt::IcicleMorphotreeWidget{this, 
       std::make_unique<imt::AutoSizeTreeLayout>(
-        std::make_unique<imt::GradientGNodeFactory>(), 20.f, 20.f)};
+        std::make_unique<imt::GradientGNodeFactory>(), 0.0f, 0.0f)};
       unitWidth= 5.f;
   }
 
@@ -137,12 +137,25 @@ MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
     }
   });
 
+  QPushButton *btnRotateWidget = new QPushButton{tr("Rotate"), this};
+  connect(btnRotateWidget, &QPushButton::clicked, [this]{
+    using TreeLayoutOrientation = IcicleMorphotreeWidget::TreeLayoutOrientation;
+
+    if (mtreeVis_->orientation() == TreeLayoutOrientation::Horizontal) {
+      mtreeVis_->setOrientation(TreeLayoutOrientation::Vertical);
+    }
+    else {
+      mtreeVis_->setOrientation(TreeLayoutOrientation::Horizontal);
+    }
+  });
+
   hlayout->addWidget(btnShowAttribute);
   hlayout->addWidget(btnPan);
   hlayout->addWidget(btnAreaFilter);
   hlayout->addWidget(btnAddGrayScaleBar);
   hlayout->addWidget(btnRemoveGrayScaleBar);
   hlayout->addWidget(btnChangeNodeStyle);
+  hlayout->addWidget(btnRotateWidget);
   layout_->addItem(hlayout);
   layout_->addItem(createUniHeightControls(unitHeight));
 

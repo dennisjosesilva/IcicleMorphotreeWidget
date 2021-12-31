@@ -21,8 +21,8 @@ namespace IcicleMorphotreeWidget
 
     AutoSizeTreeLayout(
       GNodeFactoryPtr nodeFactory=std::make_unique<GradientGNodeFactory>(),      
-      float marginTop = 20.f,
-      float marginBottom = 20.f,
+      float marginTop = 0.0f,
+      float marginBottom = 0.0f,
       qreal marginLeft = 0.0f);
         
     std::vector<float> computeNormalisedArea(const MTree &tree);

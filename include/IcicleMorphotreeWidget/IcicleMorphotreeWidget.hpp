@@ -87,6 +87,9 @@ namespace IcicleMorphotreeWidget
     TreeLayoutPtr treeLayout() { return treeLayout_; }
     void setTreeLayout(TreeLayoutPtr treeLayout);
 
+    TreeLayoutOrientation orientation() const { return treeLayout_->orientation(); }
+    void setOrientation(TreeLayoutOrientation val);
+
   signals:
     void treeAboutToBeRedrawn();
 
@@ -106,6 +109,7 @@ namespace IcicleMorphotreeWidget
     TreeLayoutPtr treeLayout_;
     Box domain_;
     MTree tree_;
+    float grayScalerBarBreadth_;
     GrayScaleBar *grayScaleBar_;
 
     QVector<GNode *> gnodes_;

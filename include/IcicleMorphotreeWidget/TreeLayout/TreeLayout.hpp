@@ -43,9 +43,17 @@ namespace IcicleMorphotreeWidget
 
     inline void setGNodeFactory(GNodeFactoryPtr f) { gnodeFactory_ = std::move(f); }
 
+    inline float  marginTop() const { return marginTop_; }
+    inline float& marginTop() { return marginTop_; }
+    inline void setMarginTop(float val) { marginTop_ = val; }
+
+    inline float  marginBottom() const { return marginBottom_; }
+    inline float& marginBottom() { return marginBottom_; }
+    inline void setMarginBottom(float val) { marginBottom_ = val; }
+
     inline TreeLayoutOrientation orientation() const { return orientation_; }
     inline TreeLayoutOrientation &orientation() { return orientation_; }
-    inline void setOrientation(TreeLayoutOrientation orientation) { orientation; }
+    inline void setOrientation(TreeLayoutOrientation orientation) { orientation_ = orientation; }
 
     virtual ~TreeLayout();
 

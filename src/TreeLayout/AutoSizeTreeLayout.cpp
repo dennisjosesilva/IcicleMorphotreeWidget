@@ -161,7 +161,5 @@ namespace IcicleMorphotreeWidget
     qreal width = treeVis_->sceneRect().width();
     return (width / (static_cast<qreal>(maxLevel)+1.0));
   }
-
-  
 }
 

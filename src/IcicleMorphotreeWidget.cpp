@@ -18,7 +18,8 @@ namespace IcicleMorphotreeWidget
      tree_{morphotree::MorphoTreeType::MaxTree},
      treeLayout_{std::move(treeLayout)},
      grayScaleBar_{nullptr},
-     colorMap_{std::make_unique<RainbowColorMap>()}     
+     colorMap_{std::make_unique<RainbowColorMap>()},
+     grayScalerBarBreadth_{0.0f}     
   {
     QGraphicsScene *scene = new QGraphicsScene{this};
     scene->setSceneRect(QRectF{0, 0, 400, 400});
@@ -194,6 +195,7 @@ namespace IcicleMorphotreeWidget
     if (grayScaleBar_ == nullptr)  {    
       float unitWidth = 0.0f;
       float unitHeight = 0.0f;
+      grayScalerBarBreadth_ = breadth;
 
       if (treeLayout_->orientation() == TreeLayoutOrientation::Horizontal) {        
         switch (treeLayout_->type()) {
@@ -221,7 +223,8 @@ namespace IcicleMorphotreeWidget
               std::dynamic_pointer_cast<AutoSizeTreeLayout>(treeLayout_);
             unitHeight = breadth;
             unitWidth = l->unitWidth();
-            l->setMarginLeft(unitHeight + 15);
+            l->setMarginLeft(0.0);
+            l->setMarginTop(unitHeight + 15);
             break;
           }
         }
@@ -251,6 +254,7 @@ namespace IcicleMorphotreeWidget
               std::dynamic_pointer_cast<AutoSizeTreeLayout>(treeLayout_);
             unitHeight = l->unitHeight();
             unitWidth = breadth;
+            l->setMarginTop(0.0);
             l->setMarginLeft(unitWidth + 15);
             break;
           }        
@@ -277,6 +281,7 @@ namespace IcicleMorphotreeWidget
           std::dynamic_pointer_cast<AutoSizeTreeLayout>(treeLayout_);
         
         treeLayout->setMarginLeft(0);
+        treeLayout_->setMarginTop(0);
       }
       updateTreeRendering();
       scene()->update();
@@ -297,6 +302,21 @@ namespace IcicleMorphotreeWidget
   {
     treeLayout_ = treeLayout;
     updateTreeRendering();    
+  }
+
+  void IcicleMorphotreeWidget::setOrientation(TreeLayoutOrientation val)
+  {
+    treeLayout_->setOrientation(val);
+    if (grayScaleBar_ != nullptr) {
+      float unitWidth = grayScaleBar_->unitWidth();
+      float unitHeight = grayScaleBar_->unitHeight();
+      unsigned int numberOfLevels = grayScaleBar_->numberOfLevels();      
+      removeGrayScaleBar();
+      addGrayScaleBar(numberOfLevels, grayScalerBarBreadth_);
+    }
+    else {
+      updateTreeRendering();
+    }
   }
 
   void IcicleMorphotreeWidget::keyPressEvent(QKeyEvent *e)
