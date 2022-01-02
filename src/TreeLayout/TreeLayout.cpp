@@ -13,7 +13,7 @@ namespace IcicleMorphotreeWidget
     treeVis_{nullptr},
     marginTop_{marginTop},
     marginBottom_{marginBottom},
-    orientation_{TreeLayoutOrientation::Horizontal}
+    orientation_{TreeLayoutOrientation::Vertical}
   {}
 
   void TreeLayout::parseTree(const MTree &tree) 

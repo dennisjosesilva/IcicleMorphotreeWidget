@@ -307,6 +307,14 @@ namespace IcicleMorphotreeWidget
   void IcicleMorphotreeWidget::setOrientation(TreeLayoutOrientation val)
   {
     treeLayout_->setOrientation(val);
+    
+    if (treeLayout_->style() == GNodeStyle::GradientColor) {
+      if (val == TreeLayoutOrientation::Horizontal)
+        treeLayout_->setGNodeFactory(std::make_unique<VGradientGNodeFactory>(this));
+      else
+        treeLayout_->setGNodeFactory(std::make_unique<HGradientGNodeFactory>(this));
+    }
+
     if (grayScaleBar_ != nullptr) {
       float unitWidth = grayScaleBar_->unitWidth();
       float unitHeight = grayScaleBar_->unitHeight();
@@ -371,7 +379,12 @@ namespace IcicleMorphotreeWidget
       updateTreeRendering();
       if (treeLayout_->type() == TreeLayoutType::AutoSize) {
         AutoSizeTLPtr t = std::dynamic_pointer_cast<AutoSizeTreeLayout>(treeLayout_);
-        grayScaleBar_->setUnitHeight(t->unitHeight());
+        
+        if (treeLayout_->orientation() == TreeLayoutOrientation::Horizontal)
+          grayScaleBar_->setUnitWidth(t->unitWidth());
+        else 
+          grayScaleBar_->setUnitHeight(t->unitHeight());
+        
         renderGrayScaleBar();
       }
     }

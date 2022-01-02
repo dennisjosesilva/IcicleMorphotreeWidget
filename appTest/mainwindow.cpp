@@ -55,7 +55,7 @@ MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
 
     mtreeVis_ = new imt::IcicleMorphotreeWidget{this,
       std::make_unique<imt::AutoSizeTreeLayout>(
-        std::make_unique<imt::GradientGNodeFactory>(), 0.0f, 0.0f)};
+        std::make_unique<imt::HGradientGNodeFactory>(), 0.0f, 0.0f)};
     unitHeight = 30.f;
   }
   else {
@@ -65,7 +65,7 @@ MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
     //     std::make_unique<imt::GradientGNodeFactory>(), 20.f, 20.f, 2.0f)};
     mtreeVis_ = new imt::IcicleMorphotreeWidget{this, 
       std::make_unique<imt::AutoSizeTreeLayout>(
-        std::make_unique<imt::GradientGNodeFactory>(), 0.0f, 0.0f)};
+        std::make_unique<imt::HGradientGNodeFactory>(), 0.0f, 0.0f)};
       unitWidth= 5.f;
   }
 
@@ -129,7 +129,7 @@ MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
         mtreeVis_->grayscaleBar()->setShowBorders(true);              
     }
     else {
-      mtreeVis_->setGNodeFactory(std::make_unique<imt::GradientGNodeFactory>());
+      mtreeVis_->setGNodeFactory(std::make_unique<imt::HGradientGNodeFactory>());
       isGradientNodeStyle_ = true;
       
       if (mtreeVis_->grayscaleBar() != nullptr)

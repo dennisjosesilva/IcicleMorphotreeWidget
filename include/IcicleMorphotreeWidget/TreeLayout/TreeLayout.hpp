@@ -31,13 +31,14 @@ namespace IcicleMorphotreeWidget
     using GNodeFactoryPtr = std::unique_ptr<GNodeFactory>;
 
     TreeLayout(
-      GNodeFactoryPtr nodeFactory=std::make_unique<GradientGNodeFactory>(),
+      GNodeFactoryPtr nodeFactory=std::make_unique<HGradientGNodeFactory>(),
       float marginTop = 20.f,
       float marginBottom = 20.f);
 
     void parseTree(const MTree &tree);
 
     virtual TreeLayoutType type() const = 0;
+    GNodeStyle style() const { return gnodeFactory_->style();  }
 
     inline void setTreeVis(IcicleMorphotreeWidget *t) { gnodeFactory_->setTreeVisualiser(t); treeVis_ = t; }
 
@@ -78,7 +79,7 @@ namespace IcicleMorphotreeWidget
     using NodePtr = typename MTree::NodePtr;
 
     FixedHeightTreeLayout(
-      GNodeFactoryPtr nodeFactory=std::make_unique<GradientGNodeFactory>(),
+      GNodeFactoryPtr nodeFactory=std::make_unique<HGradientGNodeFactory>(),
       float marginTop = 20.f,
       float marginBotton = 20.f,
       float height = 5.0f);
@@ -90,7 +91,7 @@ namespace IcicleMorphotreeWidget
     inline void setHeight(float height) { height_ = height; }
 
     inline TreeLayoutType type() const override { return FixedHeight; }
-
+ 
   protected:
     void parseVertical(const MTree &tree) override;
     void parseHorizontal(const MTree &tree) override;
@@ -107,7 +108,7 @@ namespace IcicleMorphotreeWidget
     using NodePtr = typename MTree::NodePtr;
 
     GrayscaleBasedHeightTreeLayout(
-      GNodeFactoryPtr nodeFactory=std::make_unique<GradientGNodeFactory>(),
+      GNodeFactoryPtr nodeFactory=std::make_unique<HGradientGNodeFactory>(),
       float marginTop = 20.f,
       float marginBottom = 20.f,
       float unitHeight = 5.0f);
@@ -117,7 +118,7 @@ namespace IcicleMorphotreeWidget
     inline void setUniHeight(float uniHeight) { unitHeight_ = uniHeight; }
 
     inline TreeLayoutType type() const override { return TreeLayoutType::GrayScaleBasedHeight; }
-
+ 
     std::vector<float> computeNormalisedArea(const MTree &tree);
 
   protected:

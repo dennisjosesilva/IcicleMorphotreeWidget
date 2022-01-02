@@ -27,9 +27,28 @@ namespace IcicleMorphotreeWidget
      gradientProportion_{gradientProportion}
   {}
 
-  GNode *GradientGNodeFactory::create(MTreeNodePtr node)
+
+  // ======== HORINZONTAL GNODE FACTORY ===========================
+  HGradientGNodeFactory::HGradientGNodeFactory(
+    IcicleMorphotreeWidget *treeVis, float gradientProportion)
+  : GradientGNodeFactory{treeVis, gradientProportion}
+  {}
+  
+  GNode *HGradientGNodeFactory::create(MTreeNodePtr node)
   {
-    return new GradientGNode{treeVis_, node, 
+    return new HGradientGNode{treeVis_, node, 
+      gradientProportion_};
+  }
+
+  // ======= VERTICAL GNODE FACTORY =================================
+  VGradientGNodeFactory::VGradientGNodeFactory(
+    IcicleMorphotreeWidget *treeVis, float gradientProportion)
+  : GradientGNodeFactory{treeVis, gradientProportion}
+  {}
+
+  GNode *VGradientGNodeFactory::create(MTreeNodePtr node)
+  {
+    return new VGradientGNode{treeVis_, node, 
       gradientProportion_};
   }
 }

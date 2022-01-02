@@ -79,10 +79,28 @@ namespace IcicleMorphotreeWidget
     inline float gradientProportion() const { return gradientProportion_; }
     inline float& gradientProportion() { return gradientProportion_; }
     inline void gradientProportion(float val) { gradientProportion_ = val; }
-
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *options,
-      QWidget *widget) override;
-  private:
+    
+  protected:
     float gradientProportion_;
+  };
+
+  class HGradientGNode : public GradientGNode
+  {
+  public:
+    HGradientGNode(IcicleMorphotreeWidget *treeVis, MTreeNodePtr mnode = nullptr, 
+      float gradientProportion = 0.4f);
+
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *options, 
+      QWidget *widget) override;
+  };
+
+  class VGradientGNode : public GradientGNode 
+  {
+  public:
+    VGradientGNode(IcicleMorphotreeWidget *treeVis, MTreeNodePtr mnode = nullptr,
+      float gradientProportion = 0.4f);
+    
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *options, 
+      QWidget *widget) override;
   };
 }
