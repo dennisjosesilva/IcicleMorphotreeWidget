@@ -96,15 +96,16 @@ namespace IcicleMorphotreeWidget
     const QStyleOptionGraphicsItem *options, QWidget *)
   {
     QRectF r = boundingRect();
-    QColor start = backgroundColor_;
-    const QColor end{
+    QColor middleColor = backgroundColor_;
+    const QColor endpointColors{
       static_cast<int>(backgroundColor_.red() * gradientProportion_),
       static_cast<int>(backgroundColor_.green() * gradientProportion_),
       static_cast<int>(backgroundColor_.blue() * gradientProportion_)};
 
     QLinearGradient linearGradient(r.x(), r.y(), r.right(), r.y());
-    linearGradient.setColorAt(0.0, start);
-    linearGradient.setColorAt(1.0, end);
+    linearGradient.setColorAt(0.0, endpointColors);
+    linearGradient.setColorAt(0.5, middleColor);
+    linearGradient.setColorAt(1.0, endpointColors);
 
     if (isSelected_) {
       if (height_ < 5.0f)
@@ -132,16 +133,17 @@ namespace IcicleMorphotreeWidget
     QWidget *)
   {
     QRectF r = boundingRect();
-    QColor start = backgroundColor_;
-    const QColor end{
+    QColor middleColor = backgroundColor_;
+    const QColor endpointColors{
       static_cast<int>(backgroundColor_.red() * gradientProportion_),
       static_cast<int>(backgroundColor_.green() * gradientProportion_),
       static_cast<int>(backgroundColor_.blue() * gradientProportion_)
     };
 
     QLinearGradient linearGradient{r.x(), r.y(), r.x(), r.bottom()};
-    linearGradient.setColorAt(0.0, start);
-    linearGradient.setColorAt(1.0, end);
+    linearGradient.setColorAt(0.0, endpointColors);
+    linearGradient.setColorAt(0.5, middleColor);
+    linearGradient.setColorAt(1.0, endpointColors);
 
     if (isSelected_) {
       if (width_ < 5.0f) 

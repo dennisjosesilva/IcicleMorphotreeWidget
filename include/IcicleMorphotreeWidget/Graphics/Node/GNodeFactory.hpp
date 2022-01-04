@@ -47,7 +47,7 @@ namespace IcicleMorphotreeWidget
   {
   public:
     GradientGNodeFactory(IcicleMorphotreeWidget *treeVis=nullptr,
-      float gradientProportion=0.4f);
+      float gradientProportion=0.6f);
         
     inline float  gradientProportion() const { return gradientProportion_; }
     inline float& gradientProportion() { return gradientProportion_; }
@@ -64,7 +64,7 @@ namespace IcicleMorphotreeWidget
   {
   public:
     HGradientGNodeFactory(IcicleMorphotreeWidget *treeVis = nullptr, 
-      float gradientProportion = 0.4f);
+      float gradientProportion = 0.6f);
     
     GNode *create(MTreeNodePtr mnode=nullptr) override;
   };
@@ -73,7 +73,7 @@ namespace IcicleMorphotreeWidget
   {
   public:
     VGradientGNodeFactory(IcicleMorphotreeWidget *treeVis = nullptr, 
-      float gradientProportion = 0.4f);
+      float gradientProportion = 0.6f);
 
     GNode *create(MTreeNodePtr mnode = nullptr) override;
   };
