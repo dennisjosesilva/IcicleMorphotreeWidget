@@ -17,7 +17,10 @@ namespace IcicleMorphotreeWidget
 
   QRectF GrayScaleBar::boundingRect() const 
   {
-    return QRectF{0, 0, unitWidth_, unitHeight_*numberOfLevels_};
+    if (orientation_ == TreeLayoutOrientation::Vertical)
+      return QRectF{0, 0, unitWidth_, unitHeight_*numberOfLevels_};
+    else 
+      return QRectF{0, 0, unitWidth_*numberOfLevels_, unitHeight_};
   }
 
   QPainterPath GrayScaleBar::shape() const 
@@ -53,7 +56,7 @@ namespace IcicleMorphotreeWidget
         painter->setPen(QPen{Qt::black, 0});
       }
       else {
-        painter->setPen(Qt::NoPen);
+        painter->setPen(QColor::fromRgb(level, level, level));
       }
 
       painter->setBrush(QColor::fromRgb(level, level, level));            
@@ -72,7 +75,7 @@ namespace IcicleMorphotreeWidget
         painter->setPen(QPen{Qt::black});
       }
       else {
-        painter->setPen(Qt::NoPen);
+        painter->setPen(QColor::fromRgb(level, level, level));
       }
 
       painter->setBrush(QColor::fromRgb(level, level, level));

@@ -90,6 +90,8 @@ namespace IcicleMorphotreeWidget
     TreeLayoutOrientation orientation() const { return treeLayout_->orientation(); }
     void setOrientation(TreeLayoutOrientation val);
 
+    // QRectF boundingRect() const override { return scene()->sceneRect(); }
+
   signals:
     void treeAboutToBeRedrawn();
 

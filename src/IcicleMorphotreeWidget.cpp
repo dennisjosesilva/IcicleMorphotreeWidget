@@ -111,13 +111,12 @@ namespace IcicleMorphotreeWidget
     gnodes_.resize(tree_.numberOfNodes());
 
     treeLayout_->parseTree(tree_);
-    emit treeAboutToBeRedrawn();
-    scene()->update();
-
     if (grayScaleBar_ != nullptr) {
       scene()->addItem(grayScaleBar_);
-      renderGrayScaleBar();
     }
+
+    emit treeAboutToBeRedrawn();
+    scene()->update();    
   }
 
   IcicleMorphotreeWidget::MTree 
@@ -319,8 +318,10 @@ namespace IcicleMorphotreeWidget
       float unitWidth = grayScaleBar_->unitWidth();
       float unitHeight = grayScaleBar_->unitHeight();
       unsigned int numberOfLevels = grayScaleBar_->numberOfLevels();      
+      bool showBorders = grayScaleBar_->showBorders();
       removeGrayScaleBar();
       addGrayScaleBar(numberOfLevels, grayScalerBarBreadth_);
+      grayScaleBar_->setShowBorders(showBorders);
     }
     else {
       updateTreeRendering();
@@ -345,7 +346,7 @@ namespace IcicleMorphotreeWidget
 
     case Qt::Key_Alt:
       isDownSpace_ = true; 
-      setDragMode(QGraphicsView::ScrollHandDrag);
+      setDragMode(QGraphicsView::ScrollHandDrag);      
       break;
 
     default:
