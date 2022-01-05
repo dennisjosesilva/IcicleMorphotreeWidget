@@ -9,6 +9,8 @@
 
 namespace IcicleMorphotreeWidget
 {
+  QColor GNode::selectionColor_ = Qt::black;
+
   GNode::GNode(IcicleMorphotreeWidget *treeVis, MTreeNodePtr mnode)
     :treeVis_{treeVis},
      mnode_{mnode},
@@ -63,11 +65,7 @@ namespace IcicleMorphotreeWidget
     QRectF r = boundingRect();
 
     if (isSelected_) {
-      if (height_ < 5.0f)
-        painter->setPen(QPen(Qt::black, 1));            
-      else
-        painter->setPen(QPen(Qt::black, 3));            
-
+      painter->setPen(QPen(selectionColor_, 3));            
       painter->setBrush(backgroundColor_);
       painter->drawRect(boundingRect());
     }
@@ -108,11 +106,7 @@ namespace IcicleMorphotreeWidget
     linearGradient.setColorAt(1.0, endpointColors);
 
     if (isSelected_) {
-      if (height_ < 5.0f)
-        painter->setPen(QPen(Qt::black, 1));            
-      else
-        painter->setPen(QPen(Qt::black, 3));            
-
+      painter->setPen(QPen(selectionColor_, 3));            
       painter->setBrush(linearGradient);
       painter->drawRect(boundingRect());
     }
@@ -146,11 +140,7 @@ namespace IcicleMorphotreeWidget
     linearGradient.setColorAt(1.0, endpointColors);
 
     if (isSelected_) {
-      if (width_ < 5.0f) 
-        painter->setPen(QPen(Qt::black, 1));
-      else 
-        painter->setPen(QPen(Qt::black, 3));
-
+      painter->setPen(QPen(selectionColor_, 3));            
       painter->setBrush(linearGradient);
       painter->drawRect(boundingRect());
     }

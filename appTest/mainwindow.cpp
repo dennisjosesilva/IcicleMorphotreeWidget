@@ -70,6 +70,7 @@ MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
   }
 
   mtreeVis_->loadImage(domain, f);
+  mtreeVis_->setNodeSelectionColor(Qt::red);
   connect(mtreeVis_, &imt::IcicleMorphotreeWidget::treeAboutToBeRedrawn, [](){
     qDebug() << "about to be drawn";
   });

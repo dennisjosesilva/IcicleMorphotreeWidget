@@ -92,6 +92,9 @@ namespace IcicleMorphotreeWidget
 
     // QRectF boundingRect() const override { return scene()->sceneRect(); }
 
+    inline QColor& nodeSelectionColor() { return GNode::selectionColor(); }
+    inline void setNodeSelectionColor(const QColor &val) { GNode::setSelectionColor(val); }
+
   signals:
     void treeAboutToBeRedrawn();
 

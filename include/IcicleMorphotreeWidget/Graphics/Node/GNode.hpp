@@ -45,11 +45,14 @@ namespace IcicleMorphotreeWidget
 
     inline MTreeNodePtr mnode() const { return mnode_; }    
 
+    inline static QColor& selectionColor() { return selectionColor_; }    
+    inline static void setSelectionColor(const QColor &val) { selectionColor_ = val; }
+
   protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *e) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *e) override;
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *e) override;
-
+    
   protected:
     IcicleMorphotreeWidget *treeVis_;
     MTreeNodePtr mnode_;
@@ -59,6 +62,8 @@ namespace IcicleMorphotreeWidget
     qreal height_;
 
     bool isSelected_;    
+
+    static QColor selectionColor_;
   };
 
   class FixedColorGNode : public GNode
