@@ -5,6 +5,8 @@
 
 #include <morphotree/adjacency/adjacency8c.hpp>
 
+#include <QOpenGLWidget>
+
 #include <QDebug>
 
 #include <QKeyEvent>
@@ -31,6 +33,13 @@ namespace IcicleMorphotreeWidget
     setTransformationAnchor(AnchorUnderMouse);
     setMinimumSize(400, 400);
     setWindowTitle(tr("Icicle Morphotree Widget"));
+
+    // initialise opengl
+    QOpenGLWidget *glWidget = new QOpenGLWidget;
+    QSurfaceFormat format;
+    format.setSamples(4);
+    glWidget->setFormat(format);
+    setViewport(glWidget);
 
     treeLayout_->setTreeVis(this);
       

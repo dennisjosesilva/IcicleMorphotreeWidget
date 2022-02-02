@@ -4,6 +4,7 @@
 #include "IcicleMorphotreeWidget/TreeLayout/TreeLayout.hpp"
 #include "IcicleMorphotreeWidget/TreeLayout/AutoSizeTreeLayout.hpp"
 
+#include "IcicleMorphotreeWidget/Graphics/Node/OpenGLGNodeFactory.hpp"
 #include "IcicleMorphotreeWidget/Filtering/AreaTreeFiltering.hpp"
 
 #include <morphotree/attributes/areaComputer.hpp>
@@ -53,9 +54,12 @@ MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
     //     std::make_unique<imt::GradientGNodeFactory>(), 20.f, 20.f, 30.0f)};
     //   unitHeight = 30.f;
 
-    mtreeVis_ = new imt::IcicleMorphotreeWidget{this,
+    // mtreeVis_ = new imt::IcicleMorphotreeWidget{this,
+    //   std::make_unique<imt::AutoSizeTreeLayout>(
+    //     std::make_unique<imt::HGradientGNodeFactory>(), 0.0f, 0.0f)};
+    mtreeVis_ = new imt::IcicleMorphotreeWidget{this, 
       std::make_unique<imt::AutoSizeTreeLayout>(
-        std::make_unique<imt::HGradientGNodeFactory>(), 0.0f, 0.0f)};
+        std::make_unique<imt::OpenGLGNodeFactory>())};
     unitHeight = 30.f;
   }
   else {
