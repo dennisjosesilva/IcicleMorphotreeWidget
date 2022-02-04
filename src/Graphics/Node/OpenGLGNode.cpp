@@ -68,8 +68,11 @@ namespace IcicleMorphotreeWidget
     QMatrix4x4 model;
     gl->glGetFloatv(GL_MODELVIEW_MATRIX, model.data());
 
+    gl->glEnable(GL_BLEND);
+
     shaderProgram_->setUniformValue("transform", proj * model);
 
+    shaderProgram_->setUniformValue("opacity", static_cast<float>(opacity()));
     shaderProgram_->setUniformValue("lp", leftProportion_);
     shaderProgram_->setUniformValue("rp", rightProportion_);
     shaderProgram_->setUniformValue("tp", topProportion_);

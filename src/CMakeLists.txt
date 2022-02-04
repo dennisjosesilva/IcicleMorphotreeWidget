@@ -23,6 +23,8 @@ qt5_wrap_cpp(PROJECT_SOURCE
    ../include/IcicleMorphotreeWidget/Graphics/Node/GNodeEventHandler.hpp
    ../include/IcicleMorphotreeWidget/Graphics/ColorBar.hpp)
 
+qt5_add_resources(PROJECT_SOURCE ../IcicleMorphotreeWidgetResource.qrc)
+
 # LIB
 add_library(IcicleMorphotreeWidget ${PROJECT_SOURCE})
 target_link_libraries(IcicleMorphotreeWidget PUBLIC ${CONAN_LIBS} Qt5::Widgets Qt5::Core Qt5::Gui)

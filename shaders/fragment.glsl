@@ -16,8 +16,9 @@ struct Face
 };
 
 in Face face;
-
 in vec2 fpos;
+
+uniform float opacity;
 
 void main()
 {
@@ -33,5 +34,5 @@ void main()
   vec4 bcolor = mix(face.bl.color, face.br.color, nx);
   vec4 finalColor = mix(bcolor, tcolor, ny);
 
-  fragColor = finalColor;
+  fragColor = vec4(finalColor.rgb, opacity);
 }

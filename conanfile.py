@@ -12,6 +12,8 @@ class IcicleMorphotreeWidget(ConanFile):
   requires = ("morphotree/0.0.1@dennisjosesilva/dev")
 
   def export_sources(self):
+    self.copy("*.qrc", dst=".", src=".")
+    self.copy("*.glsl", dst="shaders", src="shaders")
     self.copy("*.cpp", dst="src", src="src")
     self.copy("CMakeLists.txt", dst="src", src="src")
     self.copy("*.hpp", dst="include", src="include")

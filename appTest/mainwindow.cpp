@@ -200,6 +200,7 @@ void MainWindow::nodeMousePress(imt::GNode *node, QGraphicsSceneMouseEvent *e)
     // node->setOpacity(0.2f);
 
     node->setSelected(!node->isSelected());
+    node->setOpacity(0.75f);
     node->update();
 
     
