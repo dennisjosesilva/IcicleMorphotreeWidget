@@ -32,10 +32,15 @@ namespace IcicleMorphotreeWidget
     }
   }
 
-  OpenGLGNode::OpenGLGNode(IcicleMorphotreeWidget *treeVis, MTreeNodePtr mnode)
-    : GNode{treeVis, mnode}
-  {    
-  }  
+  OpenGLGNode::OpenGLGNode(IcicleMorphotreeWidget *treeVis, MTreeNodePtr mnode,
+    float topProportion, float leftProportion, float bottomProportion, 
+    float rightProportion)
+    : GNode{treeVis, mnode},
+      topProportion_{topProportion}, 
+      leftProportion_{leftProportion},
+      bottomProportion_{bottomProportion},
+      rightProportion_{rightProportion}
+  { }  
 
   void OpenGLGNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *options,
     QWidget *widget)
@@ -65,10 +70,10 @@ namespace IcicleMorphotreeWidget
 
     shaderProgram_->setUniformValue("transform", proj * model);
 
-    shaderProgram_->setUniformValue("lp", 0.4f);
-    shaderProgram_->setUniformValue("rp", 0.4f);
-    shaderProgram_->setUniformValue("tp", 0.2f);
-    shaderProgram_->setUniformValue("bp", 0.2f);
+    shaderProgram_->setUniformValue("lp", leftProportion_);
+    shaderProgram_->setUniformValue("rp", rightProportion_);
+    shaderProgram_->setUniformValue("tp", topProportion_);
+    shaderProgram_->setUniformValue("bp", bottomProportion_);
     shaderProgram_->setUniformValue("centerColor", backgroundColor_);
 
     shaderProgram_->enableAttributeArray(SHADER_PROGRAM_POSITION_ATTR_LOC);    

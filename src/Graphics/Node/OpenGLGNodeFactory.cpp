@@ -5,13 +5,20 @@
 
 namespace IcicleMorphotreeWidget
 {
-  OpenGLGNodeFactory::OpenGLGNodeFactory(IcicleMorphotreeWidget *treeVis)
-    : GNodeFactory{treeVis}
+  OpenGLGNodeFactory::OpenGLGNodeFactory(IcicleMorphotreeWidget *treeVis,
+    float topProportion, float leftProportion, 
+    float bottomProportion, float rightProportion)
+    : GNodeFactory{treeVis},
+      topProportion_{topProportion},
+      leftProportion_{leftProportion},
+      bottomProportion_{bottomProportion},
+      rightProportion_{rightProportion}
   {}
 
   GNode *OpenGLGNodeFactory::create(MTreeNodePtr mnode)
   {
-    return new OpenGLGNode{treeVis_, mnode};
+    return new OpenGLGNode{treeVis_, mnode, topProportion_, 
+      leftProportion_, bottomProportion_, rightProportion_};
   }
 
   OpenGLGNodeFactory::~OpenGLGNodeFactory()
