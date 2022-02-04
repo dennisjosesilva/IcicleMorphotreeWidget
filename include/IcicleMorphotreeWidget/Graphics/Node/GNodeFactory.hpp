@@ -11,7 +11,8 @@ namespace IcicleMorphotreeWidget
   enum GNodeStyle 
   {
     GradientColor,
-    FixedColor
+    BilinearGradientColor,
+    FixedColor    
   };
 
   class GNodeFactory

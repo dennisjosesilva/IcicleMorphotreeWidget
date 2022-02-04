@@ -322,7 +322,7 @@ namespace IcicleMorphotreeWidget
       else
         treeLayout_->setGNodeFactory(std::make_unique<HGradientGNodeFactory>(this));
     }
-
+    
     if (grayScaleBar_ != nullptr) {
       float unitWidth = grayScaleBar_->unitWidth();
       float unitHeight = grayScaleBar_->unitHeight();

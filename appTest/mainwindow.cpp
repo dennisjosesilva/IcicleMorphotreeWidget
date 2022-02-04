@@ -29,7 +29,8 @@
 #include <algorithm>
 
 MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
-  :QMainWindow{nullptr}, colorBar_{nullptr}, isGradientNodeStyle_{true}
+  : QMainWindow{nullptr}, colorBar_{nullptr}, 
+    gradientNodeStyle_{imt::GNodeStyle::BilinearGradientColor}
 {
   using AreaTreeFiltering = IcicleMorphotreeWidget::AreaTreeFiltering;
 
@@ -102,7 +103,7 @@ MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
 
     mtreeVis_->addGrayScaleBar(maxLevel+1, unitWidth);
 
-    if (isGradientNodeStyle_)
+    if (gradientNodeStyle_ == imt::GNodeStyle::FixedColor)
       mtreeVis_->grayscaleBar()->setShowBorders(false);
     else 
       mtreeVis_->grayscaleBar()->setShowBorders(true);
@@ -129,16 +130,28 @@ MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
 
   QPushButton *btnChangeNodeStyle = new QPushButton{tr("Change Node Style"), this};
   connect(btnChangeNodeStyle, &QPushButton::clicked, [this]{
-    if (isGradientNodeStyle_){
+    if (gradientNodeStyle_ == imt::GNodeStyle::BilinearGradientColor){
       mtreeVis_->setGNodeFactory(std::make_unique<imt::FixedColorGNodeFactory>());
-      isGradientNodeStyle_ = false;
+      gradientNodeStyle_ = imt::GNodeStyle::FixedColor;
 
       if (mtreeVis_->grayscaleBar() != nullptr)
         mtreeVis_->grayscaleBar()->setShowBorders(true);              
     }
-    else {
-      mtreeVis_->setGNodeFactory(std::make_unique<imt::HGradientGNodeFactory>());
-      isGradientNodeStyle_ = true;
+    else if (gradientNodeStyle_ == imt::GNodeStyle::FixedColor) {
+      
+      if (mtreeVis_->treeLayout()->orientation() == imt::TreeLayoutOrientation::Horizontal)
+        mtreeVis_->setGNodeFactory(std::make_unique<imt::VGradientGNodeFactory>());
+      else 
+        mtreeVis_->setGNodeFactory(std::make_unique<imt::HGradientGNodeFactory>());
+      
+      gradientNodeStyle_ = imt::GNodeStyle::GradientColor;
+
+      if (mtreeVis_->grayscaleBar() != nullptr)
+        mtreeVis_->grayscaleBar()->setShowBorders(true);              
+    }
+    else if (gradientNodeStyle_ == imt::GNodeStyle::GradientColor) {
+      mtreeVis_->setGNodeFactory(std::make_unique<imt::OpenGLGNodeFactory>());
+      gradientNodeStyle_ = imt::GNodeStyle::BilinearGradientColor;
       
       if (mtreeVis_->grayscaleBar() != nullptr)
         mtreeVis_->grayscaleBar()->setShowBorders(false);              

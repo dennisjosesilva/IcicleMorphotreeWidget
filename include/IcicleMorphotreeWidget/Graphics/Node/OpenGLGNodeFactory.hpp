@@ -11,7 +11,7 @@ namespace IcicleMorphotreeWidget
   public:
     OpenGLGNodeFactory(IcicleMorphotreeWidget *treeVis = nullptr);
 
-    GNodeStyle style() const override { return GNodeStyle::GradientColor; }
+    GNodeStyle style() const override { return GNodeStyle::BilinearGradientColor; }
 
     GNode *create(MTreeNodePtr mnode = nullptr) override;
 

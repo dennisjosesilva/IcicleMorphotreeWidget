@@ -18,6 +18,8 @@
 namespace imt = IcicleMorphotreeWidget;
 namespace mt = morphotree;
 
+
+
 class MainWindow : public QMainWindow
 {
 Q_OBJECT
@@ -46,7 +48,7 @@ private:
 
   imt::ColorBar *colorBar_;
 
-  bool isGradientNodeStyle_;
+  imt::GNodeStyle gradientNodeStyle_;
 
   QWidget *widget_;
   QLayout *layout_;
