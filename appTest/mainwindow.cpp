@@ -67,9 +67,12 @@ MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
     // mtreeVis_ = new imt::IcicleMorphotreeWidget{this, 
     //   std::make_unique<imt::GrayscaleBasedHeightTreeLayout>(
     //     std::make_unique<imt::GradientGNodeFactory>(), 20.f, 20.f, 2.0f)};
+    // mtreeVis_ = new imt::IcicleMorphotreeWidget{this, 
+    //   std::make_unique<imt::AutoSizeTreeLayout>(
+    //     std::make_unique<imt::HGradientGNodeFactory>(), 0.0f, 0.0f)};
     mtreeVis_ = new imt::IcicleMorphotreeWidget{this, 
       std::make_unique<imt::AutoSizeTreeLayout>(
-        std::make_unique<imt::HGradientGNodeFactory>(), 0.0f, 0.0f)};
+        std::make_unique<imt::OpenGLGNodeFactory>())};
       unitWidth= 5.f;
   }
 

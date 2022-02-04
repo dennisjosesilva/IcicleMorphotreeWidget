@@ -4,6 +4,8 @@
 
 class QOpenGLShaderProgram;
 
+void loadQtResources();
+
 namespace IcicleMorphotreeWidget
 {
   class OpenGLGNode : public GNode

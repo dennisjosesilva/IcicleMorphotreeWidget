@@ -29,6 +29,9 @@ qt5_wrap_cpp(PROJECT_SOURCE
 qt5_wrap_cpp(APP_TEST_SOURCE
    appTest/mainwindow.hpp)
 
+# SET RESOURCE FILES
+qt5_add_resources(PROJECT_SOURCE IcicleMorphotreeWidgetResource.qrc)
+
 # LIB
 add_library(IcecleMorphotreeWidgetLib ${PROJECT_SOURCE})
 target_link_libraries(IcecleMorphotreeWidgetLib PUBLIC ${CONAN_LIBS} Qt5::Widgets Qt5::Core Qt5::Gui)

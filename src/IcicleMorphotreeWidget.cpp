@@ -22,7 +22,7 @@ namespace IcicleMorphotreeWidget
      grayScaleBar_{nullptr},
      colorMap_{std::make_unique<RainbowColorMap>()},
      grayScalerBarBreadth_{0.0f}     
-  {
+  {        
     QGraphicsScene *scene = new QGraphicsScene{this};
     scene->setSceneRect(QRectF{0, 0, 400, 400});
     scene->setItemIndexMethod(QGraphicsScene::NoIndex);

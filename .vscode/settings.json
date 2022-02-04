@@ -49,6 +49,7 @@
     "streambuf": "cpp",
     "typeinfo": "cpp",
     "variant": "cpp",
-    "bit": "cpp"
+    "bit": "cpp",
+    "cinttypes": "cpp"
   }
 }
