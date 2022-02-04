@@ -16,7 +16,7 @@ namespace IcicleMorphotreeWidget
 
   void OpenGLGNode::initShaders()
   {    
-    if (!shaderProgram_) {
+    if (!shaderProgram_ || !shaderProgram_->isLinked()) {
       loadQtResources();
 
       shaderProgram_ = new QOpenGLShaderProgram;      
