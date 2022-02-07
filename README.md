@@ -14,7 +14,7 @@ The morphotree library is used as Conan package. To install, it needs to be down
 conan create . morphotree/0.0.1@dennisjosesilva/dev
 ```
 
-## installation
+## Installation
 
 It can be used as a conan package by running the following command
 
