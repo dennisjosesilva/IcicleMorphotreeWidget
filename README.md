@@ -8,13 +8,13 @@ It depends on Conan, Qt, and morphotree library.
 
 
 
-The morphotree library is used as Conan package. To install, it needs to be downloaded from [Github repository]([GitHub - dennisjosesilva/morphotree: A simple morphological tree filter prototyping library](https://github.com/dennisjosesilva/morphotree))  and at the root repository run:  
+The morphotree library is used as Conan package. To install, it needs to be downloaded from [Github repository](https://github.com/dennisjosesilva/morphotree)  and at the root repository run:  
 
 ```bash
 conan create . morphotree/0.0.1@dennisjosesilva/dev
 ```
 
-## instalation
+## Installation
 
 It can be used as a conan package by running the following command
 
