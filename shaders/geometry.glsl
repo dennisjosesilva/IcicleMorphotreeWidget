@@ -28,6 +28,12 @@ uniform float rp;
 uniform float tp;
 uniform float bp;
 
+uniform float cp;
+uniform float tlp;
+uniform float trp;
+uniform float blp;
+uniform float brp;
+
 uniform mat4 transform;
 
 void main()
@@ -48,9 +54,9 @@ void main()
 
   // Quad #1
   face = Face(
-    Vertex(tl, ((lp + tp) / 2.0) * centerColor),
+    Vertex(tl, tlp * centerColor),
     Vertex(t, tp * centerColor),
-    Vertex(c, centerColor),
+    Vertex(c, cp * centerColor),
     Vertex(l, lp * centerColor));
 
   gl_Position = transform * vec4(tl, 0.0, 1.0);
@@ -81,10 +87,10 @@ void main()
 
   // Quad #2
   face = Face(
-    Vertex(t, tp * centerColor),
-    Vertex(tr, ((tp + rp) / 2.0) * centerColor),
-    Vertex(r, rp * centerColor),
-    Vertex(c, centerColor));
+    Vertex(t,  tp * centerColor),
+    Vertex(tr, trp * centerColor),
+    Vertex(r,  rp * centerColor),
+    Vertex(c,  cp * centerColor));
 
   gl_Position = transform * vec4(t, 0.0, 1.0);
   fpos = t;
@@ -115,9 +121,9 @@ void main()
   // Quad #3 
   face = Face(
     Vertex(l, lp * centerColor),
-    Vertex(c, centerColor),
+    Vertex(c, cp * centerColor),
     Vertex(b, bp * centerColor),
-    Vertex(bl, ((lp + bp) / 2.0) * centerColor));
+    Vertex(bl, blp * centerColor));
   
   gl_Position = transform * vec4(l, 0.0, 1.0);
   fpos = l;
@@ -147,9 +153,9 @@ void main()
 
   // Quad #4
   face = Face(
-    Vertex(c, centerColor),
+    Vertex(c, cp * centerColor),
     Vertex(r, rp * centerColor),
-    Vertex(br, ((rp + bp) / 2.0) * centerColor),
+    Vertex(br, brp * centerColor),
     Vertex(b, bp * centerColor));
 
   gl_Position = transform * vec4(c, 0.0, 1.0);

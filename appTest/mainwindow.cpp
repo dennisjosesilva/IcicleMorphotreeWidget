@@ -59,8 +59,8 @@ MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
     //   std::make_unique<imt::AutoSizeTreeLayout>(
     //     std::make_unique<imt::HGradientGNodeFactory>(), 0.0f, 0.0f)};
     mtreeVis_ = new imt::IcicleMorphotreeWidget{this, 
-      std::make_unique<imt::AutoSizeTreeLayout>(
-        std::make_unique<imt::OpenGLGNodeFactory>())};
+      std::make_shared<imt::AutoSizeTreeLayout>(
+        std::make_shared<imt::OpenGLGNodeFactory>())};
     unitHeight = 30.f;
   }
   else {
@@ -72,10 +72,21 @@ MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
     //   std::make_unique<imt::AutoSizeTreeLayout>(
     //     std::make_unique<imt::HGradientGNodeFactory>(), 0.0f, 0.0f)};
     mtreeVis_ = new imt::IcicleMorphotreeWidget{this, 
-      std::make_unique<imt::AutoSizeTreeLayout>(
-        std::make_unique<imt::OpenGLGNodeFactory>())};
+      std::make_shared<imt::AutoSizeTreeLayout>(
+        std::make_shared<imt::OpenGLGNodeFactory>())};
       unitWidth= 5.f;
   }
+
+
+  std::unique_ptr<imt::Preset> preset = 
+    //std::make_unique<imt::DefaultPreset>();
+    //std::make_unique<imt::FlatPreset>();
+    //std::make_unique<imt::VerticalPreset>();
+    //std::make_unique<imt::HorinzontalPreset>();
+    //std::make_unique<imt::SymmetricTentLikeCushion>();
+    std::make_unique<imt::AsymetricTentLikeCushion>();
+  
+  preset->setUpFactory(std::dynamic_pointer_cast<imt::OpenGLGNodeFactory>(mtreeVis_->gnodeFactory()));
 
   mtreeVis_->loadImage(domain, f);
   mtreeVis_->setNodeSelectionColor(Qt::red);

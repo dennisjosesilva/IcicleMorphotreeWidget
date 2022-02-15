@@ -74,6 +74,7 @@ namespace IcicleMorphotreeWidget
     GNode *gnode(int x, int y, const QVector<bool> &mask);
 
     void setGNodeFactory(GNodeFactoryPtr f);
+    GNodeFactoryPtr gnodeFactory() { return treeLayout_->gnodeFactory(); }
 
     inline std::vector<uint8> recImage() const { return tree_.reconstructImage(); }
     inline Box domain() const { return domain_; }

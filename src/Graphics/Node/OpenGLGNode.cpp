@@ -34,12 +34,19 @@ namespace IcicleMorphotreeWidget
 
   OpenGLGNode::OpenGLGNode(IcicleMorphotreeWidget *treeVis, MTreeNodePtr mnode,
     float topProportion, float leftProportion, float bottomProportion, 
-    float rightProportion)
+    float rightProportion, float centerProportion,
+    float topLeftProportion, float topRightProportion,
+    float bottomLeftProportion, float bottomRightProportion)
     : GNode{treeVis, mnode},
       topProportion_{topProportion}, 
       leftProportion_{leftProportion},
       bottomProportion_{bottomProportion},
-      rightProportion_{rightProportion}
+      rightProportion_{rightProportion},
+      centerProportion_{centerProportion},
+      topLeftProportion_{topLeftProportion},
+      topRightProportion_{topRightProportion},
+      bottomLeftProportion_{bottomLeftProportion},
+      bottomRightProportion_{bottomRightProportion}
   { }  
 
   void OpenGLGNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *options,
@@ -77,6 +84,13 @@ namespace IcicleMorphotreeWidget
     shaderProgram_->setUniformValue("rp", rightProportion_);
     shaderProgram_->setUniformValue("tp", topProportion_);
     shaderProgram_->setUniformValue("bp", bottomProportion_);
+
+    shaderProgram_->setUniformValue("cp", centerProportion_);
+    shaderProgram_->setUniformValue("tlp", topLeftProportion_);
+    shaderProgram_->setUniformValue("trp", topRightProportion_);
+    shaderProgram_->setUniformValue("blp", bottomLeftProportion_);
+    shaderProgram_->setUniformValue("brp", bottomRightProportion_);
+
     shaderProgram_->setUniformValue("centerColor", backgroundColor_);
 
     shaderProgram_->enableAttributeArray(SHADER_PROGRAM_POSITION_ATTR_LOC);    

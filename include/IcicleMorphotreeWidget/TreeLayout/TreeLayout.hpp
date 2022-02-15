@@ -28,10 +28,10 @@ namespace IcicleMorphotreeWidget
     using uint8 = morphotree::uint8;
     using MTree = morphotree::MorphologicalTree<uint8>;
     using NodePtr = typename MTree::NodePtr;
-    using GNodeFactoryPtr = std::unique_ptr<GNodeFactory>;
+    using GNodeFactoryPtr = std::shared_ptr<GNodeFactory>;
 
     TreeLayout(
-      GNodeFactoryPtr nodeFactory=std::make_unique<HGradientGNodeFactory>(),
+      GNodeFactoryPtr nodeFactory=std::make_shared<HGradientGNodeFactory>(),
       float marginTop = 20.f,
       float marginBottom = 20.f);
 
@@ -43,6 +43,7 @@ namespace IcicleMorphotreeWidget
     inline void setTreeVis(IcicleMorphotreeWidget *t) { gnodeFactory_->setTreeVisualiser(t); treeVis_ = t; }
 
     inline void setGNodeFactory(GNodeFactoryPtr f) { gnodeFactory_ = std::move(f); }
+    inline GNodeFactoryPtr gnodeFactory() { return gnodeFactory_; }
 
     inline float  marginTop() const { return marginTop_; }
     inline float& marginTop() { return marginTop_; }
