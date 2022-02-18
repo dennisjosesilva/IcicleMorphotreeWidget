@@ -6,11 +6,13 @@
 namespace IcicleMorphotreeWidget
 {
   GrayScaleBar::GrayScaleBar(qreal unitWidth, qreal unitHeight, 
-    unsigned int numberOfLevels, TreeLayoutOrientation orientation)
+    unsigned int numberOfLevels, TreeLayoutOrientation orientation,
+    MorphoTreeType mtreeType)
     :unitWidth_{unitWidth}, unitHeight_{unitHeight}, 
      numberOfLevels_{numberOfLevels},
      showBorders_{true},
-     orientation_{orientation}
+     orientation_{orientation},
+     mtreeType_{mtreeType}
   {
     setZValue(-1);
   }
@@ -50,8 +52,15 @@ namespace IcicleMorphotreeWidget
     unsigned int L = numberOfLevels_;
     for (unsigned int l=0; l < L; ++l) {
       qreal relLevel = static_cast<qreal>(l) / static_cast<qreal>(L);
-      int level = 255 * relLevel;     
+      int level;
       
+      if (mtreeType_ == MorphoTreeType::MAX_TREE_8C || 
+        mtreeType_ == MorphoTreeType::MAX_TREE_4C)
+        level = (1.f - relLevel);
+      else if (mtreeType_ == MorphoTreeType::MIN_TREE_4C || 
+        mtreeType_ == MorphoTreeType::MIN_TREE_8C) 
+        level = 255 * relLevel;     
+        
       if (showBorders_){
         painter->setPen(QPen{Qt::black, 0});
       }

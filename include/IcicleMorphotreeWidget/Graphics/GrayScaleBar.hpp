@@ -1,6 +1,7 @@
 #pragma once 
 
 #include "IcicleMorphotreeWidget/TreeLayout/TreeLayout.hpp"
+#include "IcicleMorphotreeWidget/MorphoTreeType.hpp"
 #include <QGraphicsItem>
 
 namespace IcicleMorphotreeWidget
@@ -10,7 +11,8 @@ namespace IcicleMorphotreeWidget
   public:
     GrayScaleBar(qreal unitWidth = 20.f, qreal unitHeight = 20.f,
       unsigned int numberOfLevels=256, 
-      TreeLayoutOrientation orientation = TreeLayoutOrientation::Vertical);
+      TreeLayoutOrientation orientation = TreeLayoutOrientation::Vertical,
+      MorphoTreeType mtreeType=MorphoTreeType::MAX_TREE_8C);
 
     enum { Type = UserType + 2 };
     int type() const override { return Type; }
@@ -50,5 +52,6 @@ namespace IcicleMorphotreeWidget
     unsigned int numberOfLevels_;
     TreeLayoutOrientation orientation_;
     bool showBorders_;
+    MorphoTreeType mtreeType_;
   };
 }

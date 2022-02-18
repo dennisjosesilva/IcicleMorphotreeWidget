@@ -12,6 +12,8 @@
 #include "IcicleMorphotreeWidget/Graphics/ColorBar.hpp"
 #include "IcicleMorphotreeWidget/Filtering/TreeFiltering.hpp"
 
+#include "IcicleMorphotreeWidget/MorphoTreeType.hpp"
+
 namespace IcicleMorphotreeWidget
 {
   class GNode;
@@ -42,7 +44,10 @@ namespace IcicleMorphotreeWidget
     MTree filter(std::shared_ptr<TreeFiltering> treeFiltering);
     void ifilter(std::shared_ptr<TreeFiltering> treeFiltering);    
 
-    void loadImage(Box domain, const std::vector<uint8> &f);
+    void loadImage(Box domain, const std::vector<uint8> &f, 
+      MorphoTreeType mtreeType=MAX_TREE_8C);
+    
+    inline MorphoTreeType treeType() const { return mtreeType_; }
 
     inline const MTree& mtree() const { return tree_; }
 
@@ -124,5 +129,7 @@ namespace IcicleMorphotreeWidget
     ColorMapPtr colorMap_;
 
     bool isDownSpace_;
+
+    MorphoTreeType mtreeType_;
   };
 }

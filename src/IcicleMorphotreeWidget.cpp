@@ -4,6 +4,7 @@
 #include "IcicleMorphotreeWidget/TreeLayout/AutoSizeTreeLayout.hpp"
 
 #include <morphotree/adjacency/adjacency8c.hpp>
+#include <morphotree/adjacency/adjacency4c.hpp>
 
 #include <QOpenGLWidget>
 
@@ -47,14 +48,29 @@ namespace IcicleMorphotreeWidget
   }
 
   void IcicleMorphotreeWidget::loadImage(Box domain, 
-    const std::vector<uint8> &f)
+    const std::vector<uint8> &f, MorphoTreeType mtreeType)
   {   
     namespace mt = morphotree; 
 
     domain_ = domain;
-    tree_ = 
-      mt::buildMaxTree(f, std::make_unique<mt::Adjacency8C>(domain_));    
+    mtreeType_ = mtreeType;
 
+    switch (mtreeType)
+    {
+    case MAX_TREE_8C:
+      tree_ = mt::buildMaxTree(f, std::make_unique<mt::Adjacency8C>(domain_));
+      break;
+    case MAX_TREE_4C:
+      tree_ = mt::buildMaxTree(f, std::make_unique<mt::Adjacency4C>(domain_));
+      break;
+    case MIN_TREE_8C:
+      tree_ = mt::buildMinTree(f, std::make_unique<mt::Adjacency8C>(domain_));
+      break;
+    case MIN_TREE_4C:
+      tree_ = mt::buildMinTree(f, std::make_unique<mt::Adjacency4C>(domain_));
+      break;
+    }
+        
     updateTreeRendering();
   }
 
