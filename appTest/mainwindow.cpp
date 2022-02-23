@@ -97,7 +97,7 @@ MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
   
   preset->setUpFactory(std::dynamic_pointer_cast<imt::OpenGLGNodeFactory>(mtreeVis_->gnodeFactory()));
 
-  mtreeVis_->loadImage(domain, f, imt::MorphoTreeType::MIN_TREE_8C);
+  mtreeVis_->loadImage(domain, f, imt::MorphoTreeType::MAX_TREE_8C);
   mtreeVis_->setNodeSelectionColor(Qt::red);
   connect(mtreeVis_, &imt::IcicleMorphotreeWidget::treeAboutToBeRedrawn, [](){
     qDebug() << "about to be drawn";
@@ -190,6 +190,14 @@ MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
     }
   });
 
+  QPushButton *btnToggleMTreeType = new QPushButton{tr("Toggle tree type"), this};
+  connect(btnToggleMTreeType, &QPushButton::clicked, [this]{
+    if (mtreeVis_->treeType() == imt::MorphoTreeType::MAX_TREE_8C)
+      mtreeVis_->setTreeType(imt::MorphoTreeType::MIN_TREE_8C);
+    else 
+      mtreeVis_->setTreeType(imt::MorphoTreeType::MAX_TREE_8C);
+  });
+
   hlayout->addWidget(btnShowAttribute);
   hlayout->addWidget(btnPan);
   hlayout->addWidget(btnAreaFilter);
@@ -197,6 +205,7 @@ MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
   hlayout->addWidget(btnRemoveGrayScaleBar);
   hlayout->addWidget(btnChangeNodeStyle);
   hlayout->addWidget(btnRotateWidget);
+  hlayout->addWidget(btnToggleMTreeType);
   layout_->addItem(hlayout);
   layout_->addItem(createUniHeightControls(unitHeight));
 

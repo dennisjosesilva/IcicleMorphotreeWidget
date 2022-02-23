@@ -77,6 +77,36 @@ namespace IcicleMorphotreeWidget
     updateTreeRendering();
   }
 
+  void IcicleMorphotreeWidget::setTreeType(MorphoTreeType mtreeType)
+  {
+    using MTree = decltype(tree_);
+    using ValueType = typename MTree::TreeWeightType;
+    namespace mt = morphotree; 
+    
+    mtreeType_ = mtreeType;
+    treeLayout_->setMTreeType(mtreeType);
+    if (grayScaleBar_ != nullptr)
+      grayScaleBar_->setMTreeType(mtreeType);
+
+    std::vector<ValueType> f = tree_.reconstructImage();
+    switch (mtreeType)
+    {
+    case MAX_TREE_8C:
+      tree_ = mt::buildMaxTree(f, std::make_unique<mt::Adjacency8C>(domain_));
+      break;
+    case MAX_TREE_4C:
+      tree_ = mt::buildMaxTree(f, std::make_unique<mt::Adjacency4C>(domain_));
+      break;
+    case MIN_TREE_8C:
+      tree_ = mt::buildMinTree(f, std::make_unique<mt::Adjacency8C>(domain_));
+      break;
+    case MIN_TREE_4C:
+      tree_ = mt::buildMinTree(f, std::make_unique<mt::Adjacency4C>(domain_));
+      break;
+    }
+    updateTreeRendering();
+  }
+
   void IcicleMorphotreeWidget::loadAttributes(NormAttributesPtr attr)
   {
     attr_ = std::move(attr);

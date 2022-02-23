@@ -51,6 +51,7 @@ namespace IcicleMorphotreeWidget
       MorphoTreeType mtreeType=MAX_TREE_8C);
     
     inline MorphoTreeType treeType() const { return mtreeType_; }
+    void setTreeType(MorphoTreeType mtreeType);
 
     inline const MTree& mtree() const { return tree_; }
 
@@ -106,6 +107,8 @@ namespace IcicleMorphotreeWidget
 
     inline QColor& nodeSelectionColor() { return GNode::selectionColor(); }
     inline void setNodeSelectionColor(const QColor &val) { GNode::setSelectionColor(val); }
+
+    
 
   signals:
     void treeAboutToBeRedrawn();
