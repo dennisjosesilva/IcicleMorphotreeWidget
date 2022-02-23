@@ -13,6 +13,7 @@
 #include "IcicleMorphotreeWidget/Filtering/TreeFiltering.hpp"
 
 #include "IcicleMorphotreeWidget/MorphoTreeType.hpp"
+#include "IcicleMorphotreeWidget/Graphics/GrayScaleBar/GrayScaleProfile.hpp"
 
 namespace IcicleMorphotreeWidget
 {
@@ -34,7 +35,9 @@ namespace IcicleMorphotreeWidget
     using ColorMapPtr = std::unique_ptr<ColorMap>;
     using NormAttributesPtr = std::unique_ptr<std::vector<float>>;
 
-    IcicleMorphotreeWidget(QWidget *parent = nullptr, 
+    IcicleMorphotreeWidget(
+      const GrayScaleProfile &grayscalePorfile=GrayScaleProfile{Range{0, 255}, Range{0, 255}},
+      QWidget *parent = nullptr, 
       TreeLayoutPtr treeLayout=std::make_shared<FixedHeightTreeLayout>());
 
     void drawBackground(QPainter *painter, const QRectF &rect) override;
@@ -50,6 +53,9 @@ namespace IcicleMorphotreeWidget
     inline MorphoTreeType treeType() const { return mtreeType_; }
 
     inline const MTree& mtree() const { return tree_; }
+
+    const GrayScaleProfile& grayscaleProfile() const  {return grayscaleProfile_; }
+    inline void setGrayScaleProfile(const GrayScaleProfile &val) { grayscaleProfile_ = val; }
 
     void loadAttributes(NormAttributesPtr attr);
     void clearAttributes();
@@ -131,5 +137,6 @@ namespace IcicleMorphotreeWidget
     bool isDownSpace_;
 
     MorphoTreeType mtreeType_;
+    GrayScaleProfile grayscaleProfile_;
   };
 }

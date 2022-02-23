@@ -8,10 +8,13 @@
 namespace IcicleMorphotreeWidget
 { 
   AutoSizeTreeLayout::AutoSizeTreeLayout(GNodeFactoryPtr nodeFactory,
-    float marginTop, float marginBottom, qreal marginLeft)
-    : TreeLayout{std::move(nodeFactory), marginTop, marginBottom},
+    const GrayScaleProfile &grayscaleProfile,
+    float marginTop, float marginBottom, qreal marginLeft,
+    MorphoTreeType mtreeType)
+    : TreeLayout{std::move(nodeFactory), marginTop, marginBottom, mtreeType},
       unitHeight_{-1.0f},
-      marginLeft_{marginLeft}
+      marginLeft_{marginLeft},
+      grayscaleProfile_{grayscaleProfile}
   {}
 
   void AutoSizeTreeLayout::parseVertical(const MTree &tree)
@@ -21,7 +24,7 @@ namespace IcicleMorphotreeWidget
     std::vector<float> bottom(tree.numberOfNodes(), 0);
     QVector<GNode *> &gnodes = treeVis_->gnodes();
     float maxBottom = 0;
-    unitHeight_ = computeUnitHeightFromTheTree(tree);
+    unitHeight_ = grayscaleProfile_.computeUnitBlock(treeVis_->sceneRect().height());  // computeUnitHeightFromTheTree(tree);
 
     float renderWidth = treeVis_->sceneRect().width() - marginLeft_;
 
@@ -72,7 +75,7 @@ namespace IcicleMorphotreeWidget
     std::vector<float> right(tree.numberOfNodes(), 0);
     QVector<GNode *> &gnodes = treeVis_->gnodes();
     float maxRight = 0.0f;
-    unitWidth_ = computeUnitWidthFromTheTree(tree);
+    unitWidth_ =  grayscaleProfile_.computeUnitBlock(treeVis_->sceneRect().width());  // computeUnitWidthFromTheTree(tree);
 
     float renderHeight = treeVis_->sceneRect().height() - marginTop_;
 
@@ -135,31 +138,6 @@ namespace IcicleMorphotreeWidget
       normalisedArea[nid] = static_cast<float>(area[nid]) / largestArea;
 
     return normalisedArea;
-  }
-
-  qreal AutoSizeTreeLayout::computeUnitHeightFromTheTree(const MTree &tree) const
-  {
-    uint8 maxLevel = 0;
-    tree.tranverse([&maxLevel](NodePtr node) { 
-      if (maxLevel < node->level())
-        maxLevel = node->level();
-    });
-
-    qreal height = treeVis_->sceneRect().height();
-
-    return (height / (static_cast<qreal>(maxLevel)+1.0));
-  }
-
-  qreal AutoSizeTreeLayout::computeUnitWidthFromTheTree(const MTree &tree) const
-  {
-    uint8 maxLevel = 0;
-    tree.tranverse([&maxLevel](NodePtr node){
-      if (maxLevel < node->level())
-        maxLevel = node->level();
-    });
-
-    qreal width = treeVis_->sceneRect().width();
-    return (width / (static_cast<qreal>(maxLevel)+1.0));
-  }
+  }  
 }
 

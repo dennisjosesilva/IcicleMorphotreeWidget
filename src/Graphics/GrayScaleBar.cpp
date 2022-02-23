@@ -5,11 +5,11 @@
 
 namespace IcicleMorphotreeWidget
 {
-  GrayScaleBar::GrayScaleBar(qreal unitWidth, qreal unitHeight, 
-    unsigned int numberOfLevels, TreeLayoutOrientation orientation,
+  GrayScaleBar::GrayScaleBar(const GrayScaleProfile &grayscaleProfile,
+    qreal unitWidth, qreal unitHeight, TreeLayoutOrientation orientation,
     MorphoTreeType mtreeType)
-    :unitWidth_{unitWidth}, unitHeight_{unitHeight}, 
-     numberOfLevels_{numberOfLevels},
+    :grayscaleProfile_{grayscaleProfile},
+     unitWidth_{unitWidth}, unitHeight_{unitHeight}, 
      showBorders_{true},
      orientation_{orientation},
      mtreeType_{mtreeType}
@@ -19,16 +19,22 @@ namespace IcicleMorphotreeWidget
 
   QRectF GrayScaleBar::boundingRect() const 
   {
+    int N = grayscaleProfile_.irange().numberOfElements();
     if (orientation_ == TreeLayoutOrientation::Vertical)
-      return QRectF{0, 0, unitWidth_, unitHeight_*numberOfLevels_};
+      return QRectF{0, 0, unitWidth_, unitHeight_ * N};
     else 
-      return QRectF{0, 0, unitWidth_*numberOfLevels_, unitHeight_};
+      return QRectF{0, 0, unitWidth_*N, unitHeight_};
   }
 
   QPainterPath GrayScaleBar::shape() const 
   {
     QPainterPath path;
-    path.addRect(0, 0, unitWidth_, unitHeight_*numberOfLevels_);    
+    int N = grayscaleProfile_.irange().numberOfElements();
+    if (orientation_ == TreeLayoutOrientation::Vertical)
+      path.addRect(0, 0, unitWidth_, unitHeight_*N);    
+    else
+      path.addRect(0, 0, unitWidth_ * N, unitHeight_);
+
     return path;
   }
 
@@ -49,18 +55,18 @@ namespace IcicleMorphotreeWidget
 
   void GrayScaleBar::paintVertical(QPainter *painter)
   {
-    unsigned int L = numberOfLevels_;
-    for (unsigned int l=0; l < L; ++l) {
-      qreal relLevel = static_cast<qreal>(l) / static_cast<qreal>(L);
-      int level;
-      
+    const Range &irange = grayscaleProfile_.irange();
+    int N = irange.numberOfElements();
+    for (unsigned int i=0;  i < N; ++i) {      
+      int l;
       if (mtreeType_ == MorphoTreeType::MAX_TREE_8C || 
         mtreeType_ == MorphoTreeType::MAX_TREE_4C)
-        level = (1.f - relLevel);
+        l = i + irange.min;
       else if (mtreeType_ == MorphoTreeType::MIN_TREE_4C || 
         mtreeType_ == MorphoTreeType::MIN_TREE_8C) 
-        level = 255 * relLevel;     
-        
+        l = irange.max - i;
+
+      int level = grayscaleProfile_.grayLevel(l);
       if (showBorders_){
         painter->setPen(QPen{Qt::black, 0});
       }
@@ -75,13 +81,20 @@ namespace IcicleMorphotreeWidget
 
   void GrayScaleBar::paintHorizontal(QPainter *painter)
   {
-    unsigned int L = numberOfLevels_;
-    for (unsigned int l = 0; l < L; ++l) {
-      qreal relLevel = static_cast<qreal>(l) / static_cast<qreal>(L);
-      int level = 255 * relLevel;
+    const Range &irange = grayscaleProfile_.irange();
+    const int N = irange.numberOfElements();
+    for (int i = 0; i < N; ++i) {
+      int l;
+      if (mtreeType_ == MorphoTreeType::MAX_TREE_4C || 
+        mtreeType_ == MorphoTreeType::MAX_TREE_8C) 
+        l = i +irange.min;
+      else if (mtreeType_ == MorphoTreeType::MIN_TREE_4C ||
+        mtreeType_ == MorphoTreeType::MIN_TREE_8C)
+        l = irange.max - i;
 
+      int level = grayscaleProfile_.grayLevel(l);
       if (showBorders_) {
-        painter->setPen(QPen{Qt::black});
+        painter->setPen(QPen{Qt::black, 0});
       }
       else {
         painter->setPen(QColor::fromRgb(level, level, level));

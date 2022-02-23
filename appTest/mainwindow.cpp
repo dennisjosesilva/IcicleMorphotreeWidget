@@ -58,9 +58,17 @@ MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
     // mtreeVis_ = new imt::IcicleMorphotreeWidget{this,
     //   std::make_unique<imt::AutoSizeTreeLayout>(
     //     std::make_unique<imt::HGradientGNodeFactory>(), 0.0f, 0.0f)};
-    mtreeVis_ = new imt::IcicleMorphotreeWidget{this, 
+    
+    auto gminmax =  std::minmax_element(f.begin(), f.end());
+    imt::GrayScaleProfile gp{imt::Range{*gminmax.first, *gminmax.second}, 
+      imt::Range{*gminmax.first, *gminmax.second}};
+
+    //imt::GrayScaleProfile gp;
+
+    mtreeVis_ = new imt::IcicleMorphotreeWidget{
+      gp, this, 
       std::make_shared<imt::AutoSizeTreeLayout>(
-        std::make_shared<imt::OpenGLGNodeFactory>())};
+        std::make_shared<imt::OpenGLGNodeFactory>(), gp)};
     unitHeight = 30.f;
   }
   else {
@@ -71,9 +79,10 @@ MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
     // mtreeVis_ = new imt::IcicleMorphotreeWidget{this, 
     //   std::make_unique<imt::AutoSizeTreeLayout>(
     //     std::make_unique<imt::HGradientGNodeFactory>(), 0.0f, 0.0f)};
-    mtreeVis_ = new imt::IcicleMorphotreeWidget{this, 
+    imt::GrayScaleProfile gp;
+    mtreeVis_ = new imt::IcicleMorphotreeWidget{gp, this, 
       std::make_shared<imt::AutoSizeTreeLayout>(
-        std::make_shared<imt::OpenGLGNodeFactory>())};
+        std::make_shared<imt::OpenGLGNodeFactory>(), gp)};
       unitWidth= 5.f;
   }
 

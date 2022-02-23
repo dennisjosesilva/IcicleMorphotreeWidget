@@ -2,6 +2,7 @@
 
 #include "IcicleMorphotreeWidget/TreeLayout/TreeLayout.hpp"
 #include "IcicleMorphotreeWidget/MorphoTreeType.hpp"
+#include "IcicleMorphotreeWidget/Graphics/GrayScaleBar/GrayScaleProfile.hpp"
 #include <QGraphicsItem>
 
 namespace IcicleMorphotreeWidget
@@ -9,8 +10,8 @@ namespace IcicleMorphotreeWidget
   class GrayScaleBar : public QGraphicsItem
   {
   public:
-    GrayScaleBar(qreal unitWidth = 20.f, qreal unitHeight = 20.f,
-      unsigned int numberOfLevels=256, 
+    GrayScaleBar(const GrayScaleProfile &grayscaleProfile={Range{0,255}, Range{0, 255}},
+      qreal unitWidth = 20.f, qreal unitHeight = 20.f,      
       TreeLayoutOrientation orientation = TreeLayoutOrientation::Vertical,
       MorphoTreeType mtreeType=MorphoTreeType::MAX_TREE_8C);
 
@@ -29,11 +30,7 @@ namespace IcicleMorphotreeWidget
     qreal unitHeight() const { return unitHeight_; }
     qreal& unitHeight() { return unitHeight_; }
     void setUnitHeight(qreal val) { unitHeight_ = val; }
-
-    unsigned int numberOfLevels() const { return numberOfLevels_; }
-    unsigned int& numberOfLevels() { return numberOfLevels_; }
-    void setNumberOfLevels(unsigned int val) { numberOfLevels_ = val; }
-
+ 
     bool showBorders() const { return showBorders_; }
     bool &showBorders() { return showBorders_; }
     void setShowBorders(bool val) { showBorders_ = val; }
@@ -42,6 +39,9 @@ namespace IcicleMorphotreeWidget
     TreeLayoutOrientation orientation() const { return orientation_; }
     void setOrientation(TreeLayoutOrientation val) { orientation_ = val; } 
 
+    const GrayScaleProfile &grayscaleProfile() const { return grayscaleProfile_; }
+    void setGrayscaleProfile(const GrayScaleProfile &val) { grayscaleProfile_ = val; }
+
   private:
     void paintVertical(QPainter *painter);
     void paintHorizontal(QPainter *painter);
@@ -49,9 +49,10 @@ namespace IcicleMorphotreeWidget
   private:
     qreal unitWidth_;
     qreal unitHeight_;
-    unsigned int numberOfLevels_;
     TreeLayoutOrientation orientation_;
     bool showBorders_;
     MorphoTreeType mtreeType_;
+
+    GrayScaleProfile grayscaleProfile_;
   };
 }

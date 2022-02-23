@@ -14,7 +14,9 @@
 
 namespace IcicleMorphotreeWidget 
 {
-  IcicleMorphotreeWidget::IcicleMorphotreeWidget(QWidget *parent,
+  IcicleMorphotreeWidget::IcicleMorphotreeWidget(
+    const GrayScaleProfile &grayscaleProfile,
+    QWidget *parent,
     TreeLayoutPtr treeLayout)
     :QGraphicsView{parent},
      scaleFactor_{1.0},
@@ -22,7 +24,8 @@ namespace IcicleMorphotreeWidget
      treeLayout_{std::move(treeLayout)},
      grayScaleBar_{nullptr},
      colorMap_{std::make_unique<RainbowColorMap>()},
-     grayScalerBarBreadth_{0.0f}     
+     grayScalerBarBreadth_{0.0f},
+     grayscaleProfile_{grayscaleProfile}
   {        
     QGraphicsScene *scene = new QGraphicsScene{this};
     scene->setSceneRect(QRectF{0, 0, 400, 400});
@@ -122,9 +125,13 @@ namespace IcicleMorphotreeWidget
       QPointF pos = grayScaleBar_->pos();
       bool showBorders = grayScaleBar_->showBorders();
 
-      grayScaleBar_ =  new GrayScaleBar{grayScaleBar_->unitWidth(), 
-        grayScaleBar_->unitHeight(), grayScaleBar_ ->numberOfLevels(),
+      grayScaleBar_ = new GrayScaleBar{grayscaleProfile_, 
+        grayScaleBar_->unitWidth(), grayScaleBar_->unitHeight(), 
         grayScaleBar_->orientation()};
+
+      // grayScaleBar_ =  new GrayScaleBar{grayScaleBar_->unitWidth(), 
+      //   grayScaleBar_->unitHeight(), grayScaleBar_ ->numberOfLevels(),
+      //   grayScaleBar_->orientation()};
       grayScaleBar_->setPos(pos);
       grayScaleBar_->setShowBorders(showBorders);
     }
@@ -285,8 +292,8 @@ namespace IcicleMorphotreeWidget
         }
       }
 
-      grayScaleBar_ = new GrayScaleBar{unitWidth, unitHeight, numberOfLevels,
-        treeLayout_->orientation()};
+      grayScaleBar_ = new GrayScaleBar{grayscaleProfile_, unitWidth, unitHeight,
+        treeLayout_->orientation()};      
       grayScaleBar_->setPos(0, 0);      
       
       updateTreeRendering();
@@ -311,7 +318,7 @@ namespace IcicleMorphotreeWidget
       scene()->update();
       update();
     }
-  }
+  }  
 
   void IcicleMorphotreeWidget::renderGrayScaleBar()
   {    
@@ -340,12 +347,9 @@ namespace IcicleMorphotreeWidget
     }
     
     if (grayScaleBar_ != nullptr) {
-      float unitWidth = grayScaleBar_->unitWidth();
-      float unitHeight = grayScaleBar_->unitHeight();
-      unsigned int numberOfLevels = grayScaleBar_->numberOfLevels();      
       bool showBorders = grayScaleBar_->showBorders();
       removeGrayScaleBar();
-      addGrayScaleBar(numberOfLevels, grayScalerBarBreadth_);
+      addGrayScaleBar(grayScalerBarBreadth_);
       grayScaleBar_->setShowBorders(showBorders);
     }
     else {

@@ -5,6 +5,7 @@
 
 #include "IcicleMorphotreeWidget/Graphics/Node/GNodeFactory.hpp"
 #include "IcicleMorphotreeWidget/TreeLayout/TreeLayout.hpp"
+#include "IcicleMorphotreeWidget/Graphics/GrayScaleBar/GrayScaleProfile.hpp"
 
 #include <vector>
 
@@ -21,14 +22,16 @@ namespace IcicleMorphotreeWidget
 
     AutoSizeTreeLayout(
       GNodeFactoryPtr nodeFactory=std::make_unique<HGradientGNodeFactory>(),      
+      const GrayScaleProfile &grayScaleProfile=GrayScaleProfile{Range{0,255}, Range{0, 255}},
       float marginTop = 0.0f,
       float marginBottom = 0.0f,
-      qreal marginLeft = 0.0f);
+      qreal marginLeft = 0.0f,
+      MorphoTreeType mtreeType = MorphoTreeType::MAX_TREE_8C);
         
     std::vector<float> computeNormalisedArea(const MTree &tree);
 
-    inline float unitHeight() const { return unitHeight_; }
-    inline float unitWidth() const { return unitWidth_; }
+    inline float unitHeight() const override { return unitHeight_; }
+    inline float unitWidth() const override { return unitWidth_; }
 
     inline qreal marginLeft() const { return marginLeft_; }
     inline qreal &marginLeft() { return marginLeft_; }
@@ -38,6 +41,10 @@ namespace IcicleMorphotreeWidget
     qreal computeUnitWidthFromTheTree(const MTree &tree) const;
 
     inline TreeLayoutType type() const override { return TreeLayoutType::AutoSize; }    
+
+    inline const GrayScaleProfile &grayscaleProfile() const { return grayscaleProfile_; }
+    inline void setGrayscaleProfile(const GrayScaleProfile &val) { grayscaleProfile_ = val; }
+
   protected:
     void parseVertical(const MTree &tree) override;
     void parseHorizontal(const MTree &tree) override;    
@@ -46,5 +53,7 @@ namespace IcicleMorphotreeWidget
     qreal unitHeight_;
     qreal marginLeft_;
     qreal unitWidth_;
+
+    GrayScaleProfile grayscaleProfile_;
   };
 }

@@ -8,12 +8,13 @@
 namespace IcicleMorphotreeWidget
 {
   TreeLayout::TreeLayout(GNodeFactoryPtr nodeFactory,
-    float marginTop, float marginBottom):
+    float marginTop, float marginBottom, MorphoTreeType mtreeType):
     gnodeFactory_{std::move(nodeFactory)},
     treeVis_{nullptr},
     marginTop_{marginTop},
     marginBottom_{marginBottom},
-    orientation_{TreeLayoutOrientation::Vertical}
+    orientation_{TreeLayoutOrientation::Vertical},
+    mtreeType_{mtreeType}
   {}
 
   void TreeLayout::parseTree(const MTree &tree) 
@@ -35,9 +36,9 @@ namespace IcicleMorphotreeWidget
 
   // ================= FIXED HEIGHT TREE LAYOUT ============================
   FixedHeightTreeLayout::FixedHeightTreeLayout(GNodeFactoryPtr nodeFactory,
-    float marginTop,
-    float marginBottom, float height):
-    TreeLayout{std::move(nodeFactory), marginTop, marginBottom},
+    float marginTop, float marginBottom, float height,
+    MorphoTreeType mtreeType):
+    TreeLayout{std::move(nodeFactory), marginTop, marginBottom, mtreeType},
     height_{height}
   {}
   
@@ -157,8 +158,8 @@ namespace IcicleMorphotreeWidget
   // ========= GRAYSCALE BASED HEIGHT TREE LAYOUT ============================
   GrayscaleBasedHeightTreeLayout::GrayscaleBasedHeightTreeLayout(
     GNodeFactoryPtr nodeFactory, float marginTop,
-    float marginBottom, float unitHeight)
-    :TreeLayout{std::move(nodeFactory), marginTop, marginBottom},
+    float marginBottom, float unitHeight, MorphoTreeType mtreeType)
+    :TreeLayout{std::move(nodeFactory), marginTop, marginBottom, mtreeType},
      unitHeight_{unitHeight}
   {}
 
@@ -219,8 +220,7 @@ namespace IcicleMorphotreeWidget
     float uniWidth = unitHeight_;
     
     tree.traverseByLevel([&right, &narea, &top, &gnodes, &maxRight, &uniWidth, this](NodePtr node){
-      if (node->parent() == nullptr) {
-        // Root node rendering
+      if (node->parent() == nullptr) {              
         int levelsToZero = static_cast<int>(node->level()) + 1;
         GNode *gnode = gnodeFactory_->create(node);
         treeVis_->addGNodeToScene(gnode);
@@ -234,7 +234,7 @@ namespace IcicleMorphotreeWidget
       }
       else {
         // Other node rendering
-        int levelsToZero = static_cast<int>(node->level()) - node->parent()->level();
+        int levelsToZero = qAbs(static_cast<int>(node->level()) - node->parent()->level());
         GNode *gnode = gnodeFactory_->create(node);
         treeVis_->addGNodeToScene(gnode);
         gnodes[node->id()] = gnode;
@@ -257,7 +257,7 @@ namespace IcicleMorphotreeWidget
     treeVis_->scene()->setSceneRect(sRect);
     treeVis_->scene()->update();
     treeVis_->update();
-  }
+  }  
 
   std::vector<float> GrayscaleBasedHeightTreeLayout::computeNormalisedArea(
     const MTree &tree)
