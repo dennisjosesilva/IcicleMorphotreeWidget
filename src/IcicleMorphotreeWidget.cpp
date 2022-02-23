@@ -73,7 +73,7 @@ namespace IcicleMorphotreeWidget
       tree_ = mt::buildMinTree(f, std::make_unique<mt::Adjacency4C>(domain_));
       break;
     }
-        
+    treeLayout_->setMTreeType(mtreeType_);
     updateTreeRendering();
   }
 
@@ -127,7 +127,7 @@ namespace IcicleMorphotreeWidget
 
       grayScaleBar_ = new GrayScaleBar{grayscaleProfile_, 
         grayScaleBar_->unitWidth(), grayScaleBar_->unitHeight(), 
-        grayScaleBar_->orientation()};
+        grayScaleBar_->orientation(), grayScaleBar_->mtreeType()};
 
       // grayScaleBar_ =  new GrayScaleBar{grayScaleBar_->unitWidth(), 
       //   grayScaleBar_->unitHeight(), grayScaleBar_ ->numberOfLevels(),
@@ -293,7 +293,7 @@ namespace IcicleMorphotreeWidget
       }
 
       grayScaleBar_ = new GrayScaleBar{grayscaleProfile_, unitWidth, unitHeight,
-        treeLayout_->orientation()};      
+        treeLayout_->orientation(), mtreeType_};
       grayScaleBar_->setPos(0, 0);      
       
       updateTreeRendering();

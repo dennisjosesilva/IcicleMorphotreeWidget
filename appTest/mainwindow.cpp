@@ -97,7 +97,7 @@ MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
   
   preset->setUpFactory(std::dynamic_pointer_cast<imt::OpenGLGNodeFactory>(mtreeVis_->gnodeFactory()));
 
-  mtreeVis_->loadImage(domain, f, imt::MorphoTreeType::MAX_TREE_8C);
+  mtreeVis_->loadImage(domain, f, imt::MorphoTreeType::MIN_TREE_8C);
   mtreeVis_->setNodeSelectionColor(Qt::red);
   connect(mtreeVis_, &imt::IcicleMorphotreeWidget::treeAboutToBeRedrawn, [](){
     qDebug() << "about to be drawn";

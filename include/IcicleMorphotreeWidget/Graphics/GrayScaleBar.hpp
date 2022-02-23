@@ -42,6 +42,10 @@ namespace IcicleMorphotreeWidget
     const GrayScaleProfile &grayscaleProfile() const { return grayscaleProfile_; }
     void setGrayscaleProfile(const GrayScaleProfile &val) { grayscaleProfile_ = val; }
 
+    MorphoTreeType mtreeType() const { return mtreeType_; }
+    MorphoTreeType &mtreeType() { return mtreeType_; }
+    void setMTreeType(MorphoTreeType val) { mtreeType_ = val; }
+
   private:
     void paintVertical(QPainter *painter);
     void paintHorizontal(QPainter *painter);

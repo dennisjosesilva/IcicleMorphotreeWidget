@@ -46,6 +46,9 @@ namespace IcicleMorphotreeWidget
     inline void setGrayscaleProfile(const GrayScaleProfile &val) { grayscaleProfile_ = val; }
 
   protected:
+    bool isMaxTree() const;
+    bool isMinTree() const;
+
     void parseVertical(const MTree &tree) override;
     void parseHorizontal(const MTree &tree) override;    
 

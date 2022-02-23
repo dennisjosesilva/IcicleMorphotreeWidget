@@ -29,8 +29,13 @@ namespace IcicleMorphotreeWidget
     float renderWidth = treeVis_->sceneRect().width() - marginLeft_;
 
     tree.traverseByLevel([&bottom, &narea, &left, &gnodes, &maxBottom, &renderWidth, this](NodePtr node) {
-      if (node->parent() == nullptr) { // root node
-        int levelsToZero = static_cast<int>(node->level()) + 1;
+      if (node->parent() == nullptr) { // root node        
+        int levelsToZero; 
+        if(isMaxTree())
+          levelsToZero = grayscaleProfile_.irange().min - static_cast<int>(node->level())+1;
+        else 
+          levelsToZero = grayscaleProfile_.irange().max - static_cast<int>(node->level())+1;
+        
         GNode *gnode = gnodeFactory_->create(node);
         treeVis_->addGNodeToScene(gnode);
         gnodes[node->id()] = gnode;
@@ -43,7 +48,7 @@ namespace IcicleMorphotreeWidget
       }
       else {
         int levelsToZero = 
-          static_cast<int>(node->level()) - static_cast<int>(node->parent()->level());
+          qAbs(static_cast<int>(node->level()) - static_cast<int>(node->parent()->level()));
         GNode *gnode = gnodeFactory_->create(node);
         treeVis_->addGNodeToScene(gnode);
         gnodes[node->id()] = gnode;
@@ -139,5 +144,15 @@ namespace IcicleMorphotreeWidget
 
     return normalisedArea;
   }  
+
+  bool AutoSizeTreeLayout::isMaxTree() const
+  {
+    return mtreeType_ == MAX_TREE_8C || mtreeType_ == MAX_TREE_4C;
+  }
+  
+  bool AutoSizeTreeLayout::isMinTree() const
+  {
+    return mtreeType_ == MIN_TREE_4C || mtreeType_ == MIN_TREE_8C;
+  }
 }
 

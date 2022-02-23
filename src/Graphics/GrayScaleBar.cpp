@@ -75,7 +75,7 @@ namespace IcicleMorphotreeWidget
       }
 
       painter->setBrush(QColor::fromRgb(level, level, level));            
-      painter->drawRect(0, static_cast<qreal>(l)*unitHeight_, unitWidth_, unitHeight_);    
+      painter->drawRect(0, static_cast<qreal>(i)*unitHeight_, unitWidth_, unitHeight_);    
     }
   }
 

@@ -62,6 +62,9 @@ namespace IcicleMorphotreeWidget
     inline TreeLayoutOrientation &orientation() { return orientation_; }
     inline void setOrientation(TreeLayoutOrientation orientation) { orientation_ = orientation; }
 
+    inline MorphoTreeType mtreeType() const { return mtreeType_; }
+    inline void setMTreeType(MorphoTreeType val) { mtreeType_ = val; }
+
     virtual ~TreeLayout();
 
   protected:
