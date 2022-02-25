@@ -56,7 +56,7 @@ namespace IcicleMorphotreeWidget
     inline const MTree& mtree() const { return tree_; }
 
     const GrayScaleProfile& grayscaleProfile() const  {return grayscaleProfile_; }
-    inline void setGrayScaleProfile(const GrayScaleProfile &val) { grayscaleProfile_ = val; }
+    void setGrayScaleProfile(const GrayScaleProfile &val);
 
     void loadAttributes(NormAttributesPtr attr);
     void clearAttributes();

@@ -107,6 +107,19 @@ namespace IcicleMorphotreeWidget
     updateTreeRendering();
   }
 
+  void IcicleMorphotreeWidget::setGrayScaleProfile(const GrayScaleProfile &val)
+  {
+    grayscaleProfile_ = val;
+    
+    if (grayScaleBar_ != nullptr)
+      grayScaleBar_->setGrayscaleProfile(grayscaleProfile_);
+
+    if (treeLayout_->type() == TreeLayoutType::AutoSize) {
+      std::dynamic_pointer_cast<AutoSizeTreeLayout>(treeLayout_)
+        ->setGrayscaleProfile(grayscaleProfile_);      
+    }
+  }
+
   void IcicleMorphotreeWidget::loadAttributes(NormAttributesPtr attr)
   {
     attr_ = std::move(attr);
