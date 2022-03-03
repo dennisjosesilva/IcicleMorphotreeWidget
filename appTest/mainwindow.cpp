@@ -97,8 +97,8 @@ MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
   
   preset->setUpFactory(std::dynamic_pointer_cast<imt::OpenGLGNodeFactory>(mtreeVis_->gnodeFactory()));
 
-  imt::GrayScaleProfile gp;
-  mtreeVis_->setGrayScaleProfile(gp);
+  // imt::GrayScaleProfile gp;
+  // mtreeVis_->setGrayScaleProfile(gp);
   mtreeVis_->loadImage(domain, f, imt::MorphoTreeType::MAX_TREE_8C);
   
   mtreeVis_->setNodeSelectionColor(Qt::red);
