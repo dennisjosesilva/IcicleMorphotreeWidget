@@ -267,8 +267,7 @@ void MainWindow::visualiseAttributesAct_onTrigger()
 {
   namespace mt = morphotree;
   using AreaComp = mt::AreaComputer<mt::uint8>;
-  using VolumeComp = mt::MaxTreeVolumeComputer<mt::uint8>;
-  using PerimeterComp = mt::MaxTreeVolumeComputer<mt::uint8>;
+  using VolumeComp = mt::VolumeComputer<mt::uint8>;
   using MTree = mt::MorphologicalTree<mt::uint8>;
   using NodePtr = typename MTree::NodePtr;
   using VColorBar = imt::VColorBar;
