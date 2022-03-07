@@ -81,9 +81,14 @@ MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
     //   std::make_unique<imt::AutoSizeTreeLayout>(
     //     std::make_unique<imt::HGradientGNodeFactory>(), 0.0f, 0.0f)};
     imt::GrayScaleProfile gp;
+    // mtreeVis_ = new imt::IcicleMorphotreeWidget{gp, this, 
+    //   std::make_shared<imt::AutoSizeTreeLayout>(
+    //     std::make_shared<imt::OpenGLGNodeFactory>(), gp)};
+
     mtreeVis_ = new imt::IcicleMorphotreeWidget{gp, this, 
       std::make_shared<imt::AutoSizeTreeLayout>(
-        std::make_shared<imt::OpenGLGNodeFactory>(), gp)};
+        std::make_shared<imt::TessBLGradientNodeFactory>(), gp)};
+
       unitWidth= 5.f;
   }
 

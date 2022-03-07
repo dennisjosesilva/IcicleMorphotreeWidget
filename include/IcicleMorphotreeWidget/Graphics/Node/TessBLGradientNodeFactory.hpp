@@ -8,8 +8,8 @@ namespace IcicleMorphotreeWidget
   {
   public:
     TessBLGradientNodeFactory(IcicleMorphotreeWidget *treeVis = nullptr,
-      float topLeftProportion=0.9f, float topRightProportion=0.7f,
-      float bottomLeftProportion=0.9f, float bottomRightProportion=0.7f);
+      float topLeftProportion=1.0f, float topRightProportion=0.8f,
+      float bottomLeftProportion=0.8f, float bottomRightProportion=0.8f);
 
     float topLeftProportion() const { return topLeftProportion_; }
     float &topLeftProportion() { return topLeftProportion_; }
