@@ -41,9 +41,9 @@ namespace IcicleMorphotreeWidget
     float bottomLeftProportion, float bottomRightProportion)
     : GNode{treeVis, mnode},
       topLeftProportion_{topLeftProportion}, 
-      topRightProportion_{topRightProportion_},
+      topRightProportion_{topRightProportion},
       bottomLeftProportion_{bottomLeftProportion},
-      bottomRightProportion_{bottomRightProportion_}
+      bottomRightProportion_{bottomRightProportion}
   {}
 
   void TessBLGradientNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *options,
