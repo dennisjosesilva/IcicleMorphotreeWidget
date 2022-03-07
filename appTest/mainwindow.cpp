@@ -5,6 +5,7 @@
 #include "IcicleMorphotreeWidget/TreeLayout/AutoSizeTreeLayout.hpp"
 
 #include "IcicleMorphotreeWidget/Graphics/Node/OpenGLGNodeFactory.hpp"
+#include "IcicleMorphotreeWidget/Graphics/Node/TessBLGradientNodeFactory.hpp"
 #include "IcicleMorphotreeWidget/Filtering/AreaTreeFiltering.hpp"
 
 #include <morphotree/attributes/areaComputer.hpp>
@@ -68,7 +69,7 @@ MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
     mtreeVis_ = new imt::IcicleMorphotreeWidget{
       gp, this, 
       std::make_shared<imt::AutoSizeTreeLayout>(
-        std::make_shared<imt::OpenGLGNodeFactory>(), gp)};
+        std::make_shared<imt::TessBLGradientNodeFactory>(), gp)};
     unitHeight = 30.f;
   }
   else {
@@ -87,15 +88,15 @@ MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
   }
 
 
-  std::unique_ptr<imt::Preset> preset = 
+  // std::unique_ptr<imt::Preset> preset = 
     //std::make_unique<imt::DefaultPreset>();
     //std::make_unique<imt::FlatPreset>();
     //std::make_unique<imt::VerticalPreset>();
     //std::make_unique<imt::HorinzontalPreset>();
     //std::make_unique<imt::SymmetricTentLikeCushion>();
-    std::make_unique<imt::AsymetricTentLikeCushion>();
+    // std::make_unique<imt::AsymetricTentLikeCushion>();
   
-  preset->setUpFactory(std::dynamic_pointer_cast<imt::OpenGLGNodeFactory>(mtreeVis_->gnodeFactory()));
+  // preset->setUpFactory(std::dynamic_pointer_cast<imt::OpenGLGNodeFactory>(mtreeVis_->gnodeFactory()));
 
   // imt::GrayScaleProfile gp;
   // mtreeVis_->setGrayScaleProfile(gp);

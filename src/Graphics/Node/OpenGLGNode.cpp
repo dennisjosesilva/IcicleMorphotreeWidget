@@ -1,14 +1,12 @@
 #include "IcicleMorphotreeWidget/Graphics/Node/OpenGLGNode.hpp"
 #include "IcicleMorphotreeWidget/Graphics/Node/OpenGLGNodeFactory.hpp"
 
+#include "IcicleMorphotreeWidget/Resource/Loader.hpp"
+
 #include <QPainter>
 
 #include <QOpenGLShaderProgram>
 #include <QOpenGLFunctions>
-
-void loadQtResources() { 
-   Q_INIT_RESOURCE(IcicleMorphotreeWidgetResource); 
-}
 
 namespace IcicleMorphotreeWidget
 {
@@ -19,12 +17,10 @@ namespace IcicleMorphotreeWidget
     if (!shaderProgram_ || !shaderProgram_->isLinked()) {
       loadQtResources();
 
-      shaderProgram_ = new QOpenGLShaderProgram;      
-
       shaderProgram_ = new QOpenGLShaderProgram;
-      shaderProgram_->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/shaders/vertex.glsl");
-      shaderProgram_->addShaderFromSourceFile(QOpenGLShader::Geometry, ":/shaders/geometry.glsl");
-      shaderProgram_->addShaderFromSourceFile(QOpenGLShader::Fragment, ":/shaders/fragment.glsl");
+      shaderProgram_->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/shaders/gl/vertex.glsl");
+      shaderProgram_->addShaderFromSourceFile(QOpenGLShader::Geometry, ":/shaders/gl/geometry.glsl");
+      shaderProgram_->addShaderFromSourceFile(QOpenGLShader::Fragment, ":/shaders/gl/fragment.glsl");
       shaderProgram_->bindAttributeLocation("aPos", SHADER_PROGRAM_POSITION_ATTR_LOC);      
       shaderProgram_->link();
 

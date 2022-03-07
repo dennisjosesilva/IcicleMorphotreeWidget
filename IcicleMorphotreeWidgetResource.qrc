@@ -1,7 +1,13 @@
 <!DOCTYPE RCC><RCC version="1.0">
-<qresource>
-  <file>shaders/vertex.glsl</file>  
-  <file>shaders/geometry.glsl</file>
-  <file>shaders/fragment.glsl</file> 
+<qresource prefix="/shaders/gl">
+  <file alias="vertex.glsl">shaders/gl/vertex.glsl</file>  
+  <file alias="geometry.glsl">shaders/gl/geometry.glsl</file>
+  <file alias="fragment.glsl">shaders/gl/fragment.glsl</file> 
+</qresource>
+<qresource prefix="/shaders/bilinear_gradient">
+  <file alias="vertex.glsl">shaders/bilinear_gradient/vertex.glsl</file>
+  <file alias="tess_control.glsl">shaders/bilinear_gradient/tess_control.glsl</file>
+  <file alias="tess_evaluation.glsl">shaders/bilinear_gradient/tess_evaluation.glsl</file>
+  <file alias="fragment.glsl">shaders/bilinear_gradient/fragment.glsl</file>
 </qresource>
 </RCC>

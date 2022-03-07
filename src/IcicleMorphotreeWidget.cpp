@@ -42,6 +42,8 @@ namespace IcicleMorphotreeWidget
     QOpenGLWidget *glWidget = new QOpenGLWidget;
     QSurfaceFormat format;
     format.setSamples(4);
+    format.setMajorVersion(4);
+    format.setMinorVersion(0);
     glWidget->setFormat(format);
     setViewport(glWidget);
 
