@@ -29,6 +29,8 @@
 #include <memory>
 #include <algorithm>
 
+#include "RenderingPanel/RenderingPanel.hpp"
+
 MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
   : QMainWindow{nullptr}, colorBar_{nullptr}, 
     gradientNodeStyle_{imt::GNodeStyle::BilinearGradientColor}
@@ -38,7 +40,12 @@ MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
   setWindowTitle("Main Window");
   resize(400, 700);
 
-  layout_ = new QVBoxLayout;
+  layout_ = new QHBoxLayout;
+  
+  QLayout *treeVisLayout = new QVBoxLayout; 
+
+  QLayout *nodeRenderingLayout = new QVBoxLayout;
+
   widget_ = new QWidget{this};
   widget_->setLayout(layout_);
 
@@ -215,11 +222,20 @@ MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
   hlayout->addWidget(btnChangeNodeStyle);
   hlayout->addWidget(btnRotateWidget);
   hlayout->addWidget(btnToggleMTreeType);
-  layout_->addItem(hlayout);
-  layout_->addItem(createUniHeightControls(unitHeight));
+  treeVisLayout->addItem(hlayout);
+  treeVisLayout->addItem(createUniHeightControls(unitHeight));
+
+  // Rendering Panel
+  RenderingPanel *renderingPanel = new RenderingPanel{mtreeVis_, 
+    this};
+  nodeRenderingLayout->addWidget(renderingPanel);
 
   // mtreeVis_->setDragMode(QGraphicsView::DragMode::ScrollHandDrag);
-  layout_->addWidget(mtreeVis_);
+  treeVisLayout->addWidget(mtreeVis_);
+  // nodeRenderingLayout
+
+  layout_->addItem(treeVisLayout);
+  layout_->addItem(nodeRenderingLayout);
 
   connect(imt::GNodeEventHandler::Singleton(), &imt::GNodeEventHandler::mousePress,
     this, &MainWindow::nodeMousePress);

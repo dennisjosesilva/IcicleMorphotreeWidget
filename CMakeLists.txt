@@ -18,7 +18,11 @@ conan_basic_setup()
 file(GLOB_RECURSE PROJECT_SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 
 # APP TEST
-set(APP_TEST_SOURCE appTest/main.cpp appTest/mainwindow.cpp)
+set(APP_TEST_SOURCE 
+   #appTest/RenderingPanel/NodeRenderingWidget.cpp
+   appTest/RenderingPanel/RenderingPanel.cpp
+   appTest/main.cpp 
+   appTest/mainwindow.cpp)
 
 # MOC SOURCE
 qt5_wrap_cpp(PROJECT_SOURCE
