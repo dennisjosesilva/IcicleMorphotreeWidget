@@ -1,6 +1,7 @@
 #include "RenderingPanel/RenderingPanel.hpp"
 
 #include "RenderingPanel/FlatRenderingWidget.hpp"
+#include "RenderingPanel/HGradientRenderingWidget.hpp"
 
 #include <QFrame>
 #include <QLabel>
@@ -12,20 +13,20 @@
 
 RenderingPanel::RenderingPanel(IcicleMorphotreeWidget *treeVis, 
   QWidget *parent)
-  : QWidget{parent}, treeVis_{treeVis}
+  : QWidget{parent}, treeVis_{treeVis}, curNodeRendering_{defaultRenderingMode()}
 {
   QVBoxLayout *mainLayout = new QVBoxLayout;
   
   mainLayout->addItem(createTitleSection());
   mainLayout->addItem(createRenderingStyleComboSection());  
-  mainLayout->addWidget(defaultRenderingMode());
+  mainLayout->addWidget(curNodeRendering_);
   mainLayout->addStretch();
   setLayout(mainLayout);
 }
 
 NodeRenderingWidget *RenderingPanel::defaultRenderingMode()
 {
-  return new FlatRenderingWidget{treeVis_, this};
+  return new HGradientRenderingWidget{treeVis_, this};
 }
 
 QLayout *RenderingPanel::createTitleSection()
@@ -65,6 +66,10 @@ QLayout *RenderingPanel::createRenderingStyleComboSection()
   renderingMethodCombo_->addItem("Tessellation Shader Gradient",
     static_cast<int>(NodeRenderingStyle::TessShaderGradient));
 
+  connect(renderingMethodCombo_, 
+    QOverload<int>::of(&QComboBox::currentIndexChanged), this,
+    &RenderingPanel::renderingMethodCombo_onCurrentIndexChanged);
+
   layout->addWidget(label);
   layout->addWidget(renderingMethodCombo_);
   layout->setContentsMargins(0, 0, 0, 15);
@@ -86,4 +91,34 @@ QWidget *RenderingPanel::createVLine()
   line->setFrameShape(QFrame::VLine);
   line->setFrameShadow(QFrame::Sunken);
   return line;
+}
+
+void RenderingPanel::changeNodeRendering(
+  NodeRenderingWidget *curNodeRendering)
+{
+  QLayout *l = layout();
+  l->replaceWidget(curNodeRendering_, curNodeRendering);    
+
+  curNodeRendering_->deleteLater();
+  curNodeRendering_ = curNodeRendering;
+}
+
+void RenderingPanel::renderingMethodCombo_onCurrentIndexChanged(
+  int index)
+{
+  NodeRenderingStyle nstyle = static_cast<NodeRenderingStyle>(
+    renderingMethodCombo_->currentData().value<int>());
+  
+  switch (nstyle)
+  {
+  case NodeRenderingStyle::FLAT:
+    changeNodeRendering(new FlatRenderingWidget{treeVis_, this});
+    break;
+  
+  case NodeRenderingStyle::HGradient:
+    changeNodeRendering(new HGradientRenderingWidget{treeVis_, this});
+
+  default:
+    break;
+  }
 }

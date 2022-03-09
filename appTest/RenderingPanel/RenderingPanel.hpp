@@ -34,6 +34,9 @@ protected:
 
   NodeRenderingWidget *defaultRenderingMode();
 
+protected slots:
+  void renderingMethodCombo_onCurrentIndexChanged(int index);
+
 protected:
   IcicleMorphotreeWidget *treeVis_;
   NodeRenderingWidget *curNodeRendering_;

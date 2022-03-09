@@ -20,6 +20,7 @@ file(GLOB_RECURSE PROJECT_SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 # APP TEST
 set(APP_TEST_SOURCE 
    appTest/RenderingPanel/FlatRenderingWidget.cpp
+   appTest/RenderingPanel/HGradientRenderingWidget.cpp
    appTest/RenderingPanel/NodeRenderingWidget.cpp
    appTest/RenderingPanel/RenderingPanel.cpp
    appTest/main.cpp 
