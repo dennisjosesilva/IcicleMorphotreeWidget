@@ -3,12 +3,21 @@
 #include "IcicleMorphotreeWidget/IcicleMorphotreeWidget.hpp"
 #include "RenderingPanel/NodeRenderingWidget.hpp"
 
+#include "IcicleMorphotreeWidget/Graphics/Node/GNodeFactory.hpp"
+
 class FlatRenderingWidget : public NodeRenderingWidget
 {
 public:
-  FlatRenderingWidget(IcicleMorphotreeWidget *treeVis, 
+  using FixedColorGNodeFactory = IcicleMorphotreeWidget::FixedColorGNodeFactory;
+  using FixedColorGNodeFactoryPtr = std::shared_ptr<FixedColorGNodeFactory>;
+
+  FlatRenderingWidget(TreeVisuliser *treeVis, 
     QWidget *parent=nullptr);
     
 protected:
-  QLayout *createMessage();  
+  void setupGNodeFactory();
+  QLayout *createMessage();
+
+protected:
+  FixedColorGNodeFactoryPtr factory_;
 };

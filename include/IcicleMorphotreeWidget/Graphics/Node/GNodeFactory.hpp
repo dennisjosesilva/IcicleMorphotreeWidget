@@ -52,7 +52,7 @@ namespace IcicleMorphotreeWidget
         
     inline float  gradientProportion() const { return gradientProportion_; }
     inline float& gradientProportion() { return gradientProportion_; }
-    inline void gradientProportion(float val) { gradientProportion_ = val; }
+    inline void setGradientProportion(float val) { gradientProportion_ = val; }
 
     GNodeStyle style() const override { return GradientColor; }
 

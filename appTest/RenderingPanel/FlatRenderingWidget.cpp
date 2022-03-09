@@ -4,16 +4,24 @@
 #include <QVBoxLayout>
 #include <QLabel>
 
-FlatRenderingWidget::FlatRenderingWidget(IcicleMorphotreeWidget *treeVis,
+FlatRenderingWidget::FlatRenderingWidget(TreeVisuliser *treeVis,
   QWidget *parent)
   : NodeRenderingWidget{treeVis, parent}
 {
   QVBoxLayout *layout = new QVBoxLayout;
 
+  setupGNodeFactory();
   layout->addItem(createTitle("Flat Rendering"));
   layout->addItem(createMessage());
 
   setLayout(layout);
+}
+
+void FlatRenderingWidget::setupGNodeFactory()
+{
+  factory_ = std::make_shared<FixedColorGNodeFactory>(treeVis_);
+  treeVis_->setGNodeFactory(factory_);
+  treeVis_->updateTreeRendering();
 }
 
 QLayout *FlatRenderingWidget::createMessage()

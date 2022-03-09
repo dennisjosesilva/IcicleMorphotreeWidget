@@ -19,6 +19,7 @@ file(GLOB_RECURSE PROJECT_SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 
 # APP TEST
 set(APP_TEST_SOURCE 
+   appTest/RenderingPanel/CustomWidgets/UnitSliderWidget.cpp
    appTest/RenderingPanel/FlatRenderingWidget.cpp
    appTest/RenderingPanel/HGradientRenderingWidget.cpp
    appTest/RenderingPanel/NodeRenderingWidget.cpp
@@ -28,6 +29,7 @@ set(APP_TEST_SOURCE
 
 # MOC SOURCE
 qt5_wrap_cpp(PROJECT_SOURCE
+   appTest/RenderingPanel/CustomWidgets/UnitSliderWidget.hpp
    include/IcicleMorphotreeWidget/IcicleMorphotreeWidget.hpp
    include/IcicleMorphotreeWidget/Graphics/Node/GNodeEventHandler.hpp
    include/IcicleMorphotreeWidget/Graphics/ColorBar.hpp)
