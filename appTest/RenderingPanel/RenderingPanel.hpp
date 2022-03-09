@@ -32,6 +32,8 @@ protected:
   QWidget *createHLine();
   QWidget *createVLine();
 
+  NodeRenderingWidget *defaultRenderingMode();
+
 protected:
   IcicleMorphotreeWidget *treeVis_;
   NodeRenderingWidget *curNodeRendering_;

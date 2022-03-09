@@ -1,5 +1,7 @@
 #include "RenderingPanel/RenderingPanel.hpp"
 
+#include "RenderingPanel/FlatRenderingWidget.hpp"
+
 #include <QFrame>
 #include <QLabel>
 #include <QComboBox>
@@ -15,9 +17,15 @@ RenderingPanel::RenderingPanel(IcicleMorphotreeWidget *treeVis,
   QVBoxLayout *mainLayout = new QVBoxLayout;
   
   mainLayout->addItem(createTitleSection());
-  mainLayout->addItem(createRenderingStyleComboSection());
+  mainLayout->addItem(createRenderingStyleComboSection());  
+  mainLayout->addWidget(defaultRenderingMode());
   mainLayout->addStretch();
   setLayout(mainLayout);
+}
+
+NodeRenderingWidget *RenderingPanel::defaultRenderingMode()
+{
+  return new FlatRenderingWidget{treeVis_, this};
 }
 
 QLayout *RenderingPanel::createTitleSection()
@@ -31,6 +39,7 @@ QLayout *RenderingPanel::createTitleSection()
 
   QLabel *titleLabel = new QLabel{"Node Rendering Style"};
   titleLabel->setFont(font);
+  titleLayout->addStretch();
 
   titleLayout->addWidget(titleLabel);
   layout->addItem(titleLayout);
@@ -58,6 +67,7 @@ QLayout *RenderingPanel::createRenderingStyleComboSection()
 
   layout->addWidget(label);
   layout->addWidget(renderingMethodCombo_);
+  layout->setContentsMargins(0, 0, 0, 15);
   return layout;
 }
 
