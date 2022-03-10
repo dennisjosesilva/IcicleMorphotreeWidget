@@ -3,6 +3,7 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QComboBox>
+#include <QDoubleSpinBox>
 #include <QLabel>
 
 GeoShaderRenderingWidget::GeoShaderRenderingWidget(TreeVisuliser *treeVis,
@@ -62,6 +63,28 @@ void GeoShaderRenderingWidget::presetComboBox_onCurrentIndexChanged(int index)
   
   case GeoShaderPresetType::Default:
     changePresetWidget(new PresetDefaultWidget{treeVis_, factory_});
+    break;
+
+  case GeoShaderPresetType::Flat:
+    changePresetWidget(new PresetFlatWidget{treeVis_, factory_});
+    break;
+
+  case GeoShaderPresetType::Vertical:
+    changePresetWidget(new PresetVerticalWidget{treeVis_, factory_});
+    break;
+  
+  case GeoShaderPresetType::Horizontal:
+    changePresetWidget(new PresetHorizontalWidget{treeVis_, factory_});
+    break;
+
+  case GeoShaderPresetType::SymmetricTentLikeCushion:
+    changePresetWidget(new PresetSymmetricTentLikeCushionWidget{treeVis_,
+      factory_});
+    break;
+
+  case GeoShaderPresetType::AsymmetricTentLikeCushion:
+    changePresetWidget(new PresetAsymmetricTentLikeCushionWidget{treeVis_,
+      factory_});
     break;
   }
 }
@@ -223,6 +246,10 @@ PresetDefaultWidget::PresetDefaultWidget(TreeVisualiser *treeVis,
 {
   QVBoxLayout *layout = new QVBoxLayout;
 
+  preset_ = std::make_unique<DefaultPreset>();
+  preset_->setUpFactory(factory_);
+  treeVis_->updateTreeRendering();
+
   layout->addItem(createSliders());
   setLayout(layout);
 }
@@ -232,25 +259,25 @@ QLayout *PresetDefaultWidget::createSliders()
   QVBoxLayout *layout = new QVBoxLayout;
 
   sliderTop_ = new UnitSliderWidget{"top: ", this};
-  sliderTop_->setValue(factory_->topProportion());
+  sliderTop_->setValue(preset_->topProportion());
   connect(sliderTop_, &UnitSliderWidget::valueChanged, this, 
     &PresetDefaultWidget::sliderTop_onValueChanged);
   layout->addWidget(sliderTop_);
 
   sliderLeft_ = new UnitSliderWidget{"left: ", this};
-  sliderLeft_->setValue(factory_->leftProportion());
+  sliderLeft_->setValue(preset_->leftProportion());
   connect(sliderLeft_, &UnitSliderWidget::valueChanged, this,
     &PresetDefaultWidget::sliderLeft_onValueChanged);
   layout->addWidget(sliderLeft_);
 
   sliderBottom_ = new UnitSliderWidget{"bottom: ", this};
-  sliderBottom_->setValue(factory_->bottomProportion());
+  sliderBottom_->setValue(preset_->bottomProportion());
   connect(sliderBottom_, &UnitSliderWidget::valueChanged, this,
     &PresetDefaultWidget::sliderBottom_onValueChanged);
   layout->addWidget(sliderBottom_);
   
   sliderRight_ = new UnitSliderWidget{"right: ", this};
-  sliderRight_->setValue(factory_->rightProportion());
+  sliderRight_->setValue(preset_->rightProportion());
   connect(sliderRight_, &UnitSliderWidget::valueChanged, this, 
     &PresetDefaultWidget::sliderRight_onValueChanged);
   layout->addWidget(sliderRight_);
@@ -260,24 +287,270 @@ QLayout *PresetDefaultWidget::createSliders()
 
 void PresetDefaultWidget::sliderTop_onValueChanged(double val)
 {
-  factory_->setTopProportion(val);
+  preset_->setTopProportion(val);
+  preset_->setUpFactory(factory_);
   treeVis_->updateTreeRendering();
 }
 
 void PresetDefaultWidget::sliderLeft_onValueChanged(double val)
 {
-  factory_->setLeftProportion(val);
+  preset_->setLeftProporition(val);
+  preset_->setUpFactory(factory_);
   treeVis_->updateTreeRendering();
 }
 
 void PresetDefaultWidget::sliderBottom_onValueChanged(double val)
 {
-  factory_->setBottomProportion(val);
+  preset_->setBottomProportion(val);
+  preset_->setUpFactory(factory_);
   treeVis_->updateTreeRendering();
 }
 
 void PresetDefaultWidget::sliderRight_onValueChanged(double val)
 {
-  factory_->setRightProportion(val);
+  preset_->setRightProportion(val);
+  preset_->setUpFactory(factory_);
+  treeVis_->updateTreeRendering();
+}
+
+// ========================= [ PRESET FLAT ] ==========================
+PresetFlatWidget::PresetFlatWidget(TreeVisualiser *treeVis,
+  OpenGLGNodeFactoryPtr factory)
+  : PresetWidget{treeVis, factory}
+{
+  QVBoxLayout *layout = new QVBoxLayout;
+
+  preset_ = std::make_unique<FlatPreset>();
+  preset_->setUpFactory(factory_);
+  treeVis_->updateTreeRendering();
+
+  layout->addItem(createMessage());
+
+  setLayout(layout);
+}
+
+QLayout *PresetFlatWidget::createMessage()
+{
+  QHBoxLayout *layout = new QHBoxLayout;
+
+  QLabel *messageLabel = new QLabel{
+    "Flat Rendering has no parameter for tunning.", this};
+  layout->addWidget(messageLabel);
+  return layout;
+}
+
+// ========================= [ PRESET VERTICAL ] ======================
+PresetVerticalWidget::PresetVerticalWidget(TreeVisualiser *treeVis,
+  OpenGLGNodeFactoryPtr factory)
+  : PresetWidget{treeVis, factory}
+{
+  QVBoxLayout *layout = new QVBoxLayout;
+  preset_ = std::make_unique<VerticalPreset>();
+  preset_->setUpFactory(factory_);
+  treeVis_->updateTreeRendering();
+
+  layout->addItem(createSliders());
+  setLayout(layout);
+}
+
+QLayout *PresetVerticalWidget::createSliders()
+{
+  QVBoxLayout *layout = new QVBoxLayout;
+
+  sliderTop_ = new UnitSliderWidget{"top: ", this};
+  sliderTop_->setValue(preset_->topProportion());
+  connect(sliderTop_, &UnitSliderWidget::valueChanged, this, 
+    &PresetVerticalWidget::sliderTop_onValueChanged);
+  layout->addWidget(sliderTop_);
+
+  sliderBottom_ = new UnitSliderWidget{"bottom: ", this};
+  sliderBottom_->setValue(preset_->bottomProportion());
+  connect(sliderBottom_, &UnitSliderWidget::valueChanged, this,
+    &PresetVerticalWidget::sliderBottom_onValueChanged);
+  layout->addWidget(sliderBottom_);
+
+  return layout;
+}
+
+void PresetVerticalWidget::sliderTop_onValueChanged(double val)
+{
+  preset_->setTopProportion(val);
+  preset_->setUpFactory(factory_);
+  treeVis_->updateTreeRendering();
+}
+
+void PresetVerticalWidget::sliderBottom_onValueChanged(double val)
+{
+  preset_->setBottomProportion(val);
+  preset_->setUpFactory(factory_);
+  treeVis_->updateTreeRendering();
+}
+
+// ========================= [ PRESET HORIZONTAL ] ====================
+PresetHorizontalWidget::PresetHorizontalWidget(TreeVisualiser *treeVis,
+  OpenGLGNodeFactoryPtr factory)
+  :PresetWidget{treeVis, factory}
+{
+  QVBoxLayout *layout = new QVBoxLayout;
+  preset_ = std::make_unique<HorizontalPreset>();
+  preset_->setUpFactory(factory_);
+  treeVis_->updateTreeRendering();
+
+  layout->addItem(createSliders());
+  setLayout(layout);
+}
+
+QLayout *PresetHorizontalWidget::createSliders()
+{
+  QVBoxLayout *layout = new QVBoxLayout;
+
+  sliderLeft_ = new UnitSliderWidget{"left: ", this};
+  sliderLeft_->setValue(preset_->leftProportion());
+  connect(sliderLeft_, &UnitSliderWidget::valueChanged, this, 
+    &PresetHorizontalWidget::sliderLeft_onValueChanged);
+  layout->addWidget(sliderLeft_);
+
+  sliderRight_ = new UnitSliderWidget{"right: ", this};
+  sliderRight_->setValue(preset_->rightProportion());
+  connect(sliderRight_, &UnitSliderWidget::valueChanged, this,
+    &PresetHorizontalWidget::sliderRight_onValueChanged);
+  layout->addWidget(sliderRight_);
+
+  return layout;
+}
+
+void PresetHorizontalWidget::sliderLeft_onValueChanged(double val)
+{
+  preset_->setLeftProportion(val);
+  preset_->setUpFactory(factory_);
+  treeVis_->updateTreeRendering();
+}
+
+void PresetHorizontalWidget::sliderRight_onValueChanged(double val)
+{
+  preset_->setRightProportion(val);
+  preset_->setUpFactory(factory_);
+  treeVis_->updateTreeRendering();
+}
+
+// =========== [ PRESET SYMMETRIC TENT LIKE CUSHION ] =================
+PresetSymmetricTentLikeCushionWidget::PresetSymmetricTentLikeCushionWidget(
+  TreeVisualiser *treeVis, OpenGLGNodeFactoryPtr factory)
+  :PresetWidget{treeVis, factory}
+{
+  QVBoxLayout *layout = new QVBoxLayout;
+
+  preset_ = std::make_unique<SymmetricTentLikeCushionPreset>();
+  preset_->setUpFactory(factory_);
+  layout->addItem(createSliders());
+
+  treeVis_->updateTreeRendering();
+  setLayout(layout);
+}
+
+QLayout *PresetSymmetricTentLikeCushionWidget::createSliders()
+{
+  QVBoxLayout *layout = new QVBoxLayout;
+
+  sliderCorner_ = new UnitSliderWidget{"corners: ", this};
+  sliderCorner_->setValue(preset_->cornerProportion());
+  connect(sliderCorner_, &UnitSliderWidget::valueChanged, this, 
+    &PresetSymmetricTentLikeCushionWidget::sliderCorner_onValueChanged);
+  layout->addWidget(sliderCorner_);
+
+  sliderSide_ = new UnitSliderWidget{"sides: ", this};
+  sliderSide_->setValue(preset_->sideProportion());
+  connect(sliderSide_, &UnitSliderWidget::valueChanged, this,
+    &PresetSymmetricTentLikeCushionWidget::sliderSide_onValueChanged);
+  layout->addWidget(sliderSide_);
+
+  return layout;
+}
+
+void PresetSymmetricTentLikeCushionWidget::sliderCorner_onValueChanged(
+  double val)
+{
+  preset_->setCornerProportion(val);
+  preset_->setUpFactory(factory_);
+  treeVis_->updateTreeRendering();
+}
+
+void PresetSymmetricTentLikeCushionWidget::sliderSide_onValueChanged(
+  double val)
+{
+  preset_->setSideProportion(val);
+  preset_->setUpFactory(factory_);
+  treeVis_->updateTreeRendering();
+}
+
+
+// =========== [ PRESET ASYMMETRIC TENT LIKE CUSHION ] =====================
+PresetAsymmetricTentLikeCushionWidget::PresetAsymmetricTentLikeCushionWidget(
+  TreeVisualiser *treeVis, OpenGLGNodeFactoryPtr factory)
+  : PresetWidget{treeVis, factory}
+{
+  QVBoxLayout *layout = new QVBoxLayout;
+  
+  preset_ = std::make_unique<AsymmetricTentLikeCushionPreset>();
+  preset_->setUpFactory(factory_);
+  
+  layout->addItem(createControls());
+  setLayout(layout);
+
+  treeVis_->updateTreeRendering();
+}
+
+QLayout *PresetAsymmetricTentLikeCushionWidget::createControls()
+{
+  QVBoxLayout *layout = new QVBoxLayout;
+
+  sliderCorners_ = new UnitSliderWidget{"corners: ", this};
+  sliderCorners_->setValue(preset_->cornerProportion());
+  connect(sliderCorners_, &UnitSliderWidget::valueChanged, this,
+    &PresetAsymmetricTentLikeCushionWidget::sliderCorner_onValueChanged);
+  layout->addWidget(sliderCorners_);
+
+  sliderSides_ = new UnitSliderWidget{"sides: ", this};
+  sliderSides_->setValue(preset_->sideProportion());
+  connect(sliderSides_, &UnitSliderWidget::valueChanged, this,
+    &PresetAsymmetricTentLikeCushionWidget::sliderSide_onValueChanged);
+  layout->addWidget(sliderSides_);
+
+  QHBoxLayout *spinLayout = new QHBoxLayout;
+  QLabel *spinLabel = new QLabel{"corner increase factor: ", this};
+  spinLayout->addWidget(spinLabel);
+
+  spinBoxIncreaseFactor_ = new QDoubleSpinBox{this};
+  spinBoxIncreaseFactor_->setRange(1.0, 10.0);
+  spinBoxIncreaseFactor_->setSingleStep(0.05);
+  spinBoxIncreaseFactor_->setValue(preset_->increaseProportion());
+  connect(spinBoxIncreaseFactor_, 
+    QOverload<double>::of(&QDoubleSpinBox::valueChanged), 
+    this, 
+    &PresetAsymmetricTentLikeCushionWidget::spinBoxIncreaseFactor_onValueChanged);
+  spinLayout->addWidget(spinBoxIncreaseFactor_);
+  layout->addItem(spinLayout);
+  
+  return layout;
+}
+
+void PresetAsymmetricTentLikeCushionWidget::sliderCorner_onValueChanged(double val)
+{
+  preset_->setCornerProportion(val);
+  preset_->setUpFactory(factory_);
+  treeVis_->updateTreeRendering();
+}
+
+void PresetAsymmetricTentLikeCushionWidget::sliderSide_onValueChanged(double val)
+{
+  preset_->setSideProportion(val);
+  preset_->setUpFactory(factory_);
+  treeVis_->updateTreeRendering();
+}
+
+void PresetAsymmetricTentLikeCushionWidget::spinBoxIncreaseFactor_onValueChanged(double val)
+{
+  preset_->setIncreaseProportion(val);
+  preset_->setUpFactory(factory_);
   treeVis_->updateTreeRendering();
 }
