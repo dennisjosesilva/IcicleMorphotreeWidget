@@ -9,7 +9,6 @@ HGradientRenderingWidget::HGradientRenderingWidget(TreeVisuliser *treeVis,
 {
   QVBoxLayout *layout = new QVBoxLayout;
 
-  
   setupGNodeFactory();
   propotionSlider_ = new UnitSliderWidget{"proportion: ", this}; 
   propotionSlider_->setValue(factory_->gradientProportion());
@@ -21,7 +20,6 @@ HGradientRenderingWidget::HGradientRenderingWidget(TreeVisuliser *treeVis,
 
   setLayout(layout);
 }
-
 
 void HGradientRenderingWidget::setupGNodeFactory()
 {

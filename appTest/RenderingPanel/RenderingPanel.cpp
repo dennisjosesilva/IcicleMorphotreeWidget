@@ -2,6 +2,7 @@
 
 #include "RenderingPanel/FlatRenderingWidget.hpp"
 #include "RenderingPanel/HGradientRenderingWidget.hpp"
+#include "RenderingPanel/GeoShaderRenderingWidget.hpp"
 
 #include <QFrame>
 #include <QLabel>
@@ -117,7 +118,12 @@ void RenderingPanel::renderingMethodCombo_onCurrentIndexChanged(
   
   case NodeRenderingStyle::HGradient:
     changeNodeRendering(new HGradientRenderingWidget{treeVis_, this});
+    break;
 
+  case NodeRenderingStyle::GeoShaderGradient:
+    changeNodeRendering(new GeoShaderRenderingWidget{treeVis_, this});
+    break;
+    
   default:
     break;
   }
