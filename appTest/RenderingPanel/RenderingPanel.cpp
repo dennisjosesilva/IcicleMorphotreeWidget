@@ -3,6 +3,7 @@
 #include "RenderingPanel/FlatRenderingWidget.hpp"
 #include "RenderingPanel/HGradientRenderingWidget.hpp"
 #include "RenderingPanel/GeoShaderRenderingWidget.hpp"
+#include "RenderingPanel/TessShaderRenderingWidget.hpp"
 
 #include <QFrame>
 #include <QLabel>
@@ -124,7 +125,8 @@ void RenderingPanel::renderingMethodCombo_onCurrentIndexChanged(
     changeNodeRendering(new GeoShaderRenderingWidget{treeVis_, this});
     break;
     
-  default:
-    break;
+  case NodeRenderingStyle::TessShaderGradient:
+    changeNodeRendering(new TessShaderRenderingWidget{treeVis_, this});
+    break;  
   }
 }

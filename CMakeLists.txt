@@ -23,6 +23,7 @@ set(APP_TEST_SOURCE
    appTest/RenderingPanel/FlatRenderingWidget.cpp
    appTest/RenderingPanel/HGradientRenderingWidget.cpp
    appTest/RenderingPanel/GeoShaderRenderingWidget.cpp
+   appTest/RenderingPanel/TessShaderRenderingWidget.cpp
    appTest/RenderingPanel/NodeRenderingWidget.cpp
    appTest/RenderingPanel/RenderingPanel.cpp
    appTest/main.cpp 
@@ -32,6 +33,7 @@ set(APP_TEST_SOURCE
 qt5_wrap_cpp(PROJECT_SOURCE
    appTest/RenderingPanel/CustomWidgets/UnitSliderWidget.hpp
    appTest/RenderingPanel/GeoShaderRenderingWidget.hpp
+   appTest/RenderingPanel/TessShaderRenderingWidget.hpp
    include/IcicleMorphotreeWidget/IcicleMorphotreeWidget.hpp
    include/IcicleMorphotreeWidget/Graphics/Node/GNodeEventHandler.hpp
    include/IcicleMorphotreeWidget/Graphics/ColorBar.hpp)
