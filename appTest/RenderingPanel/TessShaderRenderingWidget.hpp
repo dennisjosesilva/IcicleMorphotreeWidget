@@ -10,7 +10,9 @@ class TessBLShaderPresetWidget;
 class QComboBox;
 
 enum TessShaderPresetType {
-  TessNone
+  TessNone,
+  TessBottomRightLShaped,
+  TessTopLeftLShaped
 };
 
 class TessShaderRenderingWidget : public NodeRenderingWidget
@@ -72,4 +74,50 @@ protected:
   UnitSliderWidget *sliderTopRight_;
   UnitSliderWidget *sliderBottomLeft_;
   UnitSliderWidget *sliderBottomRight_;
+};
+
+class TessBLShaderPresetLShapedBottomRightWidget : public TessBLShaderPresetWidget
+{
+Q_OBJECT
+public:
+  using TessBLBottomRightLShaderPreset
+    = IcicleMorphotreeWidget::TessBLBottomRightLShapedPreset;
+  using TessBLBottomRightLShaderPresetPtr = 
+    std::unique_ptr<TessBLBottomRightLShaderPreset>;
+
+  TessBLShaderPresetLShapedBottomRightWidget(TreeVisualiser *treeVis, 
+    TessBLGradientNodeFactoryPtr factory);
+
+protected: 
+  QLayout *createSliders();
+
+protected slots:
+  void sliderDarkProportion__onValueChanged(double val);
+
+protected:
+  UnitSliderWidget *sliderDarkProportion_;
+  TessBLBottomRightLShaderPresetPtr preset_;
+};
+
+class TessBLShaderPresetLShapedTopLeftWidget : public TessBLShaderPresetWidget
+{
+Q_OBJECT
+public:  
+  using TessBLTopLeftLShapedPreset = 
+    IcicleMorphotreeWidget::TessBLTopLeftLShapedPreset;
+  using TessBLTopLeftLShapedPresetPtr = 
+    std::unique_ptr<TessBLTopLeftLShapedPreset>;
+
+  TessBLShaderPresetLShapedTopLeftWidget(TreeVisualiser *treeVis, 
+    TessBLGradientNodeFactoryPtr factory);
+
+protected:
+  QLayout *createSliders();
+
+protected slots:
+  void sliderDarkProportion__onValueChanged(double val);
+
+protected:
+  UnitSliderWidget *sliderDarkProportion_;
+  TessBLTopLeftLShapedPresetPtr preset_;
 };

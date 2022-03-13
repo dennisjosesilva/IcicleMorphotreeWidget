@@ -39,4 +39,40 @@ namespace IcicleMorphotreeWidget
     float bottomLeftProportion_;
     float bottomRightProportion_;
   };
+
+  // ================= [ PRESETS ] ==================================================
+  class TessBLPreset 
+  {
+  public:
+    using TessBLGradientNodeFactoryPtr = std::shared_ptr<TessBLGradientNodeFactory>;
+    virtual void setUpFactory(TessBLGradientNodeFactoryPtr factory) = 0;
+  };
+
+  class TessBLBottomRightLShapedPreset : public TessBLPreset
+  {
+  public:
+    TessBLBottomRightLShapedPreset(float darkerLProportion = 0.85f);
+    void setUpFactory(TessBLGradientNodeFactoryPtr factory);
+
+    float darkerLProportion() const { return darkerLProportion_; }
+    float &darkerLProportion() { return darkerLProportion_; }
+    void setDarkerLProportion(float val) { darkerLProportion_ = val; }
+
+  private:
+    float darkerLProportion_;
+  };
+
+  class TessBLTopLeftLShapedPreset : public TessBLPreset
+  {
+  public:
+    TessBLTopLeftLShapedPreset(float darkerLProportion = 0.85f);
+    void setUpFactory(TessBLGradientNodeFactoryPtr factory);
+
+    float darkerLProportion() const { return darkerLProportion_; }
+    float &darkerLProportion() { return darkerLProportion_; }
+    void setDarkerLProportion(float val) { darkerLProportion_ = val; }
+    
+  private:
+    float darkerLProportion_;
+  };
 }

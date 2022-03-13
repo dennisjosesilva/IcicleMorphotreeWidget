@@ -22,4 +22,33 @@ namespace IcicleMorphotreeWidget
 
   TessBLGradientNodeFactory::~TessBLGradientNodeFactory() 
   {}  
+
+  // ===================== [ PRESETS ] ==========================================
+  TessBLBottomRightLShapedPreset::TessBLBottomRightLShapedPreset(
+    float darkerLProportion)
+    : darkerLProportion_{darkerLProportion}
+  {}
+
+  void TessBLBottomRightLShapedPreset::setUpFactory(TessBLGradientNodeFactoryPtr
+    factory)
+  {
+    factory->setTopLeftProportion(1.0f);
+    factory->setTopRightProportion(darkerLProportion_);
+    factory->setBottomRightProportion(darkerLProportion_);
+    factory->setBottomLeftProportion(darkerLProportion_);
+  }
+
+  // ======================= [ PRESET TOP-LEFT ] =================================
+  TessBLTopLeftLShapedPreset::TessBLTopLeftLShapedPreset(float darkerLProportion)
+    : darkerLProportion_{darkerLProportion}
+  {}
+
+  void TessBLTopLeftLShapedPreset::setUpFactory(TessBLGradientNodeFactoryPtr 
+    factory)
+  {
+    factory->setTopLeftProportion(darkerLProportion_);
+    factory->setTopRightProportion(darkerLProportion_);
+    factory->setBottomLeftProportion(1.0);
+    factory->setBottomRightProportion(darkerLProportion_);
+  }
 }

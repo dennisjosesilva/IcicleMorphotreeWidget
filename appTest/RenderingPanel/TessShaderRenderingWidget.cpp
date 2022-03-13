@@ -29,6 +29,10 @@ QLayout *TessShaderRenderingWidget::createPresetComboBox()
 
   presetComboBox_ = new QComboBox{this};
   presetComboBox_->addItem("None", static_cast<int>(TessShaderPresetType::TessNone));
+  presetComboBox_->addItem("L-shaped bottom right", static_cast<int>(
+    TessShaderPresetType::TessBottomRightLShaped));
+  presetComboBox_->addItem("L-shaped top left", static_cast<int>(
+    TessShaderPresetType::TessTopLeftLShaped));
   connect(presetComboBox_, QOverload<int>::of(&QComboBox::currentIndexChanged),
     this, &TessShaderRenderingWidget::presetComboBox_onCurrentIndexChanged);
   
@@ -47,7 +51,16 @@ void TessShaderRenderingWidget::presetComboBox_onCurrentIndexChanged(int index)
   case TessShaderPresetType::TessNone:
     changePresetWidget(new TessBLShaderPresetNoneWidget{treeVis_, factory_});
     break;
+
+  case TessShaderPresetType::TessBottomRightLShaped:
+    changePresetWidget(new TessBLShaderPresetLShapedBottomRightWidget{treeVis_, factory_});
+    break;
+
+  case TessShaderPresetType::TessTopLeftLShaped:
+    changePresetWidget(new TessBLShaderPresetLShapedTopLeftWidget{treeVis_, factory_});
+    break;
   }
+
 }
 
 void TessShaderRenderingWidget::changePresetWidget(
@@ -139,4 +152,76 @@ void TessBLShaderPresetNoneWidget::sliderBottomRight_onValueChanged(double val)
   treeVis_->updateTreeRendering();
 }
 
-// ===================== [ PRESET WIDGET ] ==================================
+// ===================== [ PRESET WIDGET ] =============================================
+TessBLShaderPresetLShapedBottomRightWidget::TessBLShaderPresetLShapedBottomRightWidget(
+  TreeVisualiser *treeVis, TessBLGradientNodeFactoryPtr factory)
+  : TessBLShaderPresetWidget{treeVis, factory}
+{
+  QVBoxLayout *layout = new QVBoxLayout;
+
+  preset_ = std::make_unique<TessBLBottomRightLShaderPreset>();
+  preset_->setUpFactory(factory_);
+
+  layout->addItem(createSliders());
+  setLayout(layout);
+
+  treeVis_->updateTreeRendering();
+}
+
+QLayout *TessBLShaderPresetLShapedBottomRightWidget::createSliders()
+{
+  QVBoxLayout *layout = new QVBoxLayout;
+
+  sliderDarkProportion_ = new UnitSliderWidget{"dark proportion: ", this};
+  sliderDarkProportion_->setValue(preset_->darkerLProportion());
+  connect(sliderDarkProportion_, &UnitSliderWidget::valueChanged, this, 
+    &TessBLShaderPresetLShapedBottomRightWidget::sliderDarkProportion__onValueChanged);
+  layout->addWidget(sliderDarkProportion_);
+
+  return layout;
+}
+
+void TessBLShaderPresetLShapedBottomRightWidget::sliderDarkProportion__onValueChanged(
+  double val)
+{
+  preset_->setDarkerLProportion(val);
+  preset_->setUpFactory(factory_);
+  treeVis_->updateTreeRendering();
+}
+
+// =================== [ ANOTHER PRESET ] ===============================================
+TessBLShaderPresetLShapedTopLeftWidget::TessBLShaderPresetLShapedTopLeftWidget(
+  TreeVisualiser *treeVis, TessBLGradientNodeFactoryPtr factory)
+  : TessBLShaderPresetWidget{treeVis, factory}
+{
+  QVBoxLayout *layout = new QVBoxLayout;
+
+  preset_ = std::make_unique<TessBLTopLeftLShapedPreset>();
+  preset_->setUpFactory(factory_);
+
+  layout->addItem(createSliders());
+  setLayout(layout);
+
+  treeVis_->updateTreeRendering();
+}
+
+QLayout *TessBLShaderPresetLShapedTopLeftWidget::createSliders()
+{
+  QVBoxLayout *layout = new QVBoxLayout;
+
+  sliderDarkProportion_ = new UnitSliderWidget{"dark proportion: ", this};
+  sliderDarkProportion_->setValue(preset_->darkerLProportion());
+  connect(sliderDarkProportion_, &UnitSliderWidget::valueChanged, this, 
+    &TessBLShaderPresetLShapedTopLeftWidget::sliderDarkProportion__onValueChanged);
+  layout->addWidget(sliderDarkProportion_);
+
+  return layout;
+}
+
+void TessBLShaderPresetLShapedTopLeftWidget::sliderDarkProportion__onValueChanged(
+  double val)
+{
+  preset_->setDarkerLProportion(val);
+  preset_->setUpFactory(factory_);
+  treeVis_->updateTreeRendering();
+}
