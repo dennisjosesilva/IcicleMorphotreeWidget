@@ -31,7 +31,7 @@ namespace IcicleMorphotreeWidget
       shaderProgram_->bind();      
 
       // Set tessellation subdivision levels
-      shaderProgram_->setUniformValue("innerSubvisionLevel", 8);
+      shaderProgram_->setUniformValue("innerSubdivisionLevel", 8);
       shaderProgram_->setUniformValue("outerSubdivisionLevel", 8);
     }
   }

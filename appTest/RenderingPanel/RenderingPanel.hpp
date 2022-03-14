@@ -12,7 +12,8 @@ enum NodeRenderingStyle {
   FLAT = 0,
   HGradient = 1,
   GeoShaderGradient = 2,
-  TessShaderGradient = 3
+  TessShaderGradient = 3,
+  TessFunctionShader = 4
 };
 
 

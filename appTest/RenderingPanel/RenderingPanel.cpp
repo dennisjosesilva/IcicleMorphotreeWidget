@@ -4,6 +4,7 @@
 #include "RenderingPanel/HGradientRenderingWidget.hpp"
 #include "RenderingPanel/GeoShaderRenderingWidget.hpp"
 #include "RenderingPanel/TessShaderRenderingWidget.hpp"
+#include "RenderingPanel/TessFunctionRenderingWidget.hpp"
 
 #include <QFrame>
 #include <QLabel>
@@ -28,7 +29,7 @@ RenderingPanel::RenderingPanel(IcicleMorphotreeWidget *treeVis,
 
 NodeRenderingWidget *RenderingPanel::defaultRenderingMode()
 {
-  return new HGradientRenderingWidget{treeVis_, this};
+  return new FlatRenderingWidget{treeVis_, this};
 }
 
 QLayout *RenderingPanel::createTitleSection()
@@ -67,6 +68,8 @@ QLayout *RenderingPanel::createRenderingStyleComboSection()
     static_cast<int>(NodeRenderingStyle::GeoShaderGradient));
   renderingMethodCombo_->addItem("Tessellation Shader Gradient",
     static_cast<int>(NodeRenderingStyle::TessShaderGradient));
+  renderingMethodCombo_->addItem("Tessellation Shader Based on Function",
+    static_cast<int>(NodeRenderingStyle::TessFunctionShader));
 
   connect(renderingMethodCombo_, 
     QOverload<int>::of(&QComboBox::currentIndexChanged), this,
@@ -128,5 +131,9 @@ void RenderingPanel::renderingMethodCombo_onCurrentIndexChanged(
   case NodeRenderingStyle::TessShaderGradient:
     changeNodeRendering(new TessShaderRenderingWidget{treeVis_, this});
     break;  
+
+  case NodeRenderingStyle::TessFunctionShader:
+    changeNodeRendering(new TessFunctionRenderingWidget{treeVis_, this});
+    break;
   }
 }

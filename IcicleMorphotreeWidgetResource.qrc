@@ -10,4 +10,10 @@
   <file alias="tess_evaluation.glsl">shaders/bilinear_gradient/tess_evaluation.glsl</file>
   <file alias="fragment.glsl">shaders/bilinear_gradient/fragment.glsl</file>
 </qresource>
+<qresource prefix="/shaders/tess_function">
+  <file alias="vertex.glsl">shaders/tess_function/vertex.glsl</file>
+  <file alias="tess_control.glsl">shaders/tess_function/tess_control.glsl</file>
+  <file alias="tess_evaluation.glsl">shaders/tess_function/tess_evaluation.glsl</file>
+  <file alias="fragment.glsl">shaders/tess_function/fragment.glsl</file>
+</qresource>
 </RCC>

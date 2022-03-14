@@ -1,4 +1,4 @@
-#version 400 core
+#version 400 core 
 
 smooth in vec3 colorFS;
 out vec4 fragColor;
