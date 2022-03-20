@@ -25,7 +25,8 @@ namespace IcicleMorphotreeWidget
      grayScaleBar_{nullptr},
      colorMap_{std::make_unique<RainbowColorMap>()},
      grayScalerBarBreadth_{0.0f},
-     grayscaleProfile_{grayscaleProfile}
+     grayscaleProfile_{grayscaleProfile},
+     grayLevelRendering_{false}
   {        
     QGraphicsScene *scene = new QGraphicsScene{this};
     scene->setSceneRect(QRectF{0, 0, 400, 400});
@@ -142,6 +143,11 @@ namespace IcicleMorphotreeWidget
       float attrVal = attr_->at(node->mnode()->id());
       node->setBackgroundColor(colorMap_->color(attrVal));
     }
+    else if (grayLevelRendering_) {
+      int l = grayscaleProfile_
+        .grayLevel(static_cast<int>(node->mnode()->level()));
+      node->setBackgroundColor(QColor{l, l, l});
+    }
 
     scene()->addItem(node);    
   }
@@ -235,10 +241,16 @@ namespace IcicleMorphotreeWidget
   void IcicleMorphotreeWidget::resetNodesColor()
   {
     for (GNode *gnode : gnodes_) {
-      gnode->setBackgroundColor(Qt::lightGray);
+      if (grayLevelRendering_) {
+        int l = grayscaleProfile_.grayLevel(
+          static_cast<int>(gnode->mnode()->level()));        
+        gnode->setBackgroundColor(QColor{l, l, l});
+      }
+      else {
+        gnode->setBackgroundColor(Qt::lightGray);
+      }
     }
   }
-
 
   void IcicleMorphotreeWidget::scaleView(qreal scaleFactor)
   {
@@ -512,5 +524,16 @@ namespace IcicleMorphotreeWidget
     treeLayout_->setGNodeFactory(std::move(f)); 
     updateTreeRendering();
   }
-  
+
+  void IcicleMorphotreeWidget::activateGrayscaleNodeRender()
+  {
+    grayLevelRendering_ = true;
+    resetNodesColor();
+  }
+
+  void IcicleMorphotreeWidget::deactivactedGrayscaleNodeRender()
+  {
+    grayLevelRendering_ = false;
+    resetNodesColor();
+  }
 }

@@ -108,7 +108,11 @@ namespace IcicleMorphotreeWidget
     inline QColor& nodeSelectionColor() { return GNode::selectionColor(); }
     inline void setNodeSelectionColor(const QColor &val) { GNode::setSelectionColor(val); }
 
-    
+    // grey-level rendering
+    void activateGrayscaleNodeRender();
+    void deactivactedGrayscaleNodeRender();
+    inline bool isGrayscaleNodeRenderActivated() const { return grayLevelRendering_; }
+
 
   signals:
     void treeAboutToBeRedrawn();
@@ -138,8 +142,10 @@ namespace IcicleMorphotreeWidget
     ColorMapPtr colorMap_;
 
     bool isDownSpace_;
-
+    
     MorphoTreeType mtreeType_;
     GrayScaleProfile grayscaleProfile_;
+
+    bool grayLevelRendering_;
   };
 }

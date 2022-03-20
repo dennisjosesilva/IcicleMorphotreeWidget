@@ -219,6 +219,16 @@ MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
       mtreeVis_->setTreeType(imt::MorphoTreeType::MAX_TREE_8C);
   });
 
+  QPushButton *btnGreyscaleRender = new QPushButton{tr("Toggle greyscale node render"), this};
+  connect(btnGreyscaleRender, &QPushButton::clicked, [this]{
+    if (mtreeVis_->isGrayscaleNodeRenderActivated()) 
+      mtreeVis_->deactivactedGrayscaleNodeRender();
+    else 
+      mtreeVis_->activateGrayscaleNodeRender();
+    mtreeVis_->updateTreeRendering();
+  });
+
+
   hlayout->addWidget(btnShowAttribute);
   hlayout->addWidget(btnPan);
   hlayout->addWidget(btnAreaFilter);
@@ -227,6 +237,7 @@ MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
   hlayout->addWidget(btnChangeNodeStyle);
   hlayout->addWidget(btnRotateWidget);
   hlayout->addWidget(btnToggleMTreeType);
+  hlayout->addWidget(btnGreyscaleRender);
   treeVisLayout->addItem(hlayout);
   treeVisLayout->addItem(createUniHeightControls(unitHeight));
 
