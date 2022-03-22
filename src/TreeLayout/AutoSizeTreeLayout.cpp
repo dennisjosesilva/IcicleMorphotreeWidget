@@ -88,7 +88,12 @@ namespace IcicleMorphotreeWidget
       if (node->parent() == nullptr) { 
         // root node
         // ---------
-        int levelsToZero = static_cast<int>(node->level()) + 1;
+        int levelsToZero; 
+        if(isMaxTree())
+          levelsToZero = grayscaleProfile_.irange().min - static_cast<int>(node->level())+1;
+        else 
+          levelsToZero = grayscaleProfile_.irange().max - static_cast<int>(node->level())+1;
+        
         GNode *gnode = gnodeFactory_->create(node);
         treeVis_->addGNodeToScene(gnode);
         gnodes[node->id()] = gnode;
@@ -102,8 +107,7 @@ namespace IcicleMorphotreeWidget
       else {
         // other nodes of the tree
         // -----------------------
-        int levelsToZero = static_cast<int>(node->level()) - 
-          static_cast<int>(node->parent()->level());
+        int levelsToZero = qAbs(static_cast<int>(node->level()) - static_cast<int>(node->parent()->level()));
         GNode *gnode = gnodeFactory_->create(node);
         treeVis_->addGNodeToScene(gnode);
         gnodes[node->id()] = gnode;
