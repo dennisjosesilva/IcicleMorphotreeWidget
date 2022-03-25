@@ -17,13 +17,25 @@ public:
 
 protected:
   void setUpGNodeFactory();
+  QLayout *createSliders();
 
 protected slots:
   void minValueSlider_onValueChanged(double val);
   void maxValueSlider_onValueChanged(double val);
 
+  void topLeftProportionSlider_onValueChanged(double val);
+  void topRightProportionSlider_onValueChanged(double val);
+  void bottomLeftProportionSlider_onValueChanged(double val);
+  void bottomRightProportionSlider_onValueChanged(double val);
+
 protected:
   UnitSliderWidget *minValueSlider_;
   UnitSliderWidget *maxValueSlider_;
+
+  UnitSliderWidget *topLeftProportionSlider_;
+  UnitSliderWidget *topRightProportionSlider_;
+  UnitSliderWidget *bottomLeftProportionSlider_;
+  UnitSliderWidget *bottomRightProportionSlider_;
+
   TessFunctionNodeFactoryPtr factory_;
 };
