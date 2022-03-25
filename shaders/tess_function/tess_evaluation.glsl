@@ -2,6 +2,7 @@
 layout(quads, equal_spacing, ccw) in;
 
 in vec2 positionES[];
+in vec3 colorES[];
 
 smooth out vec3 colorFS;
 
@@ -37,6 +38,12 @@ void main()
     u   * omv * positionES[1] +
     u   *   v * positionES[2] + 
     omu *   v * positionES[3];
+
+  vec3 bcolor = 
+    omu * omv * colorES[0] +
+    u   * omv * colorES[1] +
+    u   *   v * colorES[2] +
+    omu *   v * colorES[3];
 
   gl_Position = transform * vec4(p, 0.0, 1.0);
   colorFS = bcolor * normalisedF(u) * normalisedF(v);

@@ -35,8 +35,12 @@ namespace IcicleMorphotreeWidget
   }
 
   TessFunctionNode::TessFunctionNode(IcicleMorphotreeWidget *treeVis, MTreeNodePtr mnode,
+    float topLeftProportion, float topRightProportion,
+    float bottomLeftProportion, float bottomRightProportion,
     float minValue, float maxValue)
-  : GNode{treeVis, mnode}, minValue_{minValue}, maxValue_{maxValue}
+  : GNode{treeVis, mnode}, minValue_{minValue}, maxValue_{maxValue},
+    topLeftProportion_{topLeftProportion}, topRightProportion_{topRightProportion},
+    bottomLeftProportion_{bottomLeftProportion}, bottomRightProportion_{bottomRightProportion}
   {}
 
   void TessFunctionNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *options, 
@@ -62,6 +66,11 @@ namespace IcicleMorphotreeWidget
       static_cast<float>(backgroundColor_.greenF()),
       static_cast<float>(backgroundColor_.blueF()) };
 
+    QVector<QVector3D> colors = {
+      bcolor * topLeftProportion_, bcolor * topRightProportion_,
+      bcolor * bottomLeftProportion_, bcolor * bottomRightProportion_ 
+    };
+
     initShaders();
     shaderProgram_->bind();
     
@@ -76,11 +85,15 @@ namespace IcicleMorphotreeWidget
 
     shaderProgram_->setUniformValue("transform", proj * model);
     shaderProgram_->setUniformValue("opacity", static_cast<float>(opacity()));
-    shaderProgram_->setUniformValue("bcolor", bcolor);
+    // shaderProgram_->setUniformValue("bcolor", bcolor);
 
     shaderProgram_->enableAttributeArray(SHADER_PROGRAM_POSITION_ATTR_LOC);
     shaderProgram_->setAttributeArray(SHADER_PROGRAM_POSITION_ATTR_LOC, GL_FLOAT, pos.data(),
       2, 0);
+
+    shaderProgram_->enableAttributeArray(SHADER_PROGRAM_COLOR_ATTR_LOC);
+    shaderProgram_->setAttributeArray(SHADER_PROGRAM_COLOR_ATTR_LOC, GL_FLOAT, colors.data(),
+      3, 0);
 
     egl->glPatchParameteri(GL_PATCH_VERTICES, 4);
     gl->glDrawArrays(GL_PATCHES, 0, pos.size());
