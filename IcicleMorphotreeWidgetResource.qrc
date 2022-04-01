@@ -16,4 +16,9 @@
   <file alias="tess_evaluation.glsl">shaders/tess_function/tess_evaluation.glsl</file>
   <file alias="fragment.glsl">shaders/tess_function/fragment.glsl</file>
 </qresource>
+<qresource prefix="/colormap">
+  <file alias="iso_luminant_01">colormap/CET-I1.csv</file>
+  <file alias="iso_luminant_02">colormap/CET-I2.csv</file>
+  <file alias="iso_luminant_03">colormap/CET-I3.csv</file>
+</qresource>
 </RCC>

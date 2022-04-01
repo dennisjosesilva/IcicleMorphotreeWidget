@@ -29,4 +29,21 @@ namespace IcicleMorphotreeWidget
   private:
     float dx_;
   };
+
+
+  // The colourmap class below are based on the lookup tables 
+  // downdload from this page: https://colorcet.com/index.html
+  class CETColorMap : public ColorMap
+  {
+  public:
+    CETColorMap(const QString &csvFilePath=":/colormap/iso_luminant_01");
+
+    QColor color(float u) const override;
+
+  private:
+    void loadLookUpTable(const QString &csvFilePath);
+
+  private:
+    QVector<QColor> lookUp_;
+  };
 }

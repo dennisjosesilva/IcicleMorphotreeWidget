@@ -96,22 +96,10 @@ void main()
 
   vec3 colorHSV = rgb2hsv(bcolor);
     
-  // colorHSV[2] *= normalisedF(u) * normalisedF(v);
-  
-  
-  // // set S to 1 - profile
-  // colorHSV[1] = (1.0f - (normalisedF(u)) * normalisedF(v));
-  
-  // // set 
-  // colorHSV[2] = 1.0f;
-
-  // colorHSV[1] = 0.8f;
-  // Set value 
-  // colorHSV[2] *= (normalisedF(u) * normalisedF(v));
-  colorHSV[1] = 1.0f - (normalisedF(u) * normalisedF(v));
-  //colorHSV[2] = (normalisedF(u) * normalisedF(v));
-  // colorHSV[2] = (normalisedF(u) * normalisedF(v));
+  // colorHSV[2] *= normalisedF(u) * normalisedF(v);  
+  colorHSV[2] = (normalisedF(u) * normalisedF(v));
 
   vec3 colorRGB = hsv2rgb(colorHSV);
   colorFS = colorRGB; 
+  // colorFS = bcolor * (normalisedF(u) * normalisedF(v));
 }

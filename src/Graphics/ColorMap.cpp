@@ -4,6 +4,8 @@
 #include <QPainter>
 #include <cmath>
 
+#include <QFile>
+
 #include <QDebug>
 
 namespace IcicleMorphotreeWidget
@@ -18,6 +20,7 @@ namespace IcicleMorphotreeWidget
     return new HColorBar{this, parent};
   }
 
+  // ====================== RAINBOW COLOR MAP ==================================================
   RainbowColorMap::RainbowColorMap(float dx)
     :ColorMap{},
      dx_{dx}
@@ -35,5 +38,39 @@ namespace IcicleMorphotreeWidget
       static_cast<int>(255 * std::fmax(0.f, (4.f - std::fabs(g-2.f) - std::fabs(g-4.f))/2.f)),
       static_cast<int>(255 * std::fmax(0.f, (3.f - std::fabs(g-1.f) - std::fabs(g-2.f))/2.f))
     };
+  }
+
+  // ======================== CET COLOR MAP =========================================================
+  CETColorMap::CETColorMap(const QString &csvFilePath)
+  {
+    lookUp_.reserve(256);
+    loadLookUpTable(csvFilePath);
+  }
+
+  void CETColorMap::loadLookUpTable(const QString &csvFilePath)
+  {
+    QFile csv{csvFilePath};
+    
+    if (!csv.open(QIODevice::ReadOnly)) {
+      qDebug() << "Error on opening the csv file";
+      return; 
+    }
+
+    QTextStream in{&csv};
+    while (!in.atEnd()) {
+      QString line = in.readLine();
+      QStringList rgbStr = line.split(",");
+
+      int r = rgbStr[0].toInt();
+      int g = rgbStr[1].toInt();
+      int b = rgbStr[2].toInt();
+
+      lookUp_.push_back(QColor::fromRgb(r, g, b));
+    }
+  }
+
+  QColor CETColorMap::color(float u) const 
+  {
+    return lookUp_[u * 255];
   }
 }

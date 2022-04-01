@@ -31,6 +31,8 @@
 
 #include "RenderingPanel/RenderingPanel.hpp"
 
+#include <QFile>
+
 MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
   : QMainWindow{nullptr}, colorBar_{nullptr}, 
     gradientNodeStyle_{imt::GNodeStyle::BilinearGradientColor}
@@ -42,8 +44,7 @@ MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
 
   layout_ = new QHBoxLayout;
   
-  QLayout *treeVisLayout = new QVBoxLayout; 
-
+  treeVisLayout_ = new QVBoxLayout;   
   QLayout *nodeRenderingLayout = new QVBoxLayout;
 
   widget_ = new QWidget{this};
@@ -237,21 +238,18 @@ MainWindow::MainWindow(mt::Box domain, const std::vector<mt::uint8> &f)
   hlayout->addWidget(btnChangeNodeStyle);
   hlayout->addWidget(btnRotateWidget);
   hlayout->addWidget(btnToggleMTreeType);
-  hlayout->addWidget(btnGreyscaleRender);
-  treeVisLayout->addItem(hlayout);
-  treeVisLayout->addItem(createUniHeightControls(unitHeight));
+  hlayout->addWidget(btnGreyscaleRender);  
+  treeVisLayout_->addLayout(hlayout);
+  treeVisLayout_->addLayout(createUniHeightControls(unitHeight));  
 
   // Rendering Panel
   RenderingPanel *renderingPanel = new RenderingPanel{mtreeVis_, 
     this};
-  nodeRenderingLayout->addWidget(renderingPanel);
-
-  // mtreeVis_->setDragMode(QGraphicsView::DragMode::ScrollHandDrag);
-  treeVisLayout->addWidget(mtreeVis_);
-  // nodeRenderingLayout
-
-  layout_->addItem(treeVisLayout);
-  layout_->addItem(nodeRenderingLayout);
+  nodeRenderingLayout->addWidget(renderingPanel);  
+  // mtreeVis_->setDragMode(QGraphicsView::DragMode::ScrollHandDrag);  
+  treeVisLayout_->addWidget(mtreeVis_);    
+  layout_->addLayout(treeVisLayout_);
+  layout_->addLayout(nodeRenderingLayout);
 
   connect(imt::GNodeEventHandler::Singleton(), &imt::GNodeEventHandler::mousePress,
     this, &MainWindow::nodeMousePress);
@@ -313,7 +311,6 @@ void MainWindow::visualiseAttributesAct_onTrigger()
 
   using MinMaxVol = std::pair<std::vector<float>::iterator, std::vector<float>::iterator>;
 
-
   if (mtreeVis_->hasAttributes()) {
     mtreeVis_->clearAttributes();
     layout_->removeWidget(colorBar_);
@@ -336,16 +333,17 @@ void MainWindow::visualiseAttributesAct_onTrigger()
       (*nvol)[i] = (vol[i] - volMin) / (volMax - volMin);      
     }
 
+    mtreeVis_->setColorMap(std::make_unique<imt::CETColorMap>());
     mtreeVis_->loadAttributes(std::move(nvol));
 
-    HColorBar *colorBar = qobject_cast<HColorBar*>(mtreeVis_->createHColorBar(this));
+    HColorBar *colorBar = qobject_cast<HColorBar*>(mtreeVis_->createHColorBar(widget_));
 
-    colorBar->setMaxValue(volMax);
-    colorBar->setMinValue(volMin);
-    colorBar->setShowNumbers(true);
-    layout_->addWidget(colorBar);
     colorBar_ = colorBar;
-  }
+    colorBar_->setMaxValue(volMax);
+    colorBar_->setMinValue(volMin);
+    colorBar_->setShowNumbers(true);        
+    treeVisLayout_->addWidget(colorBar_);  
+  }  
 }
 
 void MainWindow::uniHeightSlider_onSliderMoved(int value)

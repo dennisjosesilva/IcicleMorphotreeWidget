@@ -51,5 +51,6 @@ private:
   imt::GNodeStyle gradientNodeStyle_;
 
   QWidget *widget_;
-  QLayout *layout_;
+  QVBoxLayout *treeVisLayout_;
+  QHBoxLayout *layout_;
 };
