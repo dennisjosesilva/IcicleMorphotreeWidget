@@ -16,6 +16,12 @@
   <file alias="tess_evaluation.glsl">shaders/tess_function/tess_evaluation.glsl</file>
   <file alias="fragment.glsl">shaders/tess_function/fragment.glsl</file>
 </qresource>
+<qresource prefix="/shaders/tess_function_bezier">
+  <file alias="vertex.glsl">shaders/tess_function_bezier/vertex.glsl</file>
+  <file alias="tess_control.glsl">shaders/tess_function_bezier/tess_control.glsl</file>
+  <file alias="tess_evaluation.glsl">shaders/tess_function_bezier/tess_evaluation.glsl</file>
+  <file alias="fragment.glsl">shaders/tess_function_bezier/fragment.glsl</file>
+</qresource>
 <qresource prefix="/colormap">
   <file alias="iso_luminant_01">colormap/CET-I1.csv</file>
   <file alias="iso_luminant_02">colormap/CET-I2.csv</file>

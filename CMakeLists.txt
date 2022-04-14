@@ -25,6 +25,7 @@ set(APP_TEST_SOURCE
    appTest/RenderingPanel/GeoShaderRenderingWidget.cpp
    appTest/RenderingPanel/TessShaderRenderingWidget.cpp
    appTest/RenderingPanel/TessFunctionRenderingWidget.cpp
+   appTest/RenderingPanel/BezierFuncRenderingWidget.cpp
    appTest/RenderingPanel/NodeRenderingWidget.cpp
    appTest/RenderingPanel/RenderingPanel.cpp
    appTest/main.cpp 
@@ -36,6 +37,7 @@ qt5_wrap_cpp(PROJECT_SOURCE
    appTest/RenderingPanel/GeoShaderRenderingWidget.hpp
    appTest/RenderingPanel/TessShaderRenderingWidget.hpp
    appTest/RenderingPanel/TessFunctionRenderingWidget.hpp
+   appTest/RenderingPanel/BezierFuncRenderingWidget.hpp
    include/IcicleMorphotreeWidget/IcicleMorphotreeWidget.hpp
    include/IcicleMorphotreeWidget/Graphics/Node/GNodeEventHandler.hpp
    include/IcicleMorphotreeWidget/Graphics/ColorBar.hpp)

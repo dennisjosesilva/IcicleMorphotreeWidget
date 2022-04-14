@@ -13,7 +13,8 @@ enum NodeRenderingStyle {
   HGradient = 1,
   GeoShaderGradient = 2,
   TessShaderGradient = 3,
-  TessFunctionShader = 4
+  TessFunctionShader = 4,
+  BezierFuncShader = 5
 };
 
 

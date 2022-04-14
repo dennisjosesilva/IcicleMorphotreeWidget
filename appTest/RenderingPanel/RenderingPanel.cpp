@@ -5,6 +5,7 @@
 #include "RenderingPanel/GeoShaderRenderingWidget.hpp"
 #include "RenderingPanel/TessShaderRenderingWidget.hpp"
 #include "RenderingPanel/TessFunctionRenderingWidget.hpp"
+#include "RenderingPanel/BezierFuncRenderingWidget.hpp"
 
 #include <QFrame>
 #include <QLabel>
@@ -70,6 +71,8 @@ QLayout *RenderingPanel::createRenderingStyleComboSection()
     static_cast<int>(NodeRenderingStyle::TessShaderGradient));
   renderingMethodCombo_->addItem("Tessellation Shader Based on Function",
     static_cast<int>(NodeRenderingStyle::TessFunctionShader));
+  renderingMethodCombo_->addItem("Bezier Luminance Function",
+    static_cast<int>(NodeRenderingStyle::BezierFuncShader));
 
   connect(renderingMethodCombo_, 
     QOverload<int>::of(&QComboBox::currentIndexChanged), this,
@@ -134,6 +137,10 @@ void RenderingPanel::renderingMethodCombo_onCurrentIndexChanged(
 
   case NodeRenderingStyle::TessFunctionShader:
     changeNodeRendering(new TessFunctionRenderingWidget{treeVis_, this});
+    break;
+
+  case NodeRenderingStyle::BezierFuncShader:
+    changeNodeRendering(new BezierFuncRenderingWidget{treeVis_, this});
     break;
   }
 }
