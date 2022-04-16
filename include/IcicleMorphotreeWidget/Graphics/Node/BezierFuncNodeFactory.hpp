@@ -8,8 +8,8 @@ namespace IcicleMorphotreeWidget
   {
   public:
     BezierFuncNodeFactory(IcicleMorphotreeWidget *treeVis = nullptr, 
-      float hleft = 0.7f, float hmiddle = 1.0f, float hright = 0.7f,
-      float vtop = 0.7f, float vmiddle = 0.7f, float vbottom = 0.7f);
+      float hleft = 1.0f, float hmiddle = 1.0f, float hright = 0.7f,
+      float vtop = 1.0f, float vmiddle = 1.0f, float vbottom = 0.7f);
 
   float hleft() const { return hleft_; }
   float &hleft() { return hleft_; }

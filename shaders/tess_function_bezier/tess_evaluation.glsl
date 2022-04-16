@@ -20,7 +20,7 @@ uniform ControlPoints controlPoints;
 float cubic_bezier(float u, float y[4])
 {
   // cubic bezier 
-  return (1.0f - u) * y[0] + 
+  return pow((1.0f - u), 3) * y[0] + 
     (3*u) * pow(1-u, 2) * y[1] +
     (3*pow(u, 2))*(1 - u) * y[2] +
     pow(u, 3) * y[3];
@@ -90,7 +90,7 @@ void main()
   gl_Position = transform * vec4(p, 0.0, 1.0);
 
   float uy[4] = float[](controlPoints.hl, controlPoints.hm, controlPoints.hm, controlPoints.hr);
-  float vy[4] = float[](controlPoints.vt, controlPoints.vm, controlPoints.hm, controlPoints.vb);
+  float vy[4] = float[](controlPoints.vt, controlPoints.vm, controlPoints.vm, controlPoints.vb);
   
   vec3 colorHSV = rgb2hsv(bcolor);
   colorHSV[2] = cubic_bezier(u, uy) * cubic_bezier(v, vy);
