@@ -58,9 +58,9 @@ namespace IcicleMorphotreeWidget
       QVector2D{r.topLeft()}, QVector2D{r.topRight()},
       QVector2D{r.bottomRight()}, QVector2D{r.bottomLeft()}};
     
-    QVector3D bcolor{ backgroundColor_.redF(), 
-      backgroundColor_.greenF(),
-      backgroundColor_.blueF() };
+    QVector3D bcolor{ static_cast<float>(backgroundColor_.redF()), 
+      static_cast<float>(backgroundColor_.greenF()),
+      static_cast<float>(backgroundColor_.blueF()) };
 
     initShaders();
     shaderProgram_->bind();
