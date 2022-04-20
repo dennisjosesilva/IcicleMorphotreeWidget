@@ -14,6 +14,7 @@ class IcicleMorphotreeWidget(ConanFile):
   def export_sources(self):
     self.copy("*.qrc", dst=".", src=".")
     self.copy("*.glsl", dst="shaders", src="shaders")
+    self.copy("*.csv", dst="colormap", src="colormap")
     self.copy("*.cpp", dst="src", src="src")
     self.copy("CMakeLists.txt", dst="src", src="src")
     self.copy("*.hpp", dst="include", src="include")
