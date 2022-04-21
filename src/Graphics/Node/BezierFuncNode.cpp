@@ -71,6 +71,8 @@ namespace IcicleMorphotreeWidget
     QMatrix4x4 model;
     gl->glGetFloatv(GL_MODELVIEW_MATRIX, model.data());
 
+    gl->glEnable(GL_BLEND); // enable transparency
+
     shaderProgram_->setUniformValue("controlPoints.hl", hleft_);
     shaderProgram_->setUniformValue("controlPoints.hm", hmiddle_);
     shaderProgram_->setUniformValue("controlPoints.hr", hright_);

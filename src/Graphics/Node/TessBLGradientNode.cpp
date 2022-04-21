@@ -81,6 +81,8 @@ namespace IcicleMorphotreeWidget
     QMatrix4x4 model;
     gl->glGetFloatv(GL_MODELVIEW_MATRIX, model.data());
 
+    gl->glEnable(GL_BLEND); // enable transparency
+
     shaderProgram_->setUniformValue("transform", proj * model);
     shaderProgram_->setUniformValue("opacity", static_cast<float>(opacity()));
     
