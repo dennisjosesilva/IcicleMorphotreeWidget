@@ -57,7 +57,6 @@ namespace IcicleMorphotreeWidget
     painter->beginNativePainting();
     
     QOpenGLFunctions *gl = QOpenGLContext::currentContext()->functions();
-    QOpenGLExtraFunctions *egl = QOpenGLContext::currentContext()->extraFunctions();
 
     QVector3D bcolor{ static_cast<float>(backgroundColor_.redF()), 
       static_cast<float>(backgroundColor_.greenF()),
@@ -94,7 +93,7 @@ namespace IcicleMorphotreeWidget
     shaderProgram_->setAttributeArray(SHADER_PROGRAM_COLOR_ATTR_LOC, GL_FLOAT, 
       colors.data(), 3, 0);
 
-    egl->glPatchParameteri(GL_PATCH_VERTICES, 4);    
+    shaderProgram_->setPatchVertexCount(4);
     gl->glDrawArrays(GL_PATCHES, 0, pos.size());
 
     painter->endNativePainting();    
