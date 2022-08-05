@@ -52,8 +52,7 @@ namespace IcicleMorphotreeWidget
     painter->beginNativePainting();
 
     QOpenGLFunctions *gl = QOpenGLContext::currentContext()->functions();
-    QOpenGLExtraFunctions *egl = QOpenGLContext::currentContext()->extraFunctions();
-
+    
     QVector<QVector2D> pos = {
       QVector2D{r.topLeft()}, QVector2D{r.topRight()},
       QVector2D{r.bottomRight()}, QVector2D{r.bottomLeft()}};
@@ -89,7 +88,7 @@ namespace IcicleMorphotreeWidget
     shaderProgram_->setAttributeArray(SHADER_PROGRAM_POSITION_ATTR_LOC, GL_FLOAT, pos.data(), 
       2, 0);
 
-    egl->glPatchParameteri(GL_PATCH_VERTICES, 4);
+    shaderProgram_->setPatchVertexCount(4);
     gl->glDrawArrays(GL_PATCHES, 0, pos.size());
 
     painter->endNativePainting();
