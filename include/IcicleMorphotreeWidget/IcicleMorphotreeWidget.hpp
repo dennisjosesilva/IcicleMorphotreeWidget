@@ -116,6 +116,8 @@ namespace IcicleMorphotreeWidget
 
   signals:
     void treeAboutToBeRedrawn();
+    void keyPress(QKeyEvent *e);
+    void keyRelease(QKeyEvent *e);
 
   protected:    
     void renderGrayScaleBar();

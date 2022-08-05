@@ -438,6 +438,8 @@ namespace IcicleMorphotreeWidget
     default:
       break;
     }
+
+    emit keyPress(e);
   }
 
   void IcicleMorphotreeWidget::keyReleaseEvent(QKeyEvent *e)
@@ -452,6 +454,8 @@ namespace IcicleMorphotreeWidget
     default:
       break;
     }
+
+    emit keyRelease(e);
   }
 
   void IcicleMorphotreeWidget::resizeEvent(QResizeEvent *e) 
